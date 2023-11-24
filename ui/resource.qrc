@@ -1,0 +1,20 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>../resources/icon/account-logout-64.ico</file>
+    <file>../resources/icon/activity-feed-32.ico</file>
+    <file>../resources/icon/activity-feed-48.ico</file>
+    <file>../resources/icon/close-window-64.ico</file>
+    <file>../resources/icon/dashboard-5-32.ico</file>
+    <file>../resources/icon/dashboard-5-48.ico</file>
+    <file>../resources/icon/group-32.ico</file>
+    <file>../resources/icon/group-48.ico</file>
+    <file>../resources/icon/home-4-32.ico</file>
+    <file>../resources/icon/home-4-48.ico</file>
+    <file>../resources/icon/Logo.png</file>
+    <file>../resources/icon/menu-4-32.ico</file>
+    <file>../resources/icon/product-32.ico</file>
+    <file>../resources/icon/product-48.ico</file>
+    <file>../resources/icon/search-13-48.ico</file>
+    <file>../resources/icon/user-48.ico</file>
+  </qresource>
+</RCC>

@@ -1,8 +1,8 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
-from PyQt5.QtCore import pyqtSlot, QFile, QTextStream
+from PyQt5.QtCore import QFile, QTextStream
 
-from sidebar_ui import Ui_MainWindow
+from src.views.admin.sidebar_ui import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     # app.setStyleSheet(style_str)
 
     ## loading style file, Example 2
-    style_file = QFile("style.qss")
+    style_file = QFile("ui/style.qss")
     style_file.open(QFile.ReadOnly | QFile.Text)
     style_stream = QTextStream(style_file)
     app.setStyleSheet(style_stream.readAll())

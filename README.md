@@ -1,9 +1,16 @@
-## Các bước thực hiện
+## Uranus
 
-## Bước 1
+## Step 1: Install library
 ```sh
 pip install -r requirements.txt
 ```
 
-## Bước 2
+## Step 2: Migration Database
+```sh
+alembic upgrade head
+```
 
+## Other: Update resource
+```sh
+pyrcc5 ui/resource.qrc -o ui/resource_rc.py
+```

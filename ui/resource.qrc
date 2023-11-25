@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icon">
+    <file>../resources/icon/bag.svg</file>
     <file>../resources/icon/account-logout-64.ico</file>
     <file>../resources/icon/activity-feed-32.ico</file>
     <file>../resources/icon/activity-feed-48.ico</file>
@@ -16,5 +17,41 @@
     <file>../resources/icon/product-48.ico</file>
     <file>../resources/icon/search-13-48.ico</file>
     <file>../resources/icon/user-48.ico</file>
+    <file>../resources/icon/arrow-80-48.ico</file>
+    <file>../resources/icon/arrow-146-48.ico</file>
+    <file>../resources/icon/arrow-208-48.ico</file>
+    <file>../resources/icon/checkbox_checked.ico</file>
+    <file>../resources/icon/check-mark-3-48.ico</file>
+    <file>../resources/icon/checkbox_unchecked.ico</file>
+    <file>../resources/icon/copy-128.gif</file>
+    <file>../resources/icon/data-configuratio-checkedn-48.ico</file>
+    <file>../resources/icon/data-configuration-128.gif</file>
+    <file>../resources/icon/edit-property-48.ico</file>
+    <file>../resources/icon/generic-text-48.ico</file>
+    <file>../resources/icon/generic-text-48-checked.ico</file>
+    <file>../resources/icon/key-4-48-checked.ico</file>
+    <file>../resources/icon/key-4-128.gif</file>
+    <file>../resources/icon/key-6-128.ico</file>
+    <file>../resources/icon/key-48.ico</file>
+    <file>../resources/icon/login-64.ico</file>
+    <file>../resources/icon/logout-48.ico</file>
+    <file>../resources/icon/pressure-128 (1).gif</file>
+    <file>../resources/icon/pressure-128.gif</file>
+    <file>../resources/icon/question-mark-7-48.ico</file>
+    <file>../resources/icon/recurring-appointment-48.ico</file>
+    <file>../resources/icon/redo-5-128.gif</file>
+    <file>../resources/icon/save-128.gif</file>
+    <file>../resources/icon/search-7-128.gif</file>
+    <file>../resources/icon/show-property-128.gif</file>
+    <file>../resources/icon/x-mark-2-128.gif</file>
+    <file>../resources/icon/x-mark-3-48.ico</file>
+    <file>../resources/icon/x-mark-48.ico</file>
+  </qresource>
+  <qresource prefix="img">
+    <file>../resources/img/why_1.png</file>
+    <file>../resources/img/why_2.png</file>
+    <file>../resources/img/why_3.png</file>
+    <file>../resources/img/why_4.png</file>
+    <file>../resources/img/206954.jpg</file>
   </qresource>
 </RCC>

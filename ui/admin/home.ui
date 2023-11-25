@@ -14,6 +14,25 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">#tableWidget QHeaderView, #tableWidget {
+	border: 0px;
+ 	background-color: #fff;
+	border-radius: 5px;
+	text-align: left;
+}
+
+#tableWidget QHeaderView::section {
+	font-family: &quot;Time New Roman&quot;, &quot;Time&quot;, &quot;serif&quot;;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+	border-radius: 14px;
+	border-bottom: 1px solid #353535;
+	border-top: 1px solid #353535;
+	padding-lefy:	 10px;
+}</string>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
@@ -68,7 +87,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resource.qrc">:/icon/icon/Logo.png</pixmap>
+            <pixmap>:/icon/icon/Logo.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -88,7 +107,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/home-4-32.ico</normaloff>
              <normalon>:/icon/icon/home-4-48.ico</normalon>:/icon/icon/home-4-32.ico</iconset>
            </property>
@@ -112,7 +131,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/dashboard-5-32.ico</normaloff>
              <normalon>:/icon/icon/dashboard-5-48.ico</normalon>:/icon/icon/dashboard-5-32.ico</iconset>
            </property>
@@ -136,7 +155,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/activity-feed-32.ico</normaloff>
              <normalon>:/icon/icon/activity-feed-48.ico</normalon>:/icon/icon/activity-feed-32.ico</iconset>
            </property>
@@ -160,7 +179,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/product-32.ico</normaloff>
              <normalon>:/icon/icon/product-48.ico</normalon>:/icon/icon/product-32.ico</iconset>
            </property>
@@ -184,7 +203,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/group-32.ico</normaloff>
              <normalon>:/icon/icon/group-48.ico</normalon>:/icon/icon/group-32.ico</iconset>
            </property>
@@ -223,7 +242,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resource.qrc">
+          <iconset>
            <normaloff>:/icon/icon/close-window-64.ico</normaloff>:/icon/icon/close-window-64.ico</iconset>
          </property>
          <property name="iconSize">
@@ -263,7 +282,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resource.qrc">:/icon/icon/Logo.png</pixmap>
+            <pixmap>:/icon/icon/Logo.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -295,7 +314,7 @@
             <string>Home</string>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/home-4-32.ico</normaloff>
              <normalon>:/icon/icon/home-4-48.ico</normalon>:/icon/icon/home-4-32.ico</iconset>
            </property>
@@ -319,7 +338,7 @@
             <string>Dashboard</string>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/dashboard-5-32.ico</normaloff>
              <normalon>:/icon/icon/dashboard-5-48.ico</normalon>:/icon/icon/dashboard-5-32.ico</iconset>
            </property>
@@ -343,7 +362,7 @@
             <string>Orders</string>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/activity-feed-32.ico</normaloff>
              <normalon>:/icon/icon/activity-feed-48.ico</normalon>:/icon/icon/activity-feed-32.ico</iconset>
            </property>
@@ -367,7 +386,7 @@
             <string>Products</string>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/product-32.ico</normaloff>
              <normalon>:/icon/icon/product-48.ico</normalon>:/icon/icon/product-32.ico</iconset>
            </property>
@@ -391,7 +410,7 @@
             <string>Customers</string>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset>
              <normaloff>:/icon/icon/group-32.ico</normaloff>
              <normalon>:/icon/icon/group-48.ico</normalon>:/icon/icon/group-32.ico</iconset>
            </property>
@@ -430,7 +449,7 @@
           <string>Exit</string>
          </property>
          <property name="icon">
-          <iconset resource="resource.qrc">
+          <iconset>
            <normaloff>:/icon/icon/close-window-64.ico</normaloff>:/icon/icon/close-window-64.ico</iconset>
          </property>
          <property name="iconSize">
@@ -492,7 +511,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="resource.qrc">
+             <iconset>
               <normaloff>:/icon/icon/menu-4-32.ico</normaloff>:/icon/icon/menu-4-32.ico</iconset>
             </property>
             <property name="iconSize">
@@ -537,7 +556,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="resource.qrc">
+               <iconset>
                 <normaloff>:/icon/icon/search-13-48.ico</normaloff>:/icon/icon/search-13-48.ico</iconset>
               </property>
              </widget>
@@ -563,7 +582,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="resource.qrc">
+             <iconset>
               <normaloff>:/icon/icon/user-48.ico</normaloff>:/icon/icon/user-48.ico</iconset>
             </property>
            </widget>
@@ -574,7 +593,7 @@
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>5</number>
+          <number>6</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_2">
@@ -692,19 +711,258 @@
          </widget>
          <widget class="QWidget" name="page_7">
           <layout class="QGridLayout" name="gridLayout_8">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <property name="spacing">
+            <number>0</number>
+           </property>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_10">
-             <property name="font">
-              <font>
-               <pointsize>20</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>User Page</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
+            <widget class="QWidget" name="userContainer" native="true">
+             <layout class="QGridLayout" name="gridLayout_10">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QWidget" name="titleContainer" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>100</height>
+                 </size>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_12">
+                 <item row="0" column="0">
+                  <widget class="QWidget" name="widget_4" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_6">
+                    <item>
+                     <widget class="QLabel" name="label">
+                      <property name="font">
+                       <font>
+                        <pointsize>15</pointsize>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Danh sách người dùng</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QWidget" name="widget_2" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_6">
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_5">
+                      <property name="spacing">
+                       <number>10</number>
+                      </property>
+                      <item>
+                       <widget class="QLineEdit" name="search_input_2">
+                        <property name="placeholderText">
+                         <string>Search...</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="search_btn_2">
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset>
+                          <normaloff>:/icon/icon/search-13-48.ico</normaloff>:/icon/icon/search-13-48.ico</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>308</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_5" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <widget class="QPushButton" name="pushButton">
+                       <property name="geometry">
+                        <rect>
+                         <x>10</x>
+                         <y>0</y>
+                         <width>75</width>
+                         <height>24</height>
+                        </rect>
+                       </property>
+                       <property name="text">
+                        <string>Thêm mới</string>
+                       </property>
+                      </widget>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QWidget" name="tableContainer" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_11">
+                 <item row="0" column="0">
+                  <widget class="QFrame" name="frame">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_9">
+                    <item row="0" column="0">
+                     <widget class="QTableWidget" name="tableWidget">
+                      <property name="focusPolicy">
+                       <enum>Qt::NoFocus</enum>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="showGrid">
+                       <bool>false</bool>
+                      </property>
+                      <property name="gridStyle">
+                       <enum>Qt::NoPen</enum>
+                      </property>
+                      <property name="rowCount">
+                       <number>2</number>
+                      </property>
+                      <attribute name="horizontalHeaderCascadingSectionResizes">
+                       <bool>false</bool>
+                      </attribute>
+                      <attribute name="horizontalHeaderDefaultSectionSize">
+                       <number>150</number>
+                      </attribute>
+                      <attribute name="horizontalHeaderStretchLastSection">
+                       <bool>true</bool>
+                      </attribute>
+                      <attribute name="verticalHeaderVisible">
+                       <bool>false</bool>
+                      </attribute>
+                      <attribute name="verticalHeaderCascadingSectionResizes">
+                       <bool>false</bool>
+                      </attribute>
+                      <row/>
+                      <row/>
+                      <column>
+                       <property name="text">
+                        <string>#</string>
+                       </property>
+                       <property name="textAlignment">
+                        <set>AlignLeading|AlignVCenter</set>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>ID</string>
+                       </property>
+                       <property name="textAlignment">
+                        <set>AlignLeading|AlignVCenter</set>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Website</string>
+                       </property>
+                       <property name="textAlignment">
+                        <set>AlignLeading|AlignVCenter</set>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Username</string>
+                       </property>
+                       <property name="textAlignment">
+                        <set>AlignLeading|AlignVCenter</set>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Password</string>
+                       </property>
+                       <property name="textAlignment">
+                        <set>AlignLeading|AlignVCenter</set>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Operation</string>
+                       </property>
+                      </column>
+                      <item row="0" column="0">
+                       <property name="text">
+                        <string>1</string>
+                       </property>
+                      </item>
+                      <item row="0" column="5">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="textAlignment">
+                        <set>AlignCenter</set>
+                       </property>
+                      </item>
+                      <item row="1" column="0">
+                       <property name="text">
+                        <string>2</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>

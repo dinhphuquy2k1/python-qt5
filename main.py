@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
 from PyQt5.QtCore import QFile, QTextStream
 
-from src.views.admin.sidebar_ui import Ui_MainWindow
+from src.views.admin.home import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
@@ -38,11 +38,11 @@ class MainWindow(QMainWindow):
                 btn.setChecked(False)
             else:
                 btn.setAutoExclusive(True)
-            
+
     ## functions for changing menu page
     def on_home_btn_1_toggled(self):
         self.ui.stackedWidget.setCurrentIndex(0)
-    
+
     def on_home_btn_2_toggled(self):
         self.ui.stackedWidget.setCurrentIndex(0)
 

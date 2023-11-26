@@ -1,5 +1,17 @@
 <RCC>
   <qresource prefix="icon">
+    <file>../resources/img/facebook.png</file>
+    <file>../resources/icon/email-info.svg</file>
+    <file>../resources/icon/location.svg</file>
+    <file>../resources/icon/phone-info.svg</file>
+    <file>../resources/img/instagram.png</file>
+    <file>../resources/img/linkedin.png</file>
+    <file>../resources/img/twitter.png</file>
+    <file>../resources/icon/next-svgrepo-com.svg</file>
+    <file>../resources/icon/previous.svg</file>
+    <file>../resources/icon/prev_icon.svg</file>
+    <file>../resources/icon/vote.svg</file>
+    <file>../resources/icon/quote.svg</file>
     <file>../resources/icon/bag.svg</file>
     <file>../resources/icon/account-logout-64.ico</file>
     <file>../resources/icon/activity-feed-32.ico</file>
@@ -48,6 +60,20 @@
     <file>../resources/icon/x-mark-48.ico</file>
   </qresource>
   <qresource prefix="img">
+    <file>../resources/img/sideimg.webp</file>
+    <file>../resources/icon/undraw_file_sync_ot38.svg</file>
+    <file>../resources/img/facebook.png</file>
+    <file>../resources/img/instagram.png</file>
+    <file>../resources/img/linkedin.png</file>
+    <file>../resources/img/twitter.png</file>
+    <file>../resources/img/youtube.png</file>
+    <file>../resources/img/Garmin-Forerunner-265_3-1-768x402.jpeg.webp</file>
+    <file>../resources/img/iphone-16-768x402.jpg.webp</file>
+    <file>../resources/img/Screen-Shot-2023-11-22-at-10.03.50-768x402.jpg.webp</file>
+    <file>../resources/img/Xiaomi-Mix-Flip-1-768x402.jpg.webp</file>
+    <file>../resources/img/feedback_1.jpg</file>
+    <file>../resources/img/feedback_2.jpg</file>
+    <file>../resources/img/hình_thumbnail-copy-10.png</file>
     <file>../resources/img/why_1.png</file>
     <file>../resources/img/why_2.png</file>
     <file>../resources/img/why_3.png</file>

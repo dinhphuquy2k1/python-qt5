@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icon">
+    <file>../resources/icon/back.svg</file>
     <file>../resources/img/facebook.png</file>
     <file>../resources/icon/email-info.svg</file>
     <file>../resources/icon/location.svg</file>

@@ -4,7 +4,7 @@ from PyQt5.QtGui import QMouseEvent, QIcon, QPixmap
 
 from src.views.common.login import Ui_Form
 from .connect_database import ConnectMySQL
-
+from src.controllers.admin.home import HomeWindow
 
 class LoginWindow(QWidget):
     def __init__(self):
@@ -93,30 +93,36 @@ class LoginWindow(QWidget):
         """
         function for login app
         """
-        username = self.ui.lineEdit.text().strip()
-        password = self.ui.lineEdit_2.text().strip()
+        # username = self.ui.lineEdit.text().strip()
+        # password = self.ui.lineEdit_2.text().strip()
+        #
+        # ## check if input username and password.
+        # if not username and not password:
+        #     self.warning_messagebox("Please input username and password")
+        #     return
+        #
+        # ## Search and check the input account information in database.
+        # result = self.mysql.check_username(username=username)
+        # if result and len(result) == 1:
+        #     if result[0]["password"] == password:
+        #         user_id = result[0]["user_id"]
+        #         # pass the user_id to main window and show it.
+        #         # main_window = MainWindow(user_id=user_id)
+        #         # main_window.show()
+        #         self.close()
+        #     else:
+        #         self.warning_messagebox("Sai tài khoản hoặc mật khẩu.")
+        #         self.ui.lineEdit_2.clear()
+        # else:
+        #     self.warning_messagebox("Sai tài khoản hoặc mật khẩu.")
+        #     self.ui.lineEdit.clear()
+        #     self.ui.lineEdit_2.clear()
 
-        ## check if input username and password.
-        if not username and not password:
-            self.warning_messagebox("Please input username and password")
-            return
+        admin_home = HomeWindow()
+        admin_home.show()
 
-        ## Search and check the input account information in database.
-        result = self.mysql.check_username(username=username)
-        if result and len(result) == 1:
-            if result[0]["password"] == password:
-                user_id = result[0]["user_id"]
-                # pass the user_id to main window and show it.
-                # main_window = MainWindow(user_id=user_id)
-                # main_window.show()
-                self.close()
-            else:
-                self.warning_messagebox("Password is wrong. Please try again.")
-                self.ui.lineEdit_2.clear()
-        else:
-            self.warning_messagebox("Username is wrong. Please try again.")
-            self.ui.lineEdit.clear()
-            self.ui.lineEdit_2.clear()
+        self.close()
+
 
 
     @pyqtSlot()

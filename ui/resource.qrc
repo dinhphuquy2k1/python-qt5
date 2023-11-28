@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icon">
+    <file>../resources/icon/search.svg</file>
+    <file>../resources/icon/plus-solid.svg</file>
     <file>../resources/icon/back.svg</file>
     <file>../resources/img/facebook.png</file>
     <file>../resources/icon/email-info.svg</file>
@@ -61,6 +63,7 @@
     <file>../resources/icon/x-mark-48.ico</file>
   </qresource>
   <qresource prefix="img">
+    <file>../resources/img/plus.png</file>
     <file>../resources/img/sideimg.webp</file>
     <file>../resources/icon/undraw_file_sync_ot38.svg</file>
     <file>../resources/img/facebook.png</file>

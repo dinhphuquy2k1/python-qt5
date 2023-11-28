@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt, QPoint, pyqtSlot
 from PyQt5.QtGui import QMouseEvent, QIcon, QPixmap
 
 from src.views.ui_generated.common.login import Ui_Form
-
+from src.controllers.admin.UserController import UserController
 from src.views.admin.Home import HomeWindow
 
 class LoginWindow(QWidget):
@@ -92,32 +92,32 @@ class LoginWindow(QWidget):
         """
         function for login app
         """
-        # username = self.ui.lineEdit.text().strip()
-        # password = self.ui.lineEdit_2.text().strip()
-        #
-        # ## check if input username and password.
+        username = self.ui.lineEdit.text().strip()
+        password = self.ui.lineEdit_2.text().strip()
+
+        ## check if input username and password.
         # if not username and not password:
-        #     self.warning_messagebox("Please input username and password")
+        #     self.warning_messagebox("Vui lòng nhập tài khoản và mật khẩu để đăng nhập")
         #     return
         #
-        # ## Search and check the input account information in database.
-        # result = self.mysql.check_username(username=username)
-        # if result and len(result) == 1:
-        #     if result[0]["password"] == password:
-        #         user_id = result[0]["user_id"]
+        # data = {
+        #     'username': username,
+        #     'password': password
+        # }
+
+        user_controller = UserController()
+        ## Search and check the input account information in database.
+        # result = user_controller.login(data)
+        # if result:
         #         # pass the user_id to main window and show it.
-        #         # main_window = MainWindow(user_id=user_id)
-        #         # main_window.show()
+        #         admin_home = HomeWindow(user_id=result.id)
+        #         admin_home.show()
         #         self.close()
-        #     else:
-        #         self.warning_messagebox("Sai tài khoản hoặc mật khẩu.")
-        #         self.ui.lineEdit_2.clear()
         # else:
         #     self.warning_messagebox("Sai tài khoản hoặc mật khẩu.")
         #     self.ui.lineEdit.clear()
         #     self.ui.lineEdit_2.clear()
-
-        admin_home = HomeWindow()
+        admin_home = HomeWindow(1)
         admin_home.show()
 
         self.close()

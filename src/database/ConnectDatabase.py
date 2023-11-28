@@ -2,17 +2,24 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from src.models.base import Base
 import configparser
-
+from src.models.users import User
 
 class ConnectMySQL:
     def __init__(self, config_file_path="alembic.ini"):
         config = configparser.ConfigParser()
         config.read(config_file_path)
         db_url = config.get("alembic", "sqlalchemy.url")
+
         # Tạo engine và kết nối đến cơ sở dữ liệu
-        self.engine = create_engine(db_url)
-        Base.metadata.create_all(self.engine)
-        self.Session = sessionmaker(bind=self.engine)
+        try:
+            self.engine = create_engine(db_url)
+            Base.metadata.create_all(self.engine)
+            self.Session = sessionmaker(bind=self.engine)
+
+        except Exception as E:
+
+            print("Không thể kết nối được database")
+
         self.connection = None
         self.session = None
 
@@ -31,7 +38,7 @@ class ConnectMySQL:
         self.connect()
         try:
             query = self.session.execute(text(query))
-            result = query.fetchone()
+            result = query.first()
             return result
 
         except Exception as E:
@@ -40,6 +47,20 @@ class ConnectMySQL:
 
         finally:
             self.close()
+
+    def insertData(self, data):
+        self.connect()
+        try:
+            self.session.add(data)
+            self.session.commit()
+            return True
+        except Exception as E:
+            print(E)
+            self.session.rollback()
+            return False
+        finally:
+            self.close()
+
 
     def getDataByQuery(self, query):
         self.connect()
@@ -73,9 +94,9 @@ class ConnectMySQL:
         """
         Common function to get data from database.
         """
-        self.connect()
         try:
-            query = self.session.query(model)
+            self.connect()
+            query = self.session.query(User)
             result = query.all()
             return result
 

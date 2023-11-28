@@ -20,3 +20,11 @@ pyrcc5 ui/resource.qrc -o ui/resource_rc.py
 pyuic5 main_window.ui -o main_window_ui.py
 
 ```
+
+
+
+## Other: Lưu thay đổi của database
+```sh
+alembic revision --autogenerate -m "first commit"
+
+```

@@ -126,7 +126,6 @@ QPushButton{
 #popupHeader{
 	height: 60px;
 	min-height: 24px;
-	box-shadow: 0 1.5px 2px 0 rgba(0,0,0,.1);
 }
 
 #widget_12, #widget_11, #widget_10{

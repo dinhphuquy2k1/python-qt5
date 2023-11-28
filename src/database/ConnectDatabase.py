@@ -1,39 +1,37 @@
-from mysql import connector
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+from src.models.base import Base
+import configparser
 
 
 class ConnectMySQL:
-    def __init__(self):
-        self.host = "localhost"
-        self.user = "root"
-        self.password = ""
-        self.port = 3306
-        self.database = "test"
-        self.my_connector = None
-        self.my_cursor = None
+    def __init__(self, config_file_path="alembic.ini"):
+        config = configparser.ConfigParser()
+        config.read(config_file_path)
+        db_url = config.get("alembic", "sqlalchemy.url")
+        # Tạo engine và kết nối đến cơ sở dữ liệu
+        self.engine = create_engine(db_url)
+        Base.metadata.create_all(self.engine)
+        self.Session = sessionmaker(bind=self.engine)
+        self.connection = None
+        self.session = None
 
     def connect(self):
         """
         Connect to MySQL Database.
         """
-        self.my_connector = connector.connect(
-            host=self.host,
-            user=self.user,
-            password=self.password,
-            port=self.port,
-            database=self.database
-        )
+        self.connection = self.engine.connect()
+        self.session = self.Session()
 
-        self.my_cursor = self.my_connector.cursor(dictionary=True, buffered=True)
+    def close(self):
+        self.connection.close()
+        self.session.close()
 
-    def get_data(self, sql):
-        """
-        Common function to get data from database.
-        """
+    def findFirstByQuery(self, query):
         self.connect()
         try:
-            self.my_cursor.execute(sql)
-            result = self.my_cursor.fetchall()
-
+            query = self.session.execute(text(query))
+            result = query.fetchone()
             return result
 
         except Exception as E:
@@ -41,24 +39,66 @@ class ConnectMySQL:
             return
 
         finally:
-            if self.my_connector:
-                self.my_cursor.close()
+            self.close()
 
-    def update_data(self, sql):
+    def getDataByQuery(self, query):
+        self.connect()
+        try:
+            result = self.session.execute(text(query)).fetchall()
+            print(result)
+            return result
+
+        except Exception as E:
+            print(E)
+            return []
+
+        finally:
+            self.close()
+
+    def findFirstByModel(self, model, filters=None):
+        self.connect()
+        try:
+            query = self.session.query(model)
+            result = query.all()
+            return result
+
+        except Exception as E:
+            print(E)
+            return []
+
+        finally:
+            self.close()
+
+    def getDataByModel(self, model):
+        """
+        Common function to get data from database.
+        """
+        self.connect()
+        try:
+            query = self.session.query(model)
+            result = query.all()
+            return result
+
+        except Exception as E:
+            print(E)
+            return []
+
+        finally:
+            self.close()
+
+    def update_data(self, data):
         """
         Common function to update database.
         """
         self.connect()
-
         try:
-            self.my_cursor.execute(sql)
-            self.my_connector.commit()
+            self.session.add(data)
+            self.session.commit()
         except Exception as E:
-            self.my_connector.rollback()
+            self.session.rollback()
             return E
         finally:
-            if self.my_connector:
-                self.my_cursor.close()
+            self.session.close()
 
     ## function for login window
     def create_login_account(self, user_name, password):
@@ -117,7 +157,7 @@ class ConnectMySQL:
                 VALUES ({user_id}, '{user_name}', '{website}', '{password}');
         """
 
-        result =self.update_data(sql=sql)
+        result = self.update_data(sql=sql)
 
         return result
 
@@ -163,20 +203,3 @@ class ConnectMySQL:
         result = self.update_data(sql=sql)
 
         return result
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

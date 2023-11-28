@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
 from PyQt5.QtCore import QFile, QTextStream
 
-from src.views.admin.home import Ui_MainWindow
+from src.views.admin.Home import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):

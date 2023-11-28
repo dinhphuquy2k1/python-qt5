@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1328</width>
+    <width>1212</width>
     <height>600</height>
    </rect>
   </property>
@@ -685,6 +685,7 @@ QPushButton{
                       <property name="font">
                        <font>
                         <pointsize>15</pointsize>
+                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -1144,7 +1145,7 @@ QPushButton{
                                   </size>
                                  </property>
                                  <property name="text">
-                                  <string>Tài khoản:</string>
+                                  <string>Tài khoản 1:</string>
                                  </property>
                                 </widget>
                                </item>
@@ -1170,7 +1171,7 @@ QPushButton{
                                    <number>0</number>
                                   </property>
                                   <property name="bottomMargin">
-                                   <number>0</number>
+                                   <number>10</number>
                                   </property>
                                   <item>
                                    <widget class="QLineEdit" name="user_le">
@@ -1195,7 +1196,7 @@ QPushButton{
                                    </widget>
                                   </item>
                                   <item alignment="Qt::AlignTop">
-                                   <widget class="QLabel" name="errorUser">
+                                   <widget class="QLabel" name="error_user">
                                     <property name="text">
                                      <string/>
                                     </property>
@@ -1273,7 +1274,7 @@ QPushButton{
                                    <number>0</number>
                                   </property>
                                   <property name="bottomMargin">
-                                   <number>0</number>
+                                   <number>10</number>
                                   </property>
                                   <item>
                                    <widget class="QLineEdit" name="pass_le">
@@ -1301,7 +1302,7 @@ QPushButton{
                                    </widget>
                                   </item>
                                   <item alignment="Qt::AlignTop">
-                                   <widget class="QLabel" name="errorUser_2">
+                                   <widget class="QLabel" name="error_password">
                                     <property name="text">
                                      <string/>
                                     </property>
@@ -1379,7 +1380,7 @@ QPushButton{
                                    <number>0</number>
                                   </property>
                                   <property name="bottomMargin">
-                                   <number>0</number>
+                                   <number>10</number>
                                   </property>
                                   <item>
                                    <widget class="QLineEdit" name="confirm_le">
@@ -1407,7 +1408,7 @@ QPushButton{
                                    </widget>
                                   </item>
                                   <item alignment="Qt::AlignTop">
-                                   <widget class="QLabel" name="errorUser_3">
+                                   <widget class="QLabel" name="error_confirm">
                                     <property name="text">
                                      <string/>
                                     </property>

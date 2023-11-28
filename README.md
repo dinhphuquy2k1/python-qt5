@@ -14,3 +14,9 @@ alembic upgrade head
 ```sh
 pyrcc5 ui/resource.qrc -o ui/resource_rc.py
 ```
+
+## Other: Update ui
+```sh
+pyuic5 main_window.ui -o main_window_ui.py
+
+```

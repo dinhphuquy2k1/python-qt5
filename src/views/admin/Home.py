@@ -1,10 +1,10 @@
-from PyQt5.QtWidgets import QWidget, QMainWindow, QApplication, QPushButton
+from PyQt5.QtWidgets import QWidget, QMessageBox, QMainWindow, QApplication, QPushButton
 from PyQt5.QtCore import Qt, QPoint, pyqtSlot
 from PyQt5.QtGui import QMouseEvent, QIcon, QPixmap
 
-from src.views.admin.home import Ui_MainWindow
-from src.controllers.connect_database import ConnectMySQL
-from src.controllers.common.common_function import warning_messagebox
+from src.views.ui_generated.admin.home import Ui_MainWindow
+from src.controllers.admin.UserController import UserController
+from src.enums.enums import *
 
 class HomeWindow(QMainWindow):
     def __init__(self):
@@ -97,14 +97,54 @@ class HomeWindow(QMainWindow):
     def on_customers_btn_2_toggled(self):
         self.ui.stackedWidget.setCurrentIndex(4)
 
+    def validateEmpty(self, data: dict, messages: dict, color_style):
+        result = []
+        for key, value in data.items():
+            label_name = f"error_{key}"
+            label = getattr(self.ui, label_name, None)
+            if not value:
+                message = messages[f"{key}Empty"]
+                result.append(message)
+                if label:
+                    label.setText(message)
+                    label.setStyleSheet(color_style)
+            else:
+                if label:
+                    label.setText("")
+        return result
+
+    @pyqtSlot()
     def on_btnUser_clicked(self):
-        user_name = self.ui.user_le.text().strip()
+        user = self.ui.user_le.text().strip()
         password = self.ui.pass_le.text().strip()
         confirm = self.ui.confirm_le.text().strip()
-        warning_messagebox(confirm)
+        color_style = "color: #ef5350;"
+        messages = {
+            'userEmpty': "Vui lòng nhập thông tin tài khoản.",
+            'userExit': "Tài khoản đã tồn tại.",
+            'passwordEmpty': "Vui lòng nhập thông tin mật khẩu.",
+            'confirmEmpty': "Vui lòng nhập lại mật khẩu.",
+            'confirmNotMatch': "Mật  khẩu không trùng khớp.",
+        }
 
+        is_valid = self.validateEmpty({'user': user, 'password': password, 'confirm': confirm}, messages, color_style)
+        if is_valid:
+            return
 
+        if password != confirm:
+            self.ui.error_confirm.setStyleSheet(color_style)
+            self.ui.error_confirm.setText(messages["confirmNotMatch"])
+            return
 
+        user_controller = UserController()
 
+        if user_controller.checkExitsUser(username=user):
+            self.ui.error_user.setStyleSheet(color_style)
+            self.ui.error_user.setText(messages["userExit"])
+            return
 
-
+        message = user_controller.checkUserEmailOrPhone(username=user)
+        if message:
+            self.ui.error_user.setStyleSheet(color_style)
+            self.ui.error_user.setText(message)
+            return

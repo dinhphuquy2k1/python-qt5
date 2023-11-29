@@ -179,6 +179,10 @@ QPushButton{
 		color: #fff;
 }
 
+#addUserBtn:hover{
+	background: #1a73e8;
+}
+
 #addUserBtn QLabel{
 	padding-left: 10px;
 }
@@ -189,7 +193,7 @@ QPushButton{
 	border: none;
 }
 
-#searchBoxContainer QLineEdit, #searchBoxContainer2 QLineEdit{
+#searchBoxContainer QLineEdit, #searchBoxContainer_2 QLineEdit{
 	border: none;
 }
 
@@ -199,10 +203,31 @@ QPushButton{
 	min-height: 36px;
 }
 
-#searchBoxContainer2{
+#searchBoxContainer_2{
 	border: 1px solid #e0e0e0;
     border-radius: 3.5px;
 	min-height: 36px;
+}
+
+#headerAdmin{
+	background: #fff;
+}
+
+#change_btn{
+	max-width: 20px !important;
+}
+
+#change_btn:hover{
+	background: #ddd;
+}
+
+#change_btn, #search_btn_5,  #search_btn_2, #backBtn{
+	min-width: 30px;
+}
+
+#search_input_5{
+	padding: 0;
+	padding-left: 10px
 }
 
 </string>
@@ -245,37 +270,67 @@ QPushButton{
         <number>0</number>
        </property>
        <item>
-        <widget class="QWidget" name="widget" native="true">
+        <widget class="QWidget" name="headerAdmin" native="true">
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>40</height>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
           </size>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <property name="spacing">
-           <number>0</number>
+           <number>6</number>
           </property>
           <property name="leftMargin">
            <number>0</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>10</number>
           </property>
           <property name="rightMargin">
-           <number>9</number>
-          </property>
-          <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item alignment="Qt::AlignLeft">
            <widget class="QPushButton" name="change_btn">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>54</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>44</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string/>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>:/icon/icon/menu-4-32.ico</normaloff>:/icon/icon/menu-4-32.ico</iconset>
+             <iconset resource="../resource.qrc">
+              <normaloff>:/icon/resources/icon/menu-4-32.ico</normaloff>:/icon/resources/icon/menu-4-32.ico</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -302,38 +357,59 @@ QPushButton{
            </spacer>
           </item>
           <item>
-           <widget class="QWidget" name="searchBoxContainer2" native="true">
+           <widget class="QWidget" name="searchBoxContainer_2" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>38</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <property name="spacing">
               <number>0</number>
              </property>
              <property name="leftMargin">
-              <number>2</number>
+              <number>0</number>
              </property>
              <property name="topMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="rightMargin">
               <number>0</number>
              </property>
              <property name="bottomMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <item>
-              <layout class="QHBoxLayout" name="searchBox_2">
+              <layout class="QHBoxLayout" name="searchBox_4">
                <property name="spacing">
                 <number>0</number>
                </property>
                <property name="leftMargin">
                 <number>2</number>
                </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
                <item>
-                <widget class="QLineEdit" name="search_input_3">
+                <widget class="QLineEdit" name="search_input_5">
                  <property name="minimumSize">
                   <size>
-                   <width>220</width>
-                   <height>44</height>
+                   <width>210</width>
+                   <height>34</height>
                   </size>
+                 </property>
+                 <property name="inputMask">
+                  <string/>
                  </property>
                  <property name="placeholderText">
                   <string>Search...</string>
@@ -341,7 +417,7 @@ QPushButton{
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="search_btn_3">
+                <widget class="QPushButton" name="search_btn_5">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                    <horstretch>0</horstretch>
@@ -350,7 +426,7 @@ QPushButton{
                  </property>
                  <property name="minimumSize">
                   <size>
-                   <width>104</width>
+                   <width>54</width>
                    <height>40</height>
                   </size>
                  </property>
@@ -407,7 +483,7 @@ QPushButton{
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>6</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_2">
@@ -523,7 +599,7 @@ QPushButton{
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="page_7">
+         <widget class="QWidget" name="userPage">
           <layout class="QGridLayout" name="gridLayout_8">
            <property name="leftMargin">
             <number>0</number>
@@ -560,7 +636,7 @@ QPushButton{
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
-                  <height>100</height>
+                  <height>0</height>
                  </size>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_12">
@@ -572,6 +648,7 @@ QPushButton{
                       <property name="font">
                        <font>
                         <pointsize>15</pointsize>
+                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -635,7 +712,7 @@ QPushButton{
                            </property>
                            <property name="minimumSize">
                             <size>
-                             <width>104</width>
+                             <width>54</width>
                              <height>40</height>
                             </size>
                            </property>
@@ -1853,6 +1930,18 @@ QPushButton{
        </size>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <property name="spacing">
@@ -1902,13 +1991,22 @@ QPushButton{
          <property name="spacing">
           <number>0</number>
          </property>
-         <item>
+         <item alignment="Qt::AlignLeft">
           <widget class="QPushButton" name="home_btn_2">
+           <property name="minimumSize">
+            <size>
+             <width>104</width>
+             <height>40</height>
+            </size>
+           </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
            <property name="text">
-            <string>Home</string>
+            <string>Trang chủ</string>
            </property>
            <property name="icon">
             <iconset>
@@ -1929,10 +2027,13 @@ QPushButton{
            </property>
           </widget>
          </item>
-         <item>
+         <item alignment="Qt::AlignLeft">
           <widget class="QPushButton" name="dashborad_btn_2">
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
            </property>
            <property name="text">
             <string>Tổng quan</string>
@@ -1956,10 +2057,13 @@ QPushButton{
            </property>
           </widget>
          </item>
-         <item>
+         <item alignment="Qt::AlignLeft">
           <widget class="QPushButton" name="orders_btn_2">
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
            </property>
            <property name="text">
             <string>Quản lý đơn hàng</string>
@@ -1983,10 +2087,13 @@ QPushButton{
            </property>
           </widget>
          </item>
-         <item>
+         <item alignment="Qt::AlignLeft">
           <widget class="QPushButton" name="products_btn_2">
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
            </property>
            <property name="text">
             <string>Quản lý sản phẩm</string>
@@ -2010,10 +2117,13 @@ QPushButton{
            </property>
           </widget>
          </item>
-         <item>
+         <item alignment="Qt::AlignLeft">
           <widget class="QPushButton" name="customers_btn_2">
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
            </property>
            <property name="text">
             <string>Quản lý tài khoản</string>
@@ -2073,6 +2183,16 @@ QPushButton{
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1470</width>
+     <height>22</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources>

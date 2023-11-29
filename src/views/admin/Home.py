@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QMessageBox, QMainWindow,QAbstractItemView, QApplication, QPushButton
 from PyQt5.QtCore import Qt, QPoint, pyqtSlot
 from PyQt5.QtGui import QMouseEvent, QIcon, QPixmap
-
+from PyQt5 import QtCore, QtGui, QtWidgets
 from src.views.ui_generated.admin.home import Ui_MainWindow
 from src.controllers.admin.UserController import UserController
 from src.models.users import User
@@ -15,19 +15,23 @@ class HomeWindow(QMainWindow):
         self.ui.setupUi(self)
         self.USER_ID = user_id
 
-        # hide collapse menu
+        # ẩn menu nhỏ
         self.ui.icon_only_widget.hide()
-        # initialize widget in app
+
+        # khởi tạo các button change page
         self.customers_btn_2 = self.ui.customers_btn_2
+        self.add_user_btn = self.ui.addUserBtn
+
+        # khởi tạo page
+        # sét trang mặc định hiển thị khi page được hiển thj
         self.pages = self.ui.stackedWidget
         self.pages.setCurrentIndex(9)
 
-        # connect signal and slot
-        # change window
+        # xử lý sự kiện click button change page
         self.customers_btn_2.toggled.connect(
             lambda: self.do_change_page(self.customers_btn_2))
-        # self.create_pw_btn.toggled.connect(
-        #     lambda: self.do_change_page(self.create_pw_btn))
+        self.add_user_btn.toggled.connect(
+            lambda: self.do_change_page(self.add_user_btn))
         # self.conf_btn.toggled.connect(
         #     lambda: self.do_change_page(self.conf_btn))
 
@@ -44,16 +48,21 @@ class HomeWindow(QMainWindow):
     def on_user_btn_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(6)
 
+    @pyqtSlot()
+    def on_addUserBtn_clicked(self):
+        print(1)
+
     def do_change_page(self, btn):
         """
         function for change page
         """
         btn_text = btn.text().strip()
-        if btn_text == self.home_btn_2.text().strip():
-            self.pages.setCurrentIndex(0)
-            self.on_showSearchBtn_clicked()
-        elif btn_text == self.customers_btn_2.text().strip():
-            self.pages.setCurrentIndex(2)
+
+        if btn_text == self.customers_btn_2.text().strip():
+            self.pages.setCurrentIndex(6)
+        elif btn_text == self.add_user_btn.text().strip():
+            self.pages.setCurrentIndex(7)
+            self.on_addUserBtn_clicked()
         else:
             self.pages.setCurrentIndex(2)
             self.on_confRefreshBtn_clicked()

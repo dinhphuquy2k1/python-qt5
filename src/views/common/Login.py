@@ -24,6 +24,7 @@ class LoginWindow(QWidget):
         # self.ui.registerBtn.setFocusPolicy(Qt.NoFocus)
         self.ui.loginBtn.setFocusPolicy(Qt.NoFocus)
 
+        self.admin_home = HomeWindow(1)
         ## show login window when start app
         self.ui.funcWidget.setCurrentIndex(0)
 
@@ -117,8 +118,9 @@ class LoginWindow(QWidget):
         #     self.warning_messagebox("Sai tài khoản hoặc mật khẩu.")
         #     self.ui.lineEdit.clear()
         #     self.ui.lineEdit_2.clear()
-        admin_home = HomeWindow(1)
-        admin_home.show()
+        self.admin_home = HomeWindow(1)
+
+        self.admin_home.show()
 
         self.close()
 

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QMessageBox, QMainWindow,QAbstractItemView, QApplication, QPushButton
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QMainWindow,QTableWidgetItem,QAbstractItemView, QApplication, QPushButton
 from PyQt5.QtCore import Qt, QPoint, pyqtSlot
 from PyQt5.QtGui import QMouseEvent, QIcon, QPixmap
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -15,6 +15,30 @@ class HomeWindow(QMainWindow):
         self.ui.setupUi(self)
         self.USER_ID = user_id
 
+        self.page_index = dict(
+            HOME_PAGE=0,
+            DASHBOARD_PAGE=1,
+            ORDER_PAGE=2,
+            PRODUCT_PAGE=3,
+            CUSTOMER_PAGE=4,
+            USER_PAGE=6,
+            USER_PAGE_DETAIL=7,
+        )
+
+        # khởi tạo widget
+        self.customers_btn_2 = self.ui.customers_btn_2
+        self.products_btn_2 = self.ui.products_btn_2
+        self.user_btn_2 = self.ui.user_btn_2
+        self.orders_btn_2 = self.ui.orders_btn_2
+        self.dashboard_btn_2 = self.ui.dashboard_btn_2
+        self.home_btn_2 = self.ui.home_btn_2
+
+        # khởi tạo controller
+        self.user_controller = UserController()
+
+        # khởi tạo biến
+        self.user_table = self.ui.tableUser
+
         # ẩn menu nhỏ
         self.ui.icon_only_widget.hide()
 
@@ -27,13 +51,24 @@ class HomeWindow(QMainWindow):
         self.pages = self.ui.stackedWidget
         self.pages.setCurrentIndex(9)
 
-        # xử lý sự kiện click button change page
+        # khởi tạo signal và slot
+        # bắt sự kiện click menu
         self.customers_btn_2.toggled.connect(
-            lambda: self.do_change_page(self.customers_btn_2))
-        self.add_user_btn.toggled.connect(
-            lambda: self.do_change_page(self.add_user_btn))
-        # self.conf_btn.toggled.connect(
-        #     lambda: self.do_change_page(self.conf_btn))
+            lambda: self.do_change_page(self.page_index['CUSTOMER_PAGE']))
+        self.user_btn_2.toggled.connect(
+            lambda: self.do_change_page(self.page_index['USER_PAGE']))
+        self.products_btn_2.toggled.connect(
+            lambda: self.do_change_page(3)
+        )
+        self.orders_btn_2.toggled.connect(
+            lambda: self.do_change_page(self.page_index['ORDER_PAGE'])
+        )
+        self.dashboard_btn_2.toggled.connect(
+            lambda: self.do_change_page(self.page_index['DASHBOARD_PAGE'])
+        )
+        self.home_btn_2.toggled.connect(
+            lambda: self.do_change_page(0)
+        )
 
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -49,23 +84,26 @@ class HomeWindow(QMainWindow):
         self.ui.stackedWidget.setCurrentIndex(6)
 
     @pyqtSlot()
+    def on_back_btn_user_clicked(self):
+        self.pages.setCurrentIndex(self.page_index['USER_PAGE'])
+        # load lại dữ liệu
+        self.show_user_table()
+
+    # sự kiện click button thêm mới tài khoản
+    @pyqtSlot()
     def on_addUserBtn_clicked(self):
-        print(1)
+        self.pages.setCurrentIndex(self.page_index['USER_PAGE_DETAIL'])
 
-    def do_change_page(self, btn):
-        """
-        function for change page
-        """
-        btn_text = btn.text().strip()
+    """
+    function for change page
+    """
+    def do_change_page(self, index):
+        self.pages.setCurrentIndex(index)
+        if index == self.page_index['USER_PAGE']:
+            self.show_user_table()
 
-        if btn_text == self.customers_btn_2.text().strip():
-            self.pages.setCurrentIndex(6)
-        elif btn_text == self.add_user_btn.text().strip():
-            self.pages.setCurrentIndex(7)
-            self.on_addUserBtn_clicked()
-        else:
-            self.pages.setCurrentIndex(2)
-            self.on_confRefreshBtn_clicked()
+
+
 
     ## Change QPushButton Checkable status when stackedWidget index changed
     def on_stackedWidget_currentChanged(self, index):
@@ -79,37 +117,6 @@ class HomeWindow(QMainWindow):
             else:
                 btn.setAutoExclusive(True)
 
-    ## functions for changing menu page
-    def on_home_btn_1_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(0)
-
-    def on_home_btn_2_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(0)
-
-    def on_dashborad_btn_1_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
-
-    def on_dashborad_btn_2_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
-
-    def on_orders_btn_1_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(2)
-
-    def on_orders_btn_2_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(2)
-
-    def on_products_btn_1_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(3)
-
-    def on_products_btn_2_toggled(self, ):
-        self.ui.stackedWidget.setCurrentIndex(3)
-
-    def on_customers_btn_1_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(4)
-
-    def on_customers_btn_2_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(4)
-        # self.ui.stackedWidget.setCurrentIndex(4)
 
     def validateEmpty(self, data: dict, messages: dict, color_style, border_style):
         result = []
@@ -129,9 +136,40 @@ class HomeWindow(QMainWindow):
                     input_text.setStyleSheet(border_style)
         return result
 
+    # Lấy danh sách user
     def getAllUser(self):
-        user_controller = UserController()
-        test = user_controller.getData()
+        return self.user_controller.getData()
+
+    # hiển thị list thông tin user lên table
+    def show_user_table(self):
+        user_list = self.getAllUser()
+        self.user_table.setRowCount(0)
+        if user_list:
+            # set a button for delete password
+            self.delete_btn = QPushButton()
+            self.delete_btn.setObjectName("delete")
+            self.delete_btn.setMinimumSize(QtCore.QSize(36, 36))
+            self.delete_btn.setMaximumSize(QtCore.QSize(36, 36))
+            icon = QIcon("resources/icon/pen.svg")
+            self.delete_btn.setIcon(icon)
+            self.delete_btn.setIconSize(QtCore.QSize(24, 24))
+            self.delete_btn.setFixedWidth(100)
+
+            layout = QHBoxLayout()
+            layout.addWidget(self.delete_btn)
+            layout.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            layout.setContentsMargins(0, 0, 0, 0)
+            widget = QWidget()
+            widget.setLayout(layout)
+
+            for index, item in enumerate(user_list):
+                column_index = 0
+                self.user_table.setRowCount(index+1)
+                self.user_table.setItem(index, column_index, QTableWidgetItem(str(index+1)))
+                self.user_table.setItem(index, column_index+1, QTableWidgetItem(str(item.id)))
+                self.user_table.setItem(index, column_index+2, QTableWidgetItem(str(item.username)))
+                self.user_table.setItem(index, column_index+3, QTableWidgetItem(str(item.name)))
+                self.user_table.setCellWidget(index, column_index+4, widget)
 
     @pyqtSlot()
     def on_btnUser_clicked(self):
@@ -189,3 +227,5 @@ class HomeWindow(QMainWindow):
 
         user = User(name=name, username=username, password=password)
         user_controller.saveUser(user=user)
+        # quay về trang danh sách
+        self.pages.setCurrentIndex(self.page_index["USER_PAGE"])

@@ -97,7 +97,7 @@ class ConnectMySQL:
         try:
             self.connect()
             query = self.session.query(User)
-            result = query.all()
+            result = query.distinct().all()
             return result
 
         except Exception as E:

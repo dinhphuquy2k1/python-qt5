@@ -61,12 +61,53 @@ class ConnectMySQL:
         finally:
             self.close()
 
+    # Lấy thông tin bản ghi dựa vào model
+    def getDataByIdWithModel(self, model, model_id):
+        try:
+            self.connect()
+            result = self.session.query(model).filter_by(id=model_id).first()
+            return result
+
+        except Exception as E:
+            print(E)
+            return []
+
+        finally:
+            self.close()
+
+    # Xóa bản ghi
+    def deleteDataWithModel(self, model, model_id):
+        try:
+            self.connect()
+            self.session.query(model).filter_by(id=model_id).delete()
+            self.session.commit()
+            return True
+        except Exception as E:
+            print(E)
+            return []
+
+        finally:
+            self.close()
+
+
+    def getDataByIdWithQuery(self, model_id):
+        try:
+            self.connect()
+            result = []
+            print(result)
+            return result
+
+        except Exception as E:
+            print(E)
+            return []
+
+        finally:
+            self.close()
 
     def getDataByQuery(self, query):
         self.connect()
         try:
             result = self.session.execute(text(query)).fetchall()
-            print(result)
             return result
 
         except Exception as E:

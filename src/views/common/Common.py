@@ -16,8 +16,9 @@ def warningMessagebox(content):
 
     msgbox.exec_()
 
+
 # tạo view button xóa sửa trên row
-def generate_action_row(row, model):
+def generate_action_row(row_id, model):
     horizontalLayout = QtWidgets.QHBoxLayout()
     horizontalLayout.setContentsMargins(0, 0, 0, 0)
     horizontalLayout.setSpacing(0)
@@ -37,7 +38,7 @@ def generate_action_row(row, model):
     icon = QtGui.QIcon("resources/icon/pen.svg")
     pushButton.setIcon(icon)
     pushButton.setIconSize(QtCore.QSize(24, 24))
-    pushButton.setObjectName(f"row_edit_{model}_{row}")
+    pushButton.setObjectName(f"row_edit_{model}_{row_id}")
     pushButton.setToolTip("Sửa")
     horizontalLayout_4.addWidget(pushButton)
     # button xóa
@@ -50,7 +51,7 @@ def generate_action_row(row, model):
     icon1 = QtGui.QIcon("resources/icon/red-delete-10433.svg")
     pushButton_2.setIcon(icon1)
     pushButton_2.setIconSize(QtCore.QSize(24, 24))
-    pushButton_2.setObjectName(f"row_delete_{model}_{row}")
+    pushButton_2.setObjectName(f"row_delete_{model}_{row_id}")
     # # kết nối click button xóa với hàm xóa
     # pushButton_2.clicked.connect(
     #     lambda: selon_row_click(self.user_table, FormMode.DELETE, self.page_index["USER_PAGE_DETAIL"], FormMode.EDIT))
@@ -64,4 +65,5 @@ def generate_action_row(row, model):
     widget = QWidget()
     widget.setContentsMargins(0, 0, 0, 0)
     widget.setLayout(horizontalLayout)
-    return widget
+    widget.setObjectName(f"row_{model}_{row_id}")
+    return widget, pushButton, pushButton_2

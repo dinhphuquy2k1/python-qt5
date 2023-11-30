@@ -10,6 +10,12 @@ class UserController(BaseController):
         result = self.findFirstByQuery(sql)
         return result
 
+    def checkExitsUserUpdate(self, username, user_id):
+        sql = f"SELECT users.id FROM users WHERE username = '{username}' AND id != '{user_id}'"
+        result = self.findFirstByQuery(sql)
+        return result
+
+
     def checkUserEmailOrPhone(self, username: str):
         is_valid = ''
         if username.isdigit():
@@ -33,6 +39,12 @@ class UserController(BaseController):
 
     def saveUser(self, user: User):
         return bool(self.insertData(user))
+
+    def updateUser(self, user: User, user_id):
+        return
+
+    def updateUserWithModel(self, data, user_id):
+        return self.updateDataWithModel(data, User, user_id)
 
     def login(self, data):
         username = data.get("username", "")

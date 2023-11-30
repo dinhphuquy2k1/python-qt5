@@ -43,7 +43,7 @@ class HomeWindow(QMainWindow):
         # hiển thị header
         self.user_table.horizontalHeader().setVisible(True)
         # lưu giá trị data khi click row trong table
-        self.data_selected = None
+        self.id_data_selected = None
         # trạng thái form
         self.mode = FormMode.ADD
 
@@ -97,10 +97,19 @@ class HomeWindow(QMainWindow):
         # load lại dữ liệu
         self.show_user_table()
 
+    # clear input form user
+    def clearUserForm(self):
+        self.ui.username_le.setText("")
+        self.ui.password_le.setText("")
+        self.ui.confirm_le.setText("")
+        self.ui.name_le.setText("")
+
     # sự kiện click button thêm mới tài khoản
     @pyqtSlot()
     def on_addUserBtn_clicked(self):
         self.pages.setCurrentIndex(self.page_index['USER_PAGE_DETAIL'])
+        self.mode = FormMode.ADD
+        self.clearUserForm()
 
     """
     function for change page
@@ -122,7 +131,7 @@ class HomeWindow(QMainWindow):
             else:
                 btn.setAutoExclusive(True)
 
-
+    #validate form input empty
     def validateEmpty(self, data: dict, messages: dict, color_style, border_style):
         result = []
         for key, value in data.items():
@@ -130,7 +139,6 @@ class HomeWindow(QMainWindow):
             label = getattr(self.ui, label_name, None)
             input_name = f"{key}_le"
             input_text = getattr(self.ui, input_name, None)
-            print(input_name)
             if not value:
                 message = messages[f"{key}Empty"]
                 result.append(message)
@@ -150,52 +158,6 @@ class HomeWindow(QMainWindow):
         user_list = self.getAllUser()
         self.user_table.setRowCount(0)
         if user_list:
-            horizontalLayout = QtWidgets.QHBoxLayout()
-            horizontalLayout.setContentsMargins(0, 0, 0, 0)
-            horizontalLayout.setSpacing(0)
-            horizontalLayout_3 = QtWidgets.QHBoxLayout()
-            spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-            horizontalLayout_3.addItem(spacerItem)
-            widget_2 = QtWidgets.QWidget()
-            horizontalLayout_4 = QtWidgets.QHBoxLayout(widget_2)
-            horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
-            horizontalLayout_4.setSpacing(0)
-            # button sửa
-            pushButton = QPushButton(widget_2)
-            pushButton.setMinimumSize(QtCore.QSize(36, 36))
-            pushButton.setMaximumSize(QtCore.QSize(36, 36))
-            pushButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-            pushButton.setText("")
-            icon = QtGui.QIcon("resources/icon/pen.svg")
-            pushButton.setIcon(icon)
-            pushButton.setIconSize(QtCore.QSize(24, 24))
-            pushButton.setObjectName(f"row_edit_user")
-            pushButton.setToolTip("Sửa")
-            horizontalLayout_4.addWidget(pushButton)
-            # button xóa
-            pushButton_2 = QtWidgets.QPushButton(widget_2)
-            pushButton_2.setMinimumSize(QtCore.QSize(36, 36))
-            pushButton_2.setMaximumSize(QtCore.QSize(36, 36))
-            pushButton_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-            pushButton_2.setText("")
-            pushButton_2.setToolTip("Xóa")
-            icon1 = QtGui.QIcon("resources/icon/red-delete-10433.svg")
-            pushButton_2.setIcon(icon1)
-            pushButton_2.setIconSize(QtCore.QSize(24, 24))
-            pushButton_2.setObjectName(f"row_delete_user")
-            # # kết nối click button xóa với hàm xóa
-            # pushButton_2.clicked.connect(
-            #     lambda: selon_row_click(self.user_table, FormMode.DELETE, self.page_index["USER_PAGE_DETAIL"], FormMode.EDIT))
-            horizontalLayout_4.addWidget(pushButton_2)
-            horizontalLayout_3.addWidget(widget_2)
-            horizontalLayout_3.addWidget(widget_2, 0, QtCore.Qt.AlignTop)
-            spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-            horizontalLayout_3.addItem(spacerItem1)
-            horizontalLayout.addLayout(horizontalLayout_3)
-
-            widget = QWidget()
-            widget.setContentsMargins(0, 0, 0, 0)
-            widget.setLayout(horizontalLayout)
             for index, item in enumerate(user_list):
                 column_index = 0
                 self.user_table.setRowCount(index+1)
@@ -203,10 +165,11 @@ class HomeWindow(QMainWindow):
                 self.user_table.setItem(index, column_index+1, QTableWidgetItem(str(item.id)))
                 self.user_table.setItem(index, column_index+2, QTableWidgetItem(str(item.username)))
                 self.user_table.setItem(index, column_index+3, QTableWidgetItem(str(item.name)))
-                pushButton.clicked.connect(
-                        lambda: self.on_row_click(self.user_table, FormMode.EDIT, self.page_index["USER_PAGE_DETAIL"]))
-                pushButton_2.clicked.connect(
-                        lambda: self.on_row_click(self.user_table, FormMode.DELETE, self.page_index["USER_PAGE_DETAIL"]))
+                widget, edit_btn, delete_btn = generate_action_row(item.id, "user")
+                edit_btn.clicked.connect(
+                    lambda: self.on_row_click(self.user_table, FormMode.EDIT, self.page_index["USER_PAGE_DETAIL"]))
+                delete_btn.clicked.connect(
+                    lambda: self.on_row_click(self.user_table, FormMode.DELETE, self.page_index["USER_PAGE_DETAIL"]))
                 self.user_table.setCellWidget(index, column_index+4, widget)
 
 
@@ -214,32 +177,25 @@ class HomeWindow(QMainWindow):
     def on_row_click(self, table, form_mode, page_index):
         # lấy data
         button = self.sender()
-        row = None
-        if button:
-            try:
-                row = table.indexAt(button.parent().pos()).row()
-            except Exception as E:
-                content = f"Something is wrong: {E}"
-                warningMessagebox(content)
-        if row >= 0:
-            id = int(table.item(row, 1).text())
-            # xử lý sự kiện cho từng màn
-            if page_index == self.page_index["USER_PAGE_DETAIL"]:
-                if form_mode == FormMode.DELETE:
-                    self.on_delete_user(id)
-                elif form_mode == FormMode.EDIT:
-                    # hiển thị màn hình
-                    self.pages.setCurrentIndex(page_index)
-                    self.on_edit_user(id)
+        user_id = int(button.objectName().strip().rsplit('_', 1)[-1])
+        # xử lý sự kiện cho từng màn
+        if page_index == self.page_index["USER_PAGE_DETAIL"]:
+            if form_mode == FormMode.DELETE:
+                self.on_delete_user(user_id)
+            elif form_mode == FormMode.EDIT:
+                # hiển thị màn hình
+                self.pages.setCurrentIndex(page_index)
+                self.on_edit_user(user_id)
 
     # hàm chỉnh sửa thông tin user
     def on_edit_user(self, user_id):
+        self.mode = FormMode.EDIT
+        self.id_data_selected = user_id
         user = self.user_controller.getUserByIdWithModel(user_id)
         self.ui.name_le.setText(user.name)
         self.ui.username_le.setText(user.username)
         self.ui.password_le.setText(user.password)
         self.ui.confirm_le.setText(user.password)
-
 
     # xóa user
     def on_delete_user(self, user_id):
@@ -302,19 +258,6 @@ class HomeWindow(QMainWindow):
             return
 
         user_controller = UserController()
-
-        if self.mode == FormMode.ADD:
-            if user_controller.checkExitsUser(username=username):
-                self.ui.error_username.setStyleSheet(color_style)
-                self.ui.error_username.setText(messages["usernameExit"])
-                self.ui.username_le.setStyleSheet(border_style)
-                return
-        elif self.mode == FormMode.EDIT:
-            print(1)
-            return
-        else: return
-
-
         message = user_controller.checkUserEmailOrPhone(username=username)
         if message:
             self.ui.error_username.setStyleSheet(color_style)
@@ -322,8 +265,25 @@ class HomeWindow(QMainWindow):
             self.ui.username_le.setStyleSheet(border_style)
             return
 
-        user = User(name=name, username=username, password=password)
-        user_controller.saveUser(user=user)
+
+        if self.mode == FormMode.ADD:
+            if user_controller.checkExitsUser(username=username):
+                self.ui.error_username.setStyleSheet(color_style)
+                self.ui.error_username.setText(messages["usernameExit"])
+                self.ui.username_le.setStyleSheet(border_style)
+                return
+            user = User(name=name, username=username, password=password)
+            user_controller.saveUser(user=user)
+        elif self.mode == FormMode.EDIT:
+            if user_controller.checkExitsUserUpdate(username=username, user_id=self.id_data_selected):
+                self.ui.error_username.setStyleSheet(color_style)
+                self.ui.error_username.setText(messages["usernameExit"])
+                self.ui.username_le.setStyleSheet(border_style)
+                return
+            user = {'username': username, 'name': name, 'password': password}
+            user_controller.updateUserWithModel(data=user, user_id=self.id_data_selected)
+        else:
+            return
         # quay về trang danh sách
         self.pages.setCurrentIndex(self.page_index["USER_PAGE"])
         # load lại dữ liệu

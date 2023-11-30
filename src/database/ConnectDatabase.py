@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, update
 from sqlalchemy.orm import sessionmaker
 from src.models.base import Base
 import configparser
@@ -49,9 +49,27 @@ class ConnectMySQL:
             self.close()
 
     def insertData(self, data):
-        self.connect()
         try:
+            self.connect()
             self.session.add(data)
+            self.session.commit()
+            return True
+        except Exception as E:
+            print(E)
+            self.session.rollback()
+            return False
+        finally:
+            self.close()
+
+    def updateDataWithQuery(self, query):
+        return
+
+    # cập nhật thông tin bản ghi
+    def updateDataWithModel(self, data, model, model_id):
+        try:
+            self.connect()
+            query = update(User).where(model.id == model_id).values(data)
+            self.session.execute(query)
             self.session.commit()
             return True
         except Exception as E:

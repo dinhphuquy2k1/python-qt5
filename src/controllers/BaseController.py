@@ -18,8 +18,15 @@ class BaseController:
     def insertData(self, data):
         return self.connection.insertData(data)
 
+    def updateDataWithModel(self, data, model, model_id):
+        return self.connection.updateDataWithModel(data, model, model_id)
+
+    def updateDataWithQuery(self, data, query):
+        return
+
     def getDataByIdWithModel(self, model, model_id):
         return self.connection.getDataByIdWithModel(model, model_id)
+
 
     def deleteDataWithModel(self, model, model_id):
         return self.connection.deleteDataWithModel(model, model_id)

@@ -56,12 +56,5 @@ class UserController(BaseController):
 
         return self.connection.findFirstByQuery(sql)
 
-    # lấy toàn bộ user
-    def getData(self):
-        return self.getDataByModel(User)
-
-    def getUserByIdWithModel(self, user_id):
-        return self.getDataByIdWithModel(User, user_id)
-
     def deleteUserWithModel(self, user_id):
         return self.deleteDataWithModel(User, user_id)

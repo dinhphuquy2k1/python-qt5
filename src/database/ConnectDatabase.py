@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, text, update
 from sqlalchemy.orm import sessionmaker
 from src.models.base import Base
+from src.views.common.Common import warningMessagebox
 import configparser
 
 
@@ -74,6 +75,7 @@ class ConnectMySQL:
             return True
         except Exception as E:
             print(E)
+            warningMessagebox("Đã xảy ra lỗi")
             self.session.rollback()
             return False
         finally:

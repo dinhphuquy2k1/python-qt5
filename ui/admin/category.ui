@@ -312,7 +312,6 @@ QPushButton{
                 <property name="font">
                  <font>
                   <pointsize>15</pointsize>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -626,7 +625,6 @@ QPushButton{
                  </property>
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>

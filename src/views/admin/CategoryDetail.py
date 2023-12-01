@@ -20,8 +20,7 @@ class CategoryDetailWindow(QWidget):
         self.mode = form_mode
 
     @pyqtSlot()
-    def save_category(self):
-        return True
+    def save_category(self, form_mode, category_id=None):
         category_name = self.ui.category_name_le.text().strip()
         color_style = "color: #ef5350;"
         border_style = "border: 1px solid #ef5350;"
@@ -41,25 +40,33 @@ class CategoryDetailWindow(QWidget):
         if is_valid:
             return
 
-        if self.mode == FormMode.ADD:
+        if form_mode == FormMode.ADD:
             if self.category_controller.checkExitsDataWithModel(Category.category_name, data=category_name):
                 self.ui.error_category_name.setStyleSheet(color_style)
                 self.ui.error_category_name.setText(messages["category_nameExit"])
                 self.ui.category_name_le.setStyleSheet(border_style)
                 return
             self.category_controller.insertData(Category(category_name=category_name))
-        elif self.mode == FormMode.EDIT:
+        elif form_mode == FormMode.EDIT:
             if self.category_controller.checkExitsDataUpdateWithModel(Category.category_name, data=category_name, model_id=1):
                 self.ui.error_category_name.setStyleSheet(color_style)
-                self.ui.error_category_name.setText(messages["usernameExit"])
+                self.ui.error_category_name.setText(messages["category_nameExit"])
                 self.ui.category_name_le.setStyleSheet(border_style)
                 return
-            self.category_controller.updateUserWithModel(data=Category(category_name=category_name), user_id=self.id_data_selected)
+            self.category_controller.updateDataWithModel(data={'category_name': category_name}, model_id=category_id)
         else:
             return
 
         return True
-        # # quay về trang danh sách
-        # self.pages.setCurrentIndex(self.page_index["USER_PAGE"])
-        # # load lại dữ liệu
-        # self.show_user_table()
+
+    # gán các giá trị lên form
+    def handle_edit_event(self, category_id):
+        category = self.category_controller.getDataByIdWithModel(category_id)
+        if category:
+            self.ui.category_name_le.setText(category.category_name)
+
+    # clear dữ liệu trên form
+    def clear_form(self):
+        self.ui.category_name_le.setStyleSheet("border: 1px solid #e0e5e9;")
+        self.ui.error_category_name.setText("")
+        self.ui.category_name_le.setText("")

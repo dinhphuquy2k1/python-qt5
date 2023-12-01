@@ -8,8 +8,8 @@ class BaseController:
         self.model = model
         self.model_name = model_name
 
-    def getDataByModel(self, model):
-        return self.connection.getDataByModel(model=model)
+    def getDataByModel(self):
+        return self.connection.getDataByModel(self.model)
 
     def getDataByQuery(self, query):
         return self.connection.getDataByQuery(query=query)
@@ -26,8 +26,8 @@ class BaseController:
     def updateDataWithQuery(self, data, query):
         return
 
-    def getDataByIdWithModel(self, model, model_id):
-        return self.connection.getDataByIdWithModel(model, model_id)
+    def getDataByIdWithModel(self, model_id):
+        return self.connection.getDataByIdWithModel(self.model, model_id)
 
 
     def deleteDataWithModel(self, model, model_id):

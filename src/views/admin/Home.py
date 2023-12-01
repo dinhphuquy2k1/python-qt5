@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QMainWindow,QTableWidgetItem,QAbstractItemView, QApplication, QPushButton
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QMainWindow, QTableWidgetItem, QAbstractItemView, QApplication, \
+    QPushButton
 from PyQt5.QtCore import Qt, QPoint, pyqtSlot
 from PyQt5.QtGui import QMouseEvent, QIcon, QPixmap
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -7,7 +8,10 @@ from src.views.common.Common import *
 from src.enums.enums import *
 from src.controllers.admin.UserController import UserController
 from src.models.users import User
-
+from src.views.admin.Product import ProductWindow
+from src.views.admin.Category import CategoryWindow
+from src.views.admin.CategoryDetail import CategoryDetailWindow
+from functools import partial
 
 class HomeWindow(QMainWindow):
     def __init__(self, user_id):
@@ -17,16 +21,6 @@ class HomeWindow(QMainWindow):
         self.ui.setupUi(self)
         self.USER_ID = user_id
 
-        self.page_index = dict(
-            HOME_PAGE=0,
-            DASHBOARD_PAGE=1,
-            ORDER_PAGE=2,
-            PRODUCT_PAGE=3,
-            CUSTOMER_PAGE=4,
-            USER_PAGE=6,
-            USER_PAGE_DETAIL=7,
-        )
-
         # khởi tạo widget
         self.customers_btn_2 = self.ui.customers_btn_2
         self.products_btn_2 = self.ui.products_btn_2
@@ -34,6 +28,10 @@ class HomeWindow(QMainWindow):
         self.orders_btn_2 = self.ui.orders_btn_2
         self.dashboard_btn_2 = self.ui.dashboard_btn_2
         self.home_btn_2 = self.ui.home_btn_2
+        # khởi tạo các page thêm vào stackWidget
+        product_widget = ProductWindow()
+        self.category_widget = CategoryWindow()
+        self.category_widget_detail = CategoryDetailWindow(FormMode.ADD)
 
         # khởi tạo controller
         self.user_controller = UserController()
@@ -50,15 +48,43 @@ class HomeWindow(QMainWindow):
         # ẩn menu nhỏ
         self.ui.icon_only_widget.hide()
 
+        # khởi tạo page
+        # sét trang mặc định hiển thị khi page được hiển thị
+        self.pages = self.ui.stackedWidget
+
         # khởi tạo các button change page
         self.customers_btn_2 = self.ui.customers_btn_2
         self.add_user_btn = self.ui.addUserBtn
+        self.back_btn_category = self.category_widget_detail.ui.back_btn_category
+        self.cancel_btn_category = self.category_widget_detail.ui.btn_cancel_category
+        self.btn_add_category = self.category_widget.ui.btn_add_category
+        self.btn_save_category = self.category_widget_detail.ui.btn_save_category
 
-        # khởi tạo page
-        # sét trang mặc định hiển thị khi page được hiển thj
-        self.pages = self.ui.stackedWidget
-        self.pages.setCurrentIndex(9)
+        # page index của các trang
+        self.page_index = dict(
+            HOME_PAGE=0,
+            DASHBOARD_PAGE=1,
+            # trang loại sản phẩm
+            CATEGORY_PAGE=self.pages.addWidget(self.category_widget),
+            CATEGORY_PAGE_DETAIL=self.pages.addWidget(self.category_widget_detail),
+            ORDER_PAGE=2,
+            PRODUCT_PAGE=self.pages.addWidget(product_widget),
+            CUSTOMER_PAGE=4,
+            # trang thông tin người dùng
+            USER_PAGE=6,
+            # trang chi tiết người dùng
+            USER_PAGE_DETAIL=7,
+        )
+        # hiển thị page mặc định khi mở form
+        self.pages.setCurrentIndex(self.page_index['CATEGORY_PAGE_DETAIL'])
 
+        self.initializeSignal()
+
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+
+    # Khởi tạo kết nối các button liên kết
+    def initializeSignal(self):
         # khởi tạo signal và slot
         # bắt sự kiện click menu
         self.customers_btn_2.toggled.connect(
@@ -77,9 +103,17 @@ class HomeWindow(QMainWindow):
         self.home_btn_2.toggled.connect(
             lambda: self.do_change_page(0)
         )
-
-        self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_TranslucentBackground)
+        # sự kiện click button back, hủy tại màn thêm mới sản phẩm
+        self.back_btn_category.clicked.connect(
+            lambda: self.do_change_page(self.page_index['CATEGORY_PAGE'])
+        )
+        self.cancel_btn_category.clicked.connect(
+            lambda: self.do_change_page(self.page_index['CATEGORY_PAGE'])
+        )
+        # kết nối sự kiện màn loại sản phẩm và chi tiết loại sản phẩm
+        self.btn_add_category.clicked.connect(
+            lambda: self.hanle_event_per_page(self.page_index['CATEGORY_PAGE_DETAIL'], self.page_index['CATEGORY_PAGE'], self.category_widget_detail,self.category_widget, "category")
+        )
 
     def on_search_btn_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(5)
@@ -114,11 +148,11 @@ class HomeWindow(QMainWindow):
     """
     function for change page
     """
+
     def do_change_page(self, index):
         self.pages.setCurrentIndex(index)
         if index == self.page_index['USER_PAGE']:
             self.show_user_table()
-
 
     ## Change QPushButton Checkable status when stackedWidget index changed
     def on_stackedWidget_currentChanged(self, index):
@@ -131,7 +165,7 @@ class HomeWindow(QMainWindow):
             else:
                 btn.setAutoExclusive(True)
 
-    #validate form input empty
+    # validate form input empty
     def validateEmpty(self, data: dict, messages: dict, color_style, border_style):
         result = []
         for key, value in data.items():
@@ -160,18 +194,17 @@ class HomeWindow(QMainWindow):
         if user_list:
             for index, item in enumerate(user_list):
                 column_index = 0
-                self.user_table.setRowCount(index+1)
-                self.user_table.setItem(index, column_index, QTableWidgetItem(str(index+1)))
-                self.user_table.setItem(index, column_index+1, QTableWidgetItem(str(item.id)))
-                self.user_table.setItem(index, column_index+2, QTableWidgetItem(str(item.username)))
-                self.user_table.setItem(index, column_index+3, QTableWidgetItem(str(item.name)))
+                self.user_table.setRowCount(index + 1)
+                self.user_table.setItem(index, column_index, QTableWidgetItem(str(index + 1)))
+                self.user_table.setItem(index, column_index + 1, QTableWidgetItem(str(item.id)))
+                self.user_table.setItem(index, column_index + 2, QTableWidgetItem(str(item.username)))
+                self.user_table.setItem(index, column_index + 3, QTableWidgetItem(str(item.name)))
                 widget, edit_btn, delete_btn = generate_action_row(item.id, "user")
                 edit_btn.clicked.connect(
                     lambda: self.on_row_click(self.user_table, FormMode.EDIT, self.page_index["USER_PAGE_DETAIL"]))
                 delete_btn.clicked.connect(
                     lambda: self.on_row_click(self.user_table, FormMode.DELETE, self.page_index["USER_PAGE_DETAIL"]))
-                self.user_table.setCellWidget(index, column_index+4, widget)
-
+                self.user_table.setCellWidget(index, column_index + 4, widget)
 
     # function click edit row
     def on_row_click(self, table, form_mode, page_index):
@@ -265,7 +298,6 @@ class HomeWindow(QMainWindow):
             self.ui.username_le.setStyleSheet(border_style)
             return
 
-
         if self.mode == FormMode.ADD:
             if user_controller.checkExitsUser(username=username):
                 self.ui.error_username.setStyleSheet(color_style)
@@ -288,3 +320,25 @@ class HomeWindow(QMainWindow):
         self.pages.setCurrentIndex(self.page_index["USER_PAGE"])
         # load lại dữ liệu
         self.show_user_table()
+
+    # xử lý các sự kiện click button save, back, cancel, delete... của các màn
+    def hanle_event_per_page(self, page_to_index, page_back_index, widget_detail, widget_list, widget_name):
+        self.do_change_page(page_to_index)
+
+        # Sử dụng getattr để lấy đối tượng hàm từ tên
+        btn_save = widget_detail.findChild(QPushButton, f"btn_save_{widget_name}")
+        btn_back = widget_detail.findChild(QPushButton, f"back_btn_{widget_name}")
+        btn_back = widget_detail.findChild(QPushButton, f"btn_cancel_{widget_name}")
+        if btn_save:
+            btn_save.clicked.connect(partial(self.handle_save, widget_detail, widget_list, page_back_index, widget_name))
+
+    def handle_save(self, widget_detail, widget_list, page_back_index, widget_name):
+        function_save_name = f"save_{widget_name}"
+        function_list_name = 1
+
+        function_save = getattr(widget_detail, function_save_name)
+        if function_save():
+            # quay về trang danh sách
+            self.pages.setCurrentIndex(page_back_index)
+
+

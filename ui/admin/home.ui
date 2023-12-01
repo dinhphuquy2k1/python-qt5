@@ -212,8 +212,6 @@ QPushButton{
 }
 
 #search_btn_2{
-	min-weight: 40px;
-	max-weight: 40px;
 	border: none;
 }
 
@@ -510,7 +508,7 @@ QPushButton{
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>7</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_2">
@@ -675,6 +673,7 @@ QPushButton{
                       <property name="font">
                        <font>
                         <pointsize>15</pointsize>
+                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -973,6 +972,7 @@ QPushButton{
                        </property>
                        <property name="font">
                         <font>
+                         <weight>75</weight>
                          <bold>true</bold>
                         </font>
                        </property>
@@ -1120,6 +1120,7 @@ QPushButton{
                        <property name="font">
                         <font>
                          <pointsize>-1</pointsize>
+                         <weight>75</weight>
                          <bold>true</bold>
                         </font>
                        </property>

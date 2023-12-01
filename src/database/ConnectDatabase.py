@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, text, update
 from sqlalchemy.orm import sessionmaker
 from src.models.base import Base
 import configparser
-from src.models.users import User
+
 
 class ConnectMySQL:
     def __init__(self, config_file_path="alembic.ini"):
@@ -68,7 +68,7 @@ class ConnectMySQL:
     def updateDataWithModel(self, data, model, model_id):
         try:
             self.connect()
-            query = update(User).where(model.id == model_id).values(data)
+            query = update(model).where(model.id == model_id).values(data)
             self.session.execute(query)
             self.session.commit()
             return True
@@ -107,7 +107,6 @@ class ConnectMySQL:
         finally:
             self.close()
 
-
     def getDataByIdWithQuery(self, model_id):
         try:
             self.connect()
@@ -135,12 +134,25 @@ class ConnectMySQL:
         finally:
             self.close()
 
-    def findFirstByModel(self, model, filters=None):
-        self.connect()
+    # Lấy ra bản ghi đầu tiên thỏa mãn điều kiện (bỏ qua bản ghi với id=model_id)
+    def findFisrtWithColumnWithoutIdByModel(self, model, column, data, model_id):
         try:
-            query = self.session.query(model)
-            result = query.all()
-            return result
+            self.connect()
+            return self.session.query(model).filter(column == data).filter(model.id != model_id).first()
+
+        except Exception as E:
+            print(E)
+            return []
+
+        finally:
+            self.close()
+
+
+    # Lấy thông tin data dựa vào model
+    def findFirstWithColumnByModel(self, model, column, data):
+        try:
+            self.connect()
+            return self.session.query(model).filter(column == data).first()
 
         except Exception as E:
             print(E)
@@ -155,7 +167,7 @@ class ConnectMySQL:
         """
         try:
             self.connect()
-            query = self.session.query(User)
+            query = self.session.query(model)
             result = query.distinct().all()
             return result
 
@@ -180,106 +192,3 @@ class ConnectMySQL:
         finally:
             self.session.close()
 
-    ## function for login window
-    def create_login_account(self, user_name, password):
-        """
-        Insert new login account data
-        """
-        sql = f"INSERT INTO user_tb (user_name, password) VALUES ('{user_name}', '{password}')"
-
-        result = self.update_data(sql=sql)
-
-        return result
-
-    def check_username(self, username):
-        """
-        Check the username when create new login account.
-        """
-        sql = f"SELECT * FROM user_tb WHERE user_name='{username}'"
-
-        result = self.get_data(sql=sql)
-
-        return result
-
-    ## Function for show data window
-    def get_password_list(self, user_id, search_username, search_website):
-        """
-        Search and get password data from database.
-        """
-        sql = f"""
-            SELECT * FROM password_tb 
-                WHERE user_id={user_id} 
-                    AND user_name LIKE '%{search_username}%'
-                    AND website LIKE '%{search_website}%';
-        """
-
-        result = self.get_data(sql=sql)
-
-        return result
-
-    def delete_password_data(self, id):
-        """
-        Delete selected password data from database.
-        """
-        sql = f"DELETE FROM password_tb WHERE id={id}"
-
-        result = self.update_data(sql=sql)
-
-        return result
-
-    ## Function for generate password window
-    def save_new_password(self, user_id, user_name, website, password):
-        """
-        Save the new generate password data
-        """
-        sql = f"""
-            INSERT INTO password_tb (user_id, user_name, website, password)
-                VALUES ({user_id}, '{user_name}', '{website}', '{password}');
-        """
-
-        result = self.update_data(sql=sql)
-
-        return result
-
-    ## function for configuration window
-    def create_config_data(self, user_id,
-                           lowercase="abcdefghijklmnopqrstuvwxyz",
-                           uppercase="ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-                           numbers="1234567890",
-                           special_characters="@#$%&^!"):
-        """
-        Create configuration data for special account
-        """
-        sql = f"""
-            INSERT INTO configuration_tb (user_id, lowercase, uppercase, numbers, special_characters )
-	            VALUES ({user_id}, '{lowercase}', '{uppercase}', '{numbers}', '{special_characters}');
-        """
-
-        result = self.update_data(sql=sql)
-
-        return result
-
-    def check_config_data(self, user_id):
-        """
-        Check if the configuration data for the user is in the database.
-        """
-        sql = f"SELECT * FROM configuration_tb WHERE user_id={user_id}"
-
-        result = self.get_data(sql=sql)
-
-        return result
-
-    def update_config_data(self, user_id, lowercase, uppercase, numbers, special_characters):
-        """
-        Update configuration data.
-        """
-        sql = f"""
-            UPDATE configuration_tb 
-                SET lowercase='{lowercase}', uppercase='{uppercase}',
-                    numbers='{numbers}', special_characters='{special_characters}'
-                WHERE user_id={user_id}
-        """
-
-        result = self.update_data(sql=sql)
-
-        return result

@@ -9,6 +9,9 @@ pip install -r requirements.txt
 ```sh
 alembic upgrade head
 ```
+```sh
+alembic downgrade base
+```
 
 ## Other: Update resource
 ```sh

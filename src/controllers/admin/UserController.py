@@ -5,6 +5,9 @@ from src.models.users import User
 
 class UserController(BaseController):
 
+    def __init__(self):
+        super().__init__(model=User, model_name="users")
+
     def checkExitsUser(self, username):
         sql = f"SELECT * FROM users WHERE username='{username}'"
         result = self.findFirstByQuery(sql)
@@ -44,7 +47,7 @@ class UserController(BaseController):
         return
 
     def updateUserWithModel(self, data, user_id):
-        return self.updateDataWithModel(data, User, user_id)
+        return self.updateDataWithModel(data, user_id)
 
     def login(self, data):
         username = data.get("username", "")

@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QMessageBox, QPushButton, QWidget
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 def warningMessagebox(content):
     """
     Common messagebox function
@@ -15,6 +16,25 @@ def warningMessagebox(content):
     msgbox.setStandardButtons(QMessageBox.Close)
 
     msgbox.exec_()
+
+
+# validate form input not empty
+def validateEmpty(self, data: dict, messages: dict, color_style, border_style):
+    result = []
+    for key, value in data.items():
+        label_name = f"error_{key}"
+        label = getattr(self.ui, label_name, None)
+        input_name = f"{key}_le"
+        input_text = getattr(self.ui, input_name, None)
+        if not value:
+            message = messages[f"{key}Empty"]
+            result.append(message)
+            if label:
+                label.setText(message)
+                label.setStyleSheet(color_style)
+            if input_text:
+                input_text.setStyleSheet(border_style)
+    return result
 
 
 # tạo view button xóa sửa trên row

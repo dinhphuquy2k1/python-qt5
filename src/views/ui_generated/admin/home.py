@@ -198,7 +198,6 @@ class Ui_MainWindow(object):
 "\n"
 "#search_btn_2{\n"
 "    min-weight: 40px;\n"
-"    max-weight: 40px;\n"
 "    border: none;\n"
 "}\n"
 "\n"

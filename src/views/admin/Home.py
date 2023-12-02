@@ -12,6 +12,7 @@ from src.models.users import User
 from src.views.admin.Product import ProductWindow
 from src.views.admin.Category import CategoryWindow
 from src.views.admin.CategoryDetail import CategoryDetailWindow
+from src.views.admin.ProductDetail import ProductDetailWindow
 from functools import partial
 
 
@@ -31,7 +32,8 @@ class HomeWindow(QMainWindow):
         self.dashboard_btn_2 = self.ui.dashboard_btn_2
         self.home_btn_2 = self.ui.home_btn_2
         # khởi tạo các page thêm vào stackWidget
-        self.category_widget_detail = CategoryDetailWindow(FormMode.ADD)
+        self.category_widget_detail = CategoryDetailWindow()
+        self.product_widget_detail = ProductDetailWindow()
 
         # khởi tạo controller
         self.user_controller = UserController()
@@ -56,8 +58,6 @@ class HomeWindow(QMainWindow):
         # khởi tạo page
         # sét trang mặc định hiển thị khi page được hiển thị
         self.pages = self.ui.stackedWidget
-        # khởi tạo các page
-        self.category_widget_detail = CategoryDetailWindow(FormMode.ADD)
 
         # khởi tạo các button change page
         self.category_btn_2 = self.ui.category_btn_2
@@ -66,11 +66,15 @@ class HomeWindow(QMainWindow):
         self.back_btn_category = self.category_widget_detail.ui.back_btn_category
         self.cancel_btn_category = self.category_widget_detail.ui.btn_cancel_category
 
-
         self.btn_add_category = self.ui.btn_add_category
         self.btn_save_category = self.category_widget_detail.ui.btn_save_category
         self.btn_cancel_category = self.category_widget_detail.ui.btn_cancel_category
         self.back_btn_category = self.category_widget_detail.ui.back_btn_category
+        # khởi tạo các button product
+        self.btn_add_product = self.ui.btn_add_product
+        self.back_btn_product = self.product_widget_detail.ui.back_btn_product
+        self.btn_save_product = self.product_widget_detail.ui.btn_save_product
+        self.btn_cancel_product = self.product_widget_detail.ui.btn_cancel_product
 
         # page index của các trang
         self.page_index = dict(
@@ -79,6 +83,7 @@ class HomeWindow(QMainWindow):
             # trang loại sản phẩm
             CATEGORY_PAGE=7,
             CATEGORY_PAGE_DETAIL=self.pages.addWidget(self.category_widget_detail),
+            PRODUCT_PAGE_DETAIL=self.pages.addWidget(self.product_widget_detail),
             ORDER_PAGE=2,
             PRODUCT_PAGE=3,
             CUSTOMER_PAGE=4,
@@ -131,6 +136,21 @@ class HomeWindow(QMainWindow):
         )
         self.btn_save_category.clicked.connect(
             lambda: self.handle_save(self.category_widget_detail, self.mode, self.page_index['CATEGORY_PAGE'], "category")
+        )
+        # kết nôi sự kiện màn sản phẩm
+        self.btn_add_product.clicked.connect(
+            lambda: self.hanle_btn_add(self.product_widget_detail, FormMode.EDIT,
+                                       self.page_index['PRODUCT_PAGE_DETAIL'])
+        )
+        self.back_btn_product.clicked.connect(
+            lambda: self.do_change_page(self.page_index['PRODUCT_PAGE'])
+        )
+        self.btn_cancel_product.clicked.connect(
+            lambda: self.do_change_page(self.page_index['PRODUCT_PAGE'])
+        )
+        self.btn_save_product.clicked.connect(
+            lambda: self.handle_save(self.product_widget_detail, self.mode, self.page_index['PRODUCT_PAGE'],
+                                     "product")
         )
 
     def on_search_btn_clicked(self):

@@ -1,8 +1,8 @@
-"""first commit
+"""second commit
 
-Revision ID: 76e5cc26309f
+Revision ID: 7b00108cb420
 Revises: 
-Create Date: 2023-12-01 16:08:34.808091
+Create Date: 2023-12-02 16:13:15.420049
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision: str = '76e5cc26309f'
+revision: str = '7b00108cb420'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,8 +28,19 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('category_name')
     )
+    op.create_table('users',
+    sa.Column('username', sa.String(length=255), nullable=True),
+    sa.Column('name', sa.String(length=255), nullable=True),
+    sa.Column('password', sa.String(length=255), nullable=True),
+    sa.Column('id', mysql.INTEGER(unsigned=True), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('username')
+    )
     op.create_table('products',
     sa.Column('product_name', sa.String(length=255), nullable=True),
+    sa.Column('product_code', sa.String(length=255), nullable=True),
     sa.Column('promotion_price', sa.DECIMAL(precision=18, scale=0), nullable=True),
     sa.Column('category_id', mysql.INTEGER(unsigned=True), nullable=True),
     sa.Column('manufacture_date', sa.DateTime(timezone=True), nullable=True),
@@ -41,7 +52,7 @@ def upgrade() -> None:
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('product_name')
+    sa.UniqueConstraint('product_code')
     )
     op.create_table('images',
     sa.Column('image_url', sa.String(length=255), nullable=True),
@@ -84,5 +95,6 @@ def downgrade() -> None:
     op.drop_table('item_classifications')
     op.drop_table('images')
     op.drop_table('products')
+    op.drop_table('users')
     op.drop_table('categories')
     # ### end Alembic commands ###

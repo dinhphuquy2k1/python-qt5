@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icon">
+    <file>../resources/icon/multiple-images.svg</file>
     <file>../resources/icon/pen.svg</file>
     <file>../resources/icon/red-delete-10433.svg</file>
     <file>../resources/icon/search.svg</file>

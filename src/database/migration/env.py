@@ -1,8 +1,10 @@
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
+from sqlalchemy import pool, create_engine
+from sqlalchemy.orm import sessionmaker
+import configparser
+from src.models.users import User
 from alembic import context
 
 # this is the Alembic Config object, which provides
@@ -71,7 +73,34 @@ def run_migrations_online():
             context.run_migrations()
 
 
+# tạo 1 tài khoản mặc định
+def seeder_user():
+    config = configparser.ConfigParser()
+    config.read("alembic.ini")
+    db_url = config.get("alembic", "sqlalchemy.url")
+    engine = create_engine(db_url)
+    Base.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    connection = None
+    session = None
+    try:
+        # tạo 1 tài khoản mặc định
+        connection = engine.connect()
+        session = Session()
+        session.add(User(username='0912229762', name='admin', password='1'))
+        session.commit()
+
+    except Exception as E:
+
+        print("Không thể kết nối được database")
+
+    finally:
+        connection.close()
+        session.close()
+
 if context.is_offline_mode():
     run_migrations_offline()
+    seeder_user()
 else:
     run_migrations_online()
+    seeder_user()

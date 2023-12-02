@@ -7,7 +7,9 @@ from sqlalchemy.dialects.mysql import INTEGER
 # Bảng sản phẩm
 class Product(Base, BaseMixin):
     __tablename__ = 'products'
-    product_name = Column(String(255), unique=True)
+    product_name = Column(String(255))
+    # mã sản phẩm
+    product_code = Column(String(255), unique=True)
     # ảnh sản phẩm
     product_image = relationship('Image', back_populates='product')
     # khuyến mãi

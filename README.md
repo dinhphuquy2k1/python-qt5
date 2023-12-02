@@ -20,8 +20,8 @@ pyrcc5 ui/resource.qrc -o ui/resource_rc.py
 
 ## Other: Update ui
 ```sh
-pyuic5 main_window.ui -o main_window_ui.py
-
+ pyuic5 ui/admin/home.ui -o src/views/ui_generated/admin/home.py
+ pyuic5 ui/admin/product_detail.ui -o src/views/ui_generated/admin/product_detail.py
 ```
 
 

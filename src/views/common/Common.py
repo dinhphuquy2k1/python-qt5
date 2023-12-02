@@ -1,8 +1,10 @@
 # messagebox.py
-from PyQt5.QtWidgets import QMessageBox, QPushButton, QWidget
+from PyQt5.QtWidgets import QMessageBox, QPushButton, QWidget, QCalendarWidget, QVBoxLayout, QDialog
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtCore import QDate, pyqtSignal
+import uuid
+from src.enums.enums import *
 
 def warningMessagebox(content):
     """
@@ -19,21 +21,31 @@ def warningMessagebox(content):
 
 
 # validate form input not empty
-def validateEmpty(self, data: dict, messages: dict, color_style, border_style):
+def validateEmpty(self, data: dict, messages: dict):
     result = []
-    for key, value in data.items():
-        label_name = f"error_{key}"
-        label = getattr(self.ui, label_name, None)
-        input_name = f"{key}_le"
-        input_text = getattr(self.ui, input_name, None)
-        if not value:
-            message = messages[f"{key}Empty"]
-            result.append(message)
-            if label:
-                label.setText(message)
-                label.setStyleSheet(color_style)
-            if input_text:
-                input_text.setStyleSheet(border_style)
+    try:
+        for key, value in data.items():
+            label_name = f"error_{key}"
+            label = getattr(self.ui, label_name, None)
+            input_name = f"{key}_le"
+            input_text = getattr(self.ui, input_name, None)
+            if not value:
+                message = messages[f"{key}Empty"]
+                result.append(message)
+                if label:
+                    label.setText(message)
+                    label.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
+                if input_text:
+                    input_text.setStyleSheet(Validate.BORDER_ERROR.value)
+            else:
+                if label:
+                    label.setText("")
+                if input_text:
+                    input_text.setStyleSheet(Validate.BORDER_VALID.value)
+
+    except Exception as E:
+        print(E)
+        return
     return result
 
 
@@ -87,3 +99,28 @@ def generate_action_row(row_id, model):
     widget.setLayout(horizontalLayout)
     widget.setObjectName(f"row_{model}_{row_id}")
     return widget, pushButton, pushButton_2
+
+
+class DateDialog(QDialog):
+    date_selected = pyqtSignal(QDate)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        layout = QVBoxLayout(self)
+
+        self.calendar_widget = QCalendarWidget(self)
+        self.calendar_widget.selectionChanged.connect(self.handle_date_selection)
+        layout.addWidget(self.calendar_widget)
+
+    def handle_date_selection(self):
+        selected_date = self.calendar_widget.selectedDate()
+        self.date_selected.emit(selected_date)
+        # Ẩn QDialog khi người dùng chọn một ngày
+        self.hide()
+
+
+# tạo tên file duy nhất
+def generate_unique_filename(file_name):
+    unique_filename = f"{str(uuid.uuid4())}_{file_name}"
+    return unique_filename

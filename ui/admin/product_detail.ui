@@ -1156,7 +1156,7 @@ QPlainTextEdit{
                                          <number>15</number>
                                         </property>
                                         <item>
-                                         <widget class="QComboBox" name="combobox_category_id">
+                                         <widget class="QComboBox" name="category_le">
                                           <property name="font">
                                            <font>
                                             <family>Cambria</family>
@@ -1547,33 +1547,12 @@ QPlainTextEdit{
                                     <number>0</number>
                                    </property>
                                    <item>
-                                    <widget class="QLineEdit" name="price_le">
-                                     <property name="minimumSize">
-                                      <size>
-                                       <width>222</width>
-                                       <height>46</height>
-                                      </size>
+                                    <widget class="QSpinBox" name="price_le">
+                                     <property name="buttonSymbols">
+                                      <enum>QAbstractSpinBox::NoButtons</enum>
                                      </property>
-                                     <property name="maximumSize">
-                                      <size>
-                                       <width>16777215</width>
-                                       <height>16777215</height>
-                                      </size>
-                                     </property>
-                                     <property name="inputMethodHints">
-                                      <set>Qt::ImhDate</set>
-                                     </property>
-                                     <property name="text">
-                                      <string/>
-                                     </property>
-                                     <property name="echoMode">
-                                      <enum>QLineEdit::Normal</enum>
-                                     </property>
-                                     <property name="placeholderText">
-                                      <string>Giá sản phẩm</string>
-                                     </property>
-                                     <property name="clearButtonEnabled">
-                                      <bool>true</bool>
+                                     <property name="maximum">
+                                      <number>1000000000</number>
                                      </property>
                                     </widget>
                                    </item>

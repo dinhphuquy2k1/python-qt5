@@ -10,6 +10,7 @@ from src.views.common.Common import *
 from src.controllers.admin.CategoryController import CategoryController
 from src.models.category import Category
 
+
 class CategoryDetailWindow(QWidget):
     def __init__(self):
         super(CategoryDetailWindow, self).__init__()
@@ -34,26 +35,28 @@ class CategoryDetailWindow(QWidget):
         }
 
         # validate dữ liệu các cột không được trống
-        is_valid = validateEmpty(self,{'category_name': category_name}, messages, color_style, border_style)
-
+        is_valid = validateEmpty(self,{'category_name': category_name}, messages)
         if is_valid:
             return
-
-        if form_mode == FormMode.ADD:
-            if self.category_controller.checkExitsDataWithModel(Category.category_name, data=category_name):
-                self.ui.error_category_name.setStyleSheet(color_style)
-                self.ui.error_category_name.setText(messages["category_nameExit"])
-                self.ui.category_name_le.setStyleSheet(border_style)
+        try:
+            if form_mode == FormMode.ADD.value:
+                if self.category_controller.checkExitsDataWithModel(Category.category_name, data=category_name):
+                    self.ui.error_category_name.setStyleSheet(color_style)
+                    self.ui.error_category_name.setText(messages["category_nameExit"])
+                    self.ui.category_name_le.setStyleSheet(border_style)
+                    return
+                self.category_controller.insertData(Category(category_name=category_name))
+            elif form_mode == FormMode.EDIT.value:
+                if self.category_controller.checkExitsDataUpdateWithModel(Category.category_name, data=category_name, model_id=category_id):
+                    self.ui.error_category_name.setStyleSheet(color_style)
+                    self.ui.error_category_name.setText(messages["category_nameExit"])
+                    self.ui.category_name_le.setStyleSheet(border_style)
+                    return
+                self.category_controller.updateDataWithModel(data={'category_name': category_name}, model_id=category_id)
+            else:
                 return
-            self.category_controller.insertData(Category(category_name=category_name))
-        elif form_mode == FormMode.EDIT:
-            if self.category_controller.checkExitsDataUpdateWithModel(Category.category_name, data=category_name, model_id=1):
-                self.ui.error_category_name.setStyleSheet(color_style)
-                self.ui.error_category_name.setText(messages["category_nameExit"])
-                self.ui.category_name_le.setStyleSheet(border_style)
-                return
-            self.category_controller.updateDataWithModel(data={'category_name': category_name}, model_id=category_id)
-        else:
+        except Exception as E:
+            print(E)
             return
 
         return True

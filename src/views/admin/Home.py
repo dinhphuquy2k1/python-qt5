@@ -8,6 +8,7 @@ from src.views.common.Common import *
 from src.enums.enums import *
 from src.controllers.admin.UserController import UserController
 from src.controllers.admin.CategoryController import CategoryController
+from src.controllers.admin.ProductController import ProductController
 from src.models.users import User
 from src.views.admin.Product import ProductWindow
 from src.views.admin.Category import CategoryWindow
@@ -38,6 +39,7 @@ class HomeWindow(QMainWindow):
         # khởi tạo controller
         self.user_controller = UserController()
         self.category_controller = CategoryController()
+        self.product_controller = ProductController()
 
         # khởi tạo table
         self.user_table = self.ui.tableUser
@@ -50,7 +52,7 @@ class HomeWindow(QMainWindow):
         # lưu giá trị data khi click row trong table
         self.id_data_selected = None
         # trạng thái form
-        self.mode = FormMode.ADD
+        self.mode = FormMode.ADD.value
 
         # ẩn menu nhỏ
         self.ui.icon_only_widget.hide()
@@ -65,6 +67,7 @@ class HomeWindow(QMainWindow):
         self.add_user_btn = self.ui.addUserBtn
         self.back_btn_category = self.category_widget_detail.ui.back_btn_category
         self.cancel_btn_category = self.category_widget_detail.ui.btn_cancel_category
+        self.products_btn_2 = self.ui.products_btn_2
 
         self.btn_add_category = self.ui.btn_add_category
         self.btn_save_category = self.category_widget_detail.ui.btn_save_category
@@ -94,6 +97,7 @@ class HomeWindow(QMainWindow):
         )
         # hiển thị page mặc định khi mở form
         self.pages.setCurrentIndex(self.page_index['PRODUCT_PAGE'])
+        self.show_product_table()
 
         self.initializeSignal()
         self.show_category_table()
@@ -110,7 +114,7 @@ class HomeWindow(QMainWindow):
         self.user_btn_2.toggled.connect(
             lambda: self.do_change_page(self.page_index['USER_PAGE']))
         self.products_btn_2.toggled.connect(
-            lambda: self.do_change_page(3)
+            lambda: self.do_change_page(self.page_index['PRODUCT_PAGE'])
         )
         self.orders_btn_2.toggled.connect(
             lambda: self.do_change_page(self.page_index['ORDER_PAGE'])
@@ -121,12 +125,12 @@ class HomeWindow(QMainWindow):
         self.home_btn_2.toggled.connect(
             lambda: self.do_change_page(0)
         )
-        self.category_btn_2.clicked.connect(
+        self.category_btn_2.toggled.connect(
             lambda: self.do_change_page(self.page_index["CATEGORY_PAGE"])
         )
         # kết nối sự kiện màn loại sản phẩm và chi tiết loại sản phẩm
         self.btn_add_category.clicked.connect(
-            lambda: self.hanle_btn_add(self.category_widget_detail, FormMode.EDIT, self.page_index['CATEGORY_PAGE_DETAIL'])
+            lambda: self.hanle_btn_add(self.category_widget_detail, FormMode.EDIT.value, self.page_index['CATEGORY_PAGE_DETAIL'])
         )
         self.back_btn_category.clicked.connect(
             lambda: self.do_change_page(self.page_index['CATEGORY_PAGE'])
@@ -139,7 +143,7 @@ class HomeWindow(QMainWindow):
         )
         # kết nôi sự kiện màn sản phẩm
         self.btn_add_product.clicked.connect(
-            lambda: self.hanle_btn_add(self.product_widget_detail, FormMode.EDIT,
+            lambda: self.hanle_btn_add(self.product_widget_detail, FormMode.EDIT.value,
                                        self.page_index['PRODUCT_PAGE_DETAIL'])
         )
         self.back_btn_product.clicked.connect(
@@ -152,6 +156,7 @@ class HomeWindow(QMainWindow):
             lambda: self.handle_save(self.product_widget_detail, self.mode, self.page_index['PRODUCT_PAGE'],
                                      "product")
         )
+
 
     def on_search_btn_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(5)
@@ -180,7 +185,7 @@ class HomeWindow(QMainWindow):
     @pyqtSlot()
     def on_addUserBtn_clicked(self):
         self.pages.setCurrentIndex(self.page_index['USER_PAGE_DETAIL'])
-        self.mode = FormMode.ADD
+        self.mode = FormMode.ADD.value
         self.clearUserForm()
 
     """
@@ -228,23 +233,23 @@ class HomeWindow(QMainWindow):
         row_id = int(button.objectName().strip().rsplit('_', 1)[-1])
         # xử lý sự kiện cho từng màn
         if page_index == self.page_index["USER_PAGE_DETAIL"]:
-            if form_mode == FormMode.DELETE:
+            if form_mode == FormMode.DELETE.value:
                 self.on_delete_user(row_id)
-            elif form_mode == FormMode.EDIT:
+            elif form_mode == FormMode.EDIT.value:
                 # hiển thị màn hình
                 self.pages.setCurrentIndex(page_index)
                 self.on_edit_user(row_id)
         else:
-            if form_mode == FormMode.DELETE:
+            if form_mode == FormMode.DELETE.value:
                 self.on_delete_user(row_id)
-            elif form_mode == FormMode.EDIT:
+            elif form_mode == FormMode.EDIT.value:
                 self.handle_btn_row_edit(widget_detail, page_index, row_id)
 
 
 
     # hàm chỉnh sửa thông tin user
     def on_edit_user(self, user_id):
-        self.mode = FormMode.EDIT
+        self.mode = FormMode.EDIT.value
         self.id_data_selected = user_id
         user = self.user_controller.getDataByIdWithModel(user_id)
         self.ui.name_le.setText(user.name)
@@ -320,7 +325,7 @@ class HomeWindow(QMainWindow):
             self.ui.username_le.setStyleSheet(border_style)
             return
 
-        if self.mode == FormMode.ADD:
+        if self.mode == FormMode.ADD.value:
             if user_controller.checkExitsUser(username=username):
                 self.ui.error_username.setStyleSheet(color_style)
                 self.ui.error_username.setText(messages["usernameExit"])
@@ -328,7 +333,7 @@ class HomeWindow(QMainWindow):
                 return
             user = User(name=name, username=username, password=password)
             user_controller.saveUser(user=user)
-        elif self.mode == FormMode.EDIT:
+        elif self.mode == FormMode.EDIT.value:
             if user_controller.checkExitsUserUpdate(username=username, user_id=self.id_data_selected):
                 self.ui.error_username.setStyleSheet(color_style)
                 self.ui.error_username.setText(messages["usernameExit"])
@@ -352,19 +357,25 @@ class HomeWindow(QMainWindow):
 
     # xử lý sự kiện click button lưu dữ liệu của form chi tiết
     def handle_save(self, widget_detail, form_mode, page_back_index, widget_name):
-        # lấy ra tên function lưu của các trang
-        function_save_name = f"save_{widget_name}"
-        function_save = getattr(widget_detail, function_save_name)
-        function_list = f"show_{widget_name}_table"
-        function_list = getattr(self, function_list)
-        if function_save(form_mode, self.id_data_selected):
-            # quay về trang danh sách
-            self.pages.setCurrentIndex(page_back_index)
-            function_list()
+        try:
+            # lấy ra tên function lưu của các trang
+            function_save_name = f"save_{widget_name}"
+            function_save = getattr(widget_detail, function_save_name)
+            function_list = f"show_{widget_name}_table"
+            function_list = getattr(self, function_list)
+            if function_save:
+                if function_save(form_mode, self.id_data_selected):
+                    # quay về trang danh sách
+                    self.pages.setCurrentIndex(page_back_index)
+                    function_list()
+                else: print(2)
+        except Exception as E:
+            print(E)
+
 
     # xử lý sự kiện click button edit trên row
     def handle_btn_row_edit(self, widget_detail, page_index, row_id):
-        self.mode = FormMode.EDIT
+        self.mode = FormMode.EDIT.value
         self.id_data_selected = row_id
         self.pages.setCurrentIndex(page_index)
         # gắn data lên form
@@ -384,10 +395,10 @@ class HomeWindow(QMainWindow):
                 self.category_table.setItem(index, column_index + 2, QTableWidgetItem(str(item.category_name)))
                 widget, edit_btn, delete_btn = generate_action_row(item.id, "user")
                 edit_btn.clicked.connect(
-                    lambda: self.on_row_click(FormMode.EDIT,
+                    lambda: self.on_row_click(FormMode.EDIT.value,
                                               self.page_index["CATEGORY_PAGE_DETAIL"], self.category_widget_detail, self.page_index["CATEGORY_PAGE"], "category"))
                 delete_btn.clicked.connect(
-                    lambda: self.on_row_click(FormMode.DELETE,
+                    lambda: self.on_row_click(FormMode.DELETE.value,
                                               self.page_index["CATEGORY_PAGE_DETAIL"], self.category_widget_detail, self.page_index["CATEGORY_PAGE"], "category"))
                 self.category_table.setCellWidget(index, column_index + 3, widget)
 
@@ -405,7 +416,25 @@ class HomeWindow(QMainWindow):
                 self.user_table.setItem(index, column_index + 3, QTableWidgetItem(str(item.name)))
                 widget, edit_btn, delete_btn = generate_action_row(item.id, "user")
                 edit_btn.clicked.connect(
-                    lambda: self.on_row_click(self.user_table, FormMode.EDIT, self.page_index["USER_PAGE_DETAIL"]))
+                    lambda: self.on_row_click(self.user_table, FormMode.EDIT.value, self.page_index["USER_PAGE_DETAIL"]))
                 delete_btn.clicked.connect(
-                    lambda: self.on_row_click(self.user_table, FormMode.DELETE, self.page_index["USER_PAGE_DETAIL"]))
+                    lambda: self.on_row_click(self.user_table, FormMode.DELETE.value, self.page_index["USER_PAGE_DETAIL"]))
                 self.user_table.setCellWidget(index, column_index + 4, widget)
+
+    def show_product_table(self):
+        product_list = self.product_controller.getDataByModel()
+        self.product_table.setRowCount(0)
+        if product_list:
+            for index, item in enumerate(product_list):
+                column_index = 0
+                self.product_table.setRowCount(index + 1)
+                self.product_table.setItem(index, column_index, QTableWidgetItem(str(item.product_code)))
+                self.product_table.setItem(index, column_index + 1, QTableWidgetItem(str(item.product_name)))
+                self.product_table.setItem(index, column_index + 2, QTableWidgetItem(str(item.quantity)))
+                self.product_table.setItem(index, column_index + 3, QTableWidgetItem(str(item.price)))
+                widget, edit_btn, delete_btn = generate_action_row(item.id, "product")
+                edit_btn.clicked.connect(
+                    lambda: self.on_row_click(self.product_table, FormMode.EDIT.value, self.page_index["USER_PAGE_DETAIL"]))
+                delete_btn.clicked.connect(
+                    lambda: self.on_row_click(self.product_table, FormMode.DELETE.value, self.page_index["USER_PAGE_DETAIL"]))
+                self.product_table.setCellWidget(index, column_index + 4, widget)

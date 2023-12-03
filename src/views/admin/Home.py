@@ -14,6 +14,7 @@ from src.views.admin.Product import ProductWindow
 from src.views.admin.Category import CategoryWindow
 from src.views.admin.CategoryDetail import CategoryDetailWindow
 from src.views.admin.ProductDetail import ProductDetailWindow
+from src.views.admin.OrderDetail import OrderDetailWindow
 from functools import partial
 
 
@@ -35,6 +36,7 @@ class HomeWindow(QMainWindow):
         # khởi tạo các page thêm vào stackWidget
         self.category_widget_detail = CategoryDetailWindow()
         self.product_widget_detail = ProductDetailWindow()
+        self.order_widget_detail = OrderDetailWindow()
 
         # khởi tạo controller
         self.user_controller = UserController()
@@ -64,7 +66,7 @@ class HomeWindow(QMainWindow):
         # khởi tạo các button change page
         self.category_btn_2 = self.ui.category_btn_2
         self.customers_btn_2 = self.ui.customers_btn_2
-        self.add_user_btn = self.ui.addUserBtn
+        self.btn_add_user = self.ui.btn_add_user
         self.back_btn_category = self.category_widget_detail.ui.back_btn_category
         self.cancel_btn_category = self.category_widget_detail.ui.btn_cancel_category
         self.products_btn_2 = self.ui.products_btn_2
@@ -88,15 +90,16 @@ class HomeWindow(QMainWindow):
             CATEGORY_PAGE_DETAIL=self.pages.addWidget(self.category_widget_detail),
             PRODUCT_PAGE_DETAIL=self.pages.addWidget(self.product_widget_detail),
             ORDER_PAGE=2,
+            ORDER_PAGE_DETAIL=self.pages.addWidget(self.order_widget_detail),
             PRODUCT_PAGE=3,
             CUSTOMER_PAGE=4,
             # trang thông tin người dùng
             USER_PAGE=6,
             # trang chi tiết người dùng
-            USER_PAGE_DETAIL=7,
+            USER_PAGE_DETAIL=8,
         )
         # hiển thị page mặc định khi mở form
-        self.pages.setCurrentIndex(self.page_index['PRODUCT_PAGE'])
+        self.pages.setCurrentIndex(self.page_index['ORDER_PAGE_DETAIL'])
         self.show_product_table()
 
         self.initializeSignal()
@@ -183,7 +186,7 @@ class HomeWindow(QMainWindow):
 
     # sự kiện click button thêm mới tài khoản
     @pyqtSlot()
-    def on_addUserBtn_clicked(self):
+    def on_btn_add_user_clicked(self):
         self.pages.setCurrentIndex(self.page_index['USER_PAGE_DETAIL'])
         self.mode = FormMode.ADD.value
         self.clearUserForm()

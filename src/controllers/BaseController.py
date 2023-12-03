@@ -40,3 +40,6 @@ class BaseController:
     # kiểm tra data đã tồn tại khi update
     def checkExitsDataUpdateWithModel(self, column, data, model_id):
         return self.connection.findFisrtWithColumnWithoutIdByModel(self.model, column, data, model_id)
+
+    def searchData(self, search_column, search_text, order_columns=['created_at']):
+        return self.connection.searchData(self.model, search_column, search_text, order_columns)

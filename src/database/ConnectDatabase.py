@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, text, update
+from sqlalchemy import create_engine, text, update, or_
 from sqlalchemy.orm import sessionmaker
 from src.models.base import Base
 from src.views.common.Common import warningMessagebox
@@ -149,7 +149,6 @@ class ConnectMySQL:
         finally:
             self.close()
 
-
     # Lấy thông tin data dựa vào model
     def findFirstWithColumnByModel(self, model, column, data):
         try:
@@ -194,3 +193,30 @@ class ConnectMySQL:
         finally:
             self.session.close()
 
+    # Tìm kiếm dữ liệu
+    # model: Model muốn tìm kiếm
+    # search_columns: danh sách cột muốn tìm kiếm. Ex: ['OtherColumn1', 'OtherColumn2']
+    # searct_text: nội dung tìm kiếm
+    # order_columns: các cột muốn sắp xếp. Ex: ['Status', 'CreatedDate']
+    def searchData(self, model, search_columns, search_text, order_columns):
+        try:
+            # Xác định các cột sắp xếp
+            order_by_columns = [getattr(model, col) for col in order_columns]
+            # Tạo biểu thức điều kiện cho tìm kiếm
+            search_conditions = [getattr(model, col).ilike(f"%{search_text}%") for col in search_columns]
+            search_condition = or_(*search_conditions)
+            self.connect()
+            query = (
+                self.session.query(model)
+                .filter(search_condition)
+                .order_by(*order_by_columns)
+            )
+            result = query.distinct().all()
+            return result
+
+        except Exception as E:
+            print(E)
+            return []
+
+        finally:
+            self.close()

@@ -5,3 +5,5 @@ from .products import Product
 from .category import Category
 from .item_classification import ItemClassification
 from .sub_item_classification import SubItemClassification
+from .orders import Order
+from .order_details import OrderDetail

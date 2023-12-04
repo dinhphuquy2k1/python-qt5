@@ -144,3 +144,18 @@ QPushButton#delete {
     margin: 3px 5px;
 }
 
+#order_group_btn{
+	border: 1px solid #e5e5e5;
+}
+
+#minus_order_btn, #plus_order_btn{
+	border: none;
+}
+
+#minus_order_btn{
+	border-right: 1px solid #e5e5e5;
+}
+
+#plus_order_btn{
+		border-left: 1px solid #e5e5e5;
+}

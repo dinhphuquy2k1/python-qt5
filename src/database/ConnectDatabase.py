@@ -3,8 +3,8 @@ from sqlalchemy.orm import sessionmaker
 from src.models.base import Base
 from src.views.common.Common import warningMessagebox
 import configparser
-
-
+import sqlalchemy
+print(sqlalchemy.__version__)
 class ConnectMySQL:
     def __init__(self, config_file_path="alembic.ini"):
         config = configparser.ConfigParser()

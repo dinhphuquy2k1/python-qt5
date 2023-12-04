@@ -1,5 +1,8 @@
 ## Uranus
-
+## Step 0: Yêu cầu
+```sh
+python version 3.11.4
+```
 ## Step 1: Install library
 ```sh
 pip install -r requirements.txt

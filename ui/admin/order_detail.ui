@@ -25,6 +25,29 @@
 	min-width: 200px;
 }
 
+QTableWidget QHeaderView::section {
+  	height: 48px;
+	font-weight: 600;
+	text-align: left;
+	font-size: 14px;
+
+	font-weight: 600;
+    background: #fff;
+	padding: 0 16px;
+}
+#tableUserContainer{
+	border: none;
+	border-radius:  4px;
+}
+
+QTableWidget::item {
+   	padding: 0 16px;
+	vertical-align: middle;
+	height: 50px;
+    border-bottom: 1px solid #ddd;	
+	border-right: 1px solid #ddd;
+	cursor: pointer;
+}
     QScrollBar:vertical
     {
         background-color: #fff;
@@ -644,9 +667,9 @@ QPlainTextEdit{
                        <property name="geometry">
                         <rect>
                          <x>0</x>
-                         <y>0</y>
-                         <width>798</width>
-                         <height>729</height>
+                         <y>-240</y>
+                         <width>783</width>
+                         <height>1055</height>
                         </rect>
                        </property>
                        <property name="sizePolicy">
@@ -878,6 +901,21 @@ QPlainTextEdit{
                               </size>
                              </property>
                              <layout class="QVBoxLayout" name="verticalLayout_12">
+                              <property name="spacing">
+                               <number>0</number>
+                              </property>
+                              <property name="leftMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="topMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="rightMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="bottomMargin">
+                               <number>0</number>
+                              </property>
                               <item>
                                <widget class="QWidget" name="widget_14" native="true">
                                 <layout class="QHBoxLayout" name="horizontalLayout_14">
@@ -1117,6 +1155,12 @@ QPlainTextEdit{
                                  </property>
                                  <item>
                                   <widget class="QTableWidget" name="table_info_user">
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>0</width>
+                                     <height>100</height>
+                                    </size>
+                                   </property>
                                    <property name="frameShape">
                                     <enum>QFrame::StyledPanel</enum>
                                    </property>
@@ -1180,6 +1224,12 @@ QPlainTextEdit{
                            </item>
                            <item>
                             <widget class="QWidget" name="widget_20" native="true">
+                             <property name="sizePolicy">
+                              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                               <horstretch>0</horstretch>
+                               <verstretch>0</verstretch>
+                              </sizepolicy>
+                             </property>
                              <layout class="QHBoxLayout" name="horizontalLayout_27">
                               <property name="spacing">
                                <number>0</number>
@@ -1198,6 +1248,12 @@ QPlainTextEdit{
                               </property>
                               <item>
                                <widget class="QWidget" name="widget_21" native="true">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
                                 <layout class="QVBoxLayout" name="verticalLayout_2">
                                  <property name="spacing">
                                   <number>0</number>
@@ -1216,6 +1272,12 @@ QPlainTextEdit{
                                  </property>
                                  <item>
                                   <widget class="QGroupBox" name="groupBox">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
                                    <property name="font">
                                     <font>
                                      <family>Cambria</family>
@@ -1246,6 +1308,12 @@ QPlainTextEdit{
                                     </property>
                                     <item>
                                      <widget class="QWidget" name="widget_2" native="true">
+                                      <property name="sizePolicy">
+                                       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                       </sizepolicy>
+                                      </property>
                                       <layout class="QVBoxLayout" name="verticalLayout_13">
                                        <property name="spacing">
                                         <number>20</number>
@@ -1344,127 +1412,197 @@ QPlainTextEdit{
                                        </item>
                                        <item>
                                         <widget class="QWidget" name="table_product_order_container" native="true">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>0</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>500</height>
+                                          </size>
+                                         </property>
                                          <layout class="QVBoxLayout" name="verticalLayout_14">
-                                          <property name="spacing">
-                                           <number>0</number>
-                                          </property>
-                                          <property name="leftMargin">
-                                           <number>0</number>
-                                          </property>
-                                          <property name="topMargin">
-                                           <number>0</number>
-                                          </property>
-                                          <property name="rightMargin">
-                                           <number>0</number>
-                                          </property>
-                                          <property name="bottomMargin">
-                                           <number>0</number>
-                                          </property>
                                           <item>
-                                           <widget class="QTableWidget" name="table_product_order">
-                                            <property name="sizePolicy">
-                                             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                                              <horstretch>0</horstretch>
-                                              <verstretch>0</verstretch>
-                                             </sizepolicy>
-                                            </property>
-                                            <property name="font">
-                                             <font>
-                                              <family>Cambria</family>
-                                             </font>
+                                           <widget class="QFrame" name="tableUserContainer">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>0</width>
+                                              <height>400</height>
+                                             </size>
                                             </property>
                                             <property name="frameShape">
                                              <enum>QFrame::StyledPanel</enum>
                                             </property>
                                             <property name="frameShadow">
-                                             <enum>QFrame::Sunken</enum>
+                                             <enum>QFrame::Raised</enum>
                                             </property>
-                                            <property name="horizontalScrollBarPolicy">
-                                             <enum>Qt::ScrollBarAlwaysOff</enum>
-                                            </property>
-                                            <property name="selectionMode">
-                                             <enum>QAbstractItemView::SingleSelection</enum>
-                                            </property>
-                                            <property name="selectionBehavior">
-                                             <enum>QAbstractItemView::SelectRows</enum>
-                                            </property>
-                                            <property name="horizontalScrollMode">
-                                             <enum>QAbstractItemView::ScrollPerItem</enum>
-                                            </property>
-                                            <property name="gridStyle">
-                                             <enum>Qt::CustomDashLine</enum>
-                                            </property>
-                                            <property name="sortingEnabled">
-                                             <bool>true</bool>
-                                            </property>
-                                            <property name="cornerButtonEnabled">
-                                             <bool>true</bool>
-                                            </property>
-                                            <property name="rowCount">
-                                             <number>0</number>
-                                            </property>
-                                            <attribute name="horizontalHeaderDefaultSectionSize">
-                                             <number>185</number>
-                                            </attribute>
-                                            <attribute name="horizontalHeaderHighlightSections">
-                                             <bool>true</bool>
-                                            </attribute>
-                                            <attribute name="horizontalHeaderStretchLastSection">
-                                             <bool>true</bool>
-                                            </attribute>
-                                            <attribute name="verticalHeaderVisible">
-                                             <bool>false</bool>
-                                            </attribute>
-                                            <attribute name="verticalHeaderHighlightSections">
-                                             <bool>false</bool>
-                                            </attribute>
-                                            <column>
-                                             <property name="text">
-                                              <string>Thông tin sản phẩm</string>
+                                            <layout class="QGridLayout" name="gridLayout_9">
+                                             <property name="leftMargin">
+                                              <number>0</number>
                                              </property>
-                                             <property name="font">
-                                              <font>
-                                               <family>Cambria</family>
-                                               <bold>true</bold>
-                                              </font>
+                                             <property name="topMargin">
+                                              <number>0</number>
                                              </property>
-                                             <property name="textAlignment">
-                                              <set>AlignLeading|AlignVCenter</set>
+                                             <property name="rightMargin">
+                                              <number>0</number>
                                              </property>
-                                            </column>
-                                            <column>
-                                             <property name="text">
-                                              <string>Đơn giá</string>
+                                             <property name="bottomMargin">
+                                              <number>0</number>
                                              </property>
-                                             <property name="font">
-                                              <font>
-                                               <family>Cambria</family>
-                                               <bold>true</bold>
-                                              </font>
+                                             <property name="spacing">
+                                              <number>0</number>
                                              </property>
-                                            </column>
-                                            <column>
-                                             <property name="text">
-                                              <string>Số lượng</string>
-                                             </property>
-                                             <property name="font">
-                                              <font>
-                                               <family>Cambria</family>
-                                               <bold>true</bold>
-                                              </font>
-                                             </property>
-                                            </column>
-                                            <column>
-                                             <property name="text">
-                                              <string>Thành tiền</string>
-                                             </property>
-                                             <property name="font">
-                                              <font>
-                                               <family>Cambria</family>
-                                               <bold>true</bold>
-                                              </font>
-                                             </property>
-                                            </column>
+                                             <item row="0" column="0">
+                                              <widget class="QTableWidget" name="table_product_order">
+                                               <property name="enabled">
+                                                <bool>true</bool>
+                                               </property>
+                                               <property name="cursor" stdset="0">
+                                                <cursorShape>PointingHandCursor</cursorShape>
+                                               </property>
+                                               <property name="focusPolicy">
+                                                <enum>Qt::NoFocus</enum>
+                                               </property>
+                                               <property name="acceptDrops">
+                                                <bool>false</bool>
+                                               </property>
+                                               <property name="frameShape">
+                                                <enum>QFrame::StyledPanel</enum>
+                                               </property>
+                                               <property name="frameShadow">
+                                                <enum>QFrame::Sunken</enum>
+                                               </property>
+                                               <property name="showDropIndicator" stdset="0">
+                                                <bool>true</bool>
+                                               </property>
+                                               <property name="dragEnabled">
+                                                <bool>false</bool>
+                                               </property>
+                                               <property name="alternatingRowColors">
+                                                <bool>false</bool>
+                                               </property>
+                                               <property name="selectionMode">
+                                                <enum>QAbstractItemView::SingleSelection</enum>
+                                               </property>
+                                               <property name="selectionBehavior">
+                                                <enum>QAbstractItemView::SelectRows</enum>
+                                               </property>
+                                               <property name="iconSize">
+                                                <size>
+                                                 <width>0</width>
+                                                 <height>0</height>
+                                                </size>
+                                               </property>
+                                               <property name="textElideMode">
+                                                <enum>Qt::ElideRight</enum>
+                                               </property>
+                                               <property name="verticalScrollMode">
+                                                <enum>QAbstractItemView::ScrollPerItem</enum>
+                                               </property>
+                                               <property name="showGrid">
+                                                <bool>true</bool>
+                                               </property>
+                                               <property name="gridStyle">
+                                                <enum>Qt::CustomDashLine</enum>
+                                               </property>
+                                               <property name="sortingEnabled">
+                                                <bool>false</bool>
+                                               </property>
+                                               <property name="rowCount">
+                                                <number>2</number>
+                                               </property>
+                                               <property name="columnCount">
+                                                <number>3</number>
+                                               </property>
+                                               <attribute name="horizontalHeaderVisible">
+                                                <bool>true</bool>
+                                               </attribute>
+                                               <attribute name="horizontalHeaderCascadingSectionResizes">
+                                                <bool>false</bool>
+                                               </attribute>
+                                               <attribute name="horizontalHeaderMinimumSectionSize">
+                                                <number>57</number>
+                                               </attribute>
+                                               <attribute name="horizontalHeaderDefaultSectionSize">
+                                                <number>228</number>
+                                               </attribute>
+                                               <attribute name="horizontalHeaderHighlightSections">
+                                                <bool>true</bool>
+                                               </attribute>
+                                               <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                                                <bool>false</bool>
+                                               </attribute>
+                                               <attribute name="horizontalHeaderStretchLastSection">
+                                                <bool>true</bool>
+                                               </attribute>
+                                               <attribute name="verticalHeaderVisible">
+                                                <bool>false</bool>
+                                               </attribute>
+                                               <attribute name="verticalHeaderCascadingSectionResizes">
+                                                <bool>false</bool>
+                                               </attribute>
+                                               <attribute name="verticalHeaderMinimumSectionSize">
+                                                <number>21</number>
+                                               </attribute>
+                                               <attribute name="verticalHeaderDefaultSectionSize">
+                                                <number>40</number>
+                                               </attribute>
+                                               <attribute name="verticalHeaderHighlightSections">
+                                                <bool>true</bool>
+                                               </attribute>
+                                               <row/>
+                                               <row/>
+                                               <column>
+                                                <property name="text">
+                                                 <string>Thông tin sản phẩm</string>
+                                                </property>
+                                                <property name="font">
+                                                 <font>
+                                                  <family>Cambria</family>
+                                                 </font>
+                                                </property>
+                                                <property name="textAlignment">
+                                                 <set>AlignLeading|AlignVCenter</set>
+                                                </property>
+                                               </column>
+                                               <column>
+                                                <property name="text">
+                                                 <string>Đơn giá</string>
+                                                </property>
+                                                <property name="font">
+                                                 <font>
+                                                  <family>Cambria</family>
+                                                 </font>
+                                                </property>
+                                                <property name="textAlignment">
+                                                 <set>AlignLeading|AlignVCenter</set>
+                                                </property>
+                                               </column>
+                                               <column>
+                                                <property name="text">
+                                                 <string>Số lượng</string>
+                                                </property>
+                                                <property name="font">
+                                                 <font>
+                                                  <family>Cambria</family>
+                                                 </font>
+                                                </property>
+                                                <property name="textAlignment">
+                                                 <set>AlignLeading|AlignVCenter</set>
+                                                </property>
+                                               </column>
+                                              </widget>
+                                             </item>
+                                            </layout>
                                            </widget>
                                           </item>
                                          </layout>
@@ -1475,7 +1613,7 @@ QPlainTextEdit{
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
-                                           <height>16777215</height>
+                                           <height>100</height>
                                           </size>
                                          </property>
                                          <layout class="QHBoxLayout" name="horizontalLayout_6">

@@ -5,6 +5,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QDate, pyqtSignal, QTimer
 import uuid
 from src.enums.enums import *
+import flet
+from flet import *
 
 def warningMessagebox(content):
     """
@@ -124,56 +126,3 @@ class DateDialog(QDialog):
 def generate_unique_filename(file_name):
     unique_filename = f"{str(uuid.uuid4())}_{file_name}"
     return unique_filename
-
-# xử lý tìm kiếm bằng combobox
-class ComboBoxSearchHandler:
-    def __init__(self, combo_box, controller):
-        self.combo_box = combo_box
-        self.controller = controller
-        self.model = QStandardItemModel(self.combo_box)
-        self.result_search = []
-        self.selected_item = None
-        # Set up a QTimer for delayed search
-        self.timer = QTimer(self.combo_box)
-        self.timer.timeout.connect(self.delayedSearch)
-        self.delay_time = 750  # milliseconds (0.5 seconds)
-        # Connect signals to handle events
-        self.combo_box.activated.connect(self.handle_option_selected)
-        self.combo_box.editTextChanged.connect(self.startTimer)
-
-    def startTimer(self):
-        self.timer.start(self.delay_time)
-
-    def delayedSearch(self):
-        # Called when the timer times out (user has stopped typing)
-        self.timer.stop()
-        if self.combo_box.currentText():
-            self.search()
-
-    def search(self):
-        # Perform the search here (replace with your actual search logic)
-        search_query = self.combo_box.currentText()
-        self.combo_box.clear()
-        self.result_search = self.controller.searchData(["name"], search_query)
-        try:
-            for index, item_data in enumerate(self.result_search):
-                item = QStandardItem(item_data.name)
-                item.setData(item_data)
-                self.combo_box.addItem(item_data.name)
-        except Exception as E:
-            print(E)
-            return
-        if not self.result_search:
-            self.combo_box.addItem("Không tìm thấy bản ghi phù hợp")
-        self.combo_box.showPopup()
-
-    def handle_option_selected(self, index):
-        if self.result_search:
-            self.selected_item = self.result_search[index].id
-        else:
-            self.selected_item = None
-        self.result_search = []
-        self.combo_box.clear()
-        self.combo_box.clearEditText()
-        self.combo_box.setCurrentText("")
-

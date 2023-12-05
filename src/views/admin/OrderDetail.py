@@ -61,52 +61,192 @@ class OrderDetailWindow(QWidget):
 
     # xử lý khi người dùng chọn sản phẩm
     def handle_product_le_selected(self, index):
-        # quantity_order_product = 1
-        # # nếu sản phẩm đã được thêm thì tăng số lượng
-        # if index in self.product_selected:
-        #     quantity_order_product = self.product_selected.get(index).quantity_order + 1
-
-
+        try:
+            # nếu sản phẩm đã được thêm thì tăng số lượng
+            if index in self.product_selected:
+                self.product_selected[index].quantity_order += 1
+                self.product_selected[index].total_price = self.product_selected[index].price * self.product_selected[index].quantity_order
+            else:
+                selected = self.product_list[index]
+                selected.quantity_order = 1
+                selected.total_price = selected.price * selected.quantity_order
+                self.product_selected[index] = selected
+        except Exception as E:
+            print(E)
+            return
         self.show_table_product()
+
+    def generate_group_order_btn(self, row, total_quantity, label_price):
+        widget = QtWidgets.QWidget()
+        widget.setContentsMargins(0, 0, 0, 0)
+        widget.setStyleSheet("#order_group_btn{\n"
+                             "    border: 1px solid #e5e5e5;\n"
+                             "    border-left: 0;\n"
+                             "    border-right: 0;\n"
+                             "}\n"
+                             "\n"
+                             "#group_order_btn QPushButton{\n"
+                             "    min-width: 7px;\n"
+                             "    max-width: 7px;\n"
+                             "    width: 7x;\n"
+                             "    min-height: 22px;\n"
+                             "    max-height: 22px;\n"
+                             "    border: none;\n"
+                             "    text-align: center;\n"
+                             "    border-left: 1px solid #e5e5e5;\n"
+                             "    border-right: 1px solid #e5e5e5;\n"
+                             "    border-radius: 0;\n"
+                             "}\n"
+                             "#group_order_btn QSpinBox{\n"
+                             "    border-radius: 0;\n"
+                             "    background: transparent;\n"
+                             "    max-width: 35px;\n"
+                             "    min-width: 35px;\n"
+                             "    width: 35px;\n"
+                             "    padding: 0;\n"
+                             "    margin: 0;\n"
+                             "    min-height: 0px;\n"
+                             "    max-height: 0px;\n"
+                             "    height: 28px;\n"
+                             "    border: none;\n"
+                             "    color: #222;\n"
+                             "    font-size: 13px;\n"
+                             "}\n")
+        widget.setObjectName("group_order_btn")
+        horizontalLayout_2 = QtWidgets.QHBoxLayout(widget)
+        horizontalLayout_2.setObjectName("horizontalLayout_2")
+        horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        horizontalLayout_2.setSpacing(0)
+        order_group_btn = QtWidgets.QWidget(widget)
+        order_group_btn.setMinimumSize(QtCore.QSize(0, 28))
+        order_group_btn.setMaximumSize(QtCore.QSize(100, 28))
+        order_group_btn.setObjectName("order_group_btn")
+        horizontalLayout_3 = QtWidgets.QHBoxLayout(order_group_btn)
+        horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
+        horizontalLayout_3.setSpacing(0)
+        horizontalLayout_3.setObjectName("horizontalLayout_3")
+        horizontalLayout = QtWidgets.QHBoxLayout()
+        horizontalLayout.setSpacing(0)
+        horizontalLayout.setObjectName("horizontalLayout")
+        minus_order_btn = QtWidgets.QPushButton(order_group_btn)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(minus_order_btn.sizePolicy().hasHeightForWidth())
+        minus_order_btn.setSizePolicy(sizePolicy)
+        minus_order_btn.setMinimumSize(QtCore.QSize(29, 28))
+        minus_order_btn.setMaximumSize(QtCore.QSize(28, 28))
+        minus_order_btn.setText("-")
+        minus_order_btn.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+        minus_order_btn.setObjectName(f"minus_order_btn_{row}")
+        horizontalLayout.addWidget(minus_order_btn)
+        quantity_order = QtWidgets.QSpinBox(order_group_btn)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(quantity_order.sizePolicy().hasHeightForWidth())
+        quantity_order.setSizePolicy(sizePolicy)
+        quantity_order.setMinimumSize(QtCore.QSize(35, 0))
+        quantity_order.setMaximumSize(QtCore.QSize(35, 20))
+        quantity_order.setLayoutDirection(Qt.LeftToRight)
+        quantity_order.setFrame(False)
+        quantity_order.setAlignment(Qt.AlignCenter)
+        quantity_order.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
+        quantity_order.setObjectName(f"quantity_order_{row}")
+        quantity_order.setMinimum(1)
+        quantity_order.setValue(total_quantity)
+        quantity_order.setMaximum(50)
+        horizontalLayout.addWidget(quantity_order, 0, Qt.AlignTop)
+        plus_order_btn = QtWidgets.QPushButton(order_group_btn)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(plus_order_btn.sizePolicy().hasHeightForWidth())
+        plus_order_btn.setSizePolicy(sizePolicy)
+        plus_order_btn.setMinimumSize(QtCore.QSize(29, 28))
+        plus_order_btn.setMaximumSize(QtCore.QSize(28, 28))
+        plus_order_btn.setText("+")
+        plus_order_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        plus_order_btn.setObjectName(f"plus_order_btn_{row}")
+        horizontalLayout.addWidget(plus_order_btn)
+        horizontalLayout_3.addLayout(horizontalLayout)
+        horizontalLayout_2.addWidget(order_group_btn)
+        minus_order_btn.clicked.connect(
+            lambda: self.decreaseQuantity()
+        )
+        plus_order_btn.clicked.connect(
+            lambda: self.increaseQuantity(quantity_order, row, label_price)
+        )
+        return widget, minus_order_btn, plus_order_btn, quantity_order
 
     # Hiển thị các sản phẩm được chọn
     def show_table_product(self):
         self.table_product_order.setRowCount(0)
         if self.product_selected:
             try:
+                row_index = 0
                 for index, item in self.product_selected.items():
                     column_index = 0
-                    self.table_product_order.setRowCount(index + 1)
-                    self.table_product_order.setRowHeight(index, 120)
+                    self.table_product_order.setRowCount(row_index + 1)
+                    self.table_product_order.setRowHeight(row_index, 120)
                     # cột sản phẩm
-                    self.table_product_order.setCellWidget(index, column_index, self.generate_info_product_order())
+                    self.table_product_order.setCellWidget(row_index, column_index, self.generate_info_product_order())
                     self.table_product_order.setColumnWidth(column_index, 200)
                     # cột đơn giá
-                    self.table_product_order.setItem(index, column_index + 1, QTableWidgetItem(formatCurrency(int(item.price), 'đ')))
+                    self.table_product_order.setItem(row_index, column_index + 1, QTableWidgetItem(formatCurrency(int(item.price), 'đ')))
+
+                    widget_price, label_price = self.generate_column_price(row_index) # tạo view cột thành tiền
+                    widget,  minus_order_btn, plus_order_btn, quantity_label = self.generate_group_order_btn(row_index, item.quantity_order, label_price) # tạo view group button
                     # cột số lượng
-                    widget,  minus_order_btn, plus_order_btn, quantity_label = generate_group_order_btn(item.id) # tạo view
-                    minus_order_btn.clicked.connect(
-                        lambda: self.decreaseQuantity(quantity_label)
-                    )
-                    plus_order_btn.clicked.connect(
-                        lambda: self.increaseQuantity(quantity_label)
-                    )
-                    self.table_product_order.setCellWidget(index, column_index + 2, widget)
+                    self.table_product_order.setCellWidget(row_index, column_index + 2, widget)
+                    # cột thành tiền
+                    self.table_product_order.setCellWidget(row_index, column_index + 3, widget_price)
+                    row_index += 1
 
             except Exception as E:
-                print(f"{E} - OrderDetail.py")
+                print(f"{E} - file OrderDetail.py")
                 return
 
     # sự kiện click button giảm số lượng sản phẩm
     def decreaseQuantity(self, quantity_label):
         print(1)
 
-    def increaseQuantity(self, quantity_label):
-        button = self.sender()
-        row_id = int(button.objectName().strip().rsplit('_', 1)[-1])
-        quantity = int(quantity_label.value())
-        quantity += 1
-        quantity_label.setValue(quantity)
+    def increaseQuantity(self, quantity_label, row, label_price):
+        try:
+            # lấy data
+            button = self.sender()
+            print(quantity_label.maximum())
+            # quantity_label.maximum()
+            index = int(button.objectName().strip().rsplit('_', 1)[-1])
+            self.product_selected[index].quantity_order += 1
+            # cập nhật cột thành tiền
+            if quantity_label.value() <= quantity_label.maximum():
+                label_price.setText(formatCurrency(int(self.product_selected[index].quantity_order) * int(self.product_selected[index].price), 'đ'))
+                quantity_label.setValue(int(self.product_selected[index].quantity_order))
+
+        except Exception as E:
+            print(f"{E} - file OrderDetail.py")
+            return
+
+
+    def generate_column_price(self, row):
+        self.label = QtWidgets.QLabel()
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy)
+        self.label.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.label.setText("Iphone 11")
+        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setObjectName(f"label_price_{row}")
+        layout = QHBoxLayout()
+        layout.addWidget(self.label)
+        layout.setAlignment(Qt.AlignHCenter | Qt.AlignLeft)
+        layout.setContentsMargins(0, 0, 0, 0)
+        widget = QWidget()
+        widget.setLayout(layout)
+        return widget, self.label
 
 
     def generate_info_product_order(self):
@@ -200,7 +340,7 @@ class OrderDetailWindow(QWidget):
         print(self.combo_box_handler.selected_item)
 
     @pyqtSlot()
-    def save_category(self, form_mode, order_id=None):
+    def save_order(self, form_mode, order_id=None):
         # category_name = self.ui.category_name_le.text().strip()
         # color_style = "color: #ef5350;"
         # border_style = "border: 1px solid #ef5350;"

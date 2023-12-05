@@ -133,7 +133,7 @@ def formatCurrency(value, suffix):
 
 
 # tạo group button trên giỏ hàng
-def generate_group_order_btn(row):
+def generate_group_order_btn(self, row, total_quantity):
     widget = QtWidgets.QWidget()
     widget.setContentsMargins(0, 0, 0, 0)
     widget.setStyleSheet("#order_group_btn{\n"
@@ -195,7 +195,7 @@ def generate_group_order_btn(row):
     minus_order_btn.setMaximumSize(QtCore.QSize(28, 28))
     minus_order_btn.setText("-")
     minus_order_btn.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
-    minus_order_btn.setObjectName(f"minus_order_{row}_btn")
+    minus_order_btn.setObjectName(f"minus_order_btn_{row}")
     horizontalLayout.addWidget(minus_order_btn)
     quantity_order = QtWidgets.QSpinBox(order_group_btn)
     sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -209,8 +209,9 @@ def generate_group_order_btn(row):
     quantity_order.setFrame(False)
     quantity_order.setAlignment(Qt.AlignCenter)
     quantity_order.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
-    quantity_order.setObjectName(f"quantity_{row}_order")
+    quantity_order.setObjectName(f"quantity_order_{row}")
     quantity_order.setMinimum(1)
+    quantity_order.setValue(total_quantity)
     quantity_order.setMaximum(50)
     horizontalLayout.addWidget(quantity_order, 0, Qt.AlignTop)
     plus_order_btn = QtWidgets.QPushButton(order_group_btn)
@@ -223,7 +224,7 @@ def generate_group_order_btn(row):
     plus_order_btn.setMaximumSize(QtCore.QSize(28, 28))
     plus_order_btn.setText("+")
     plus_order_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-    plus_order_btn.setObjectName(f"plus_order_{row}_btn")
+    plus_order_btn.setObjectName(f"plus_order_btn_{row}")
     horizontalLayout.addWidget(plus_order_btn)
     horizontalLayout_3.addLayout(horizontalLayout)
     horizontalLayout_2.addWidget(order_group_btn)

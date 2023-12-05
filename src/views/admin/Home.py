@@ -364,7 +364,7 @@ class HomeWindow(QMainWindow):
             # lấy ra tên function lưu của các trang
             function_save_name = f"save_{widget_name}"
             function_save = getattr(widget_detail, function_save_name)
-            function_list = f"show_{widget_name}_table"
+            function_list = f"show_category_table"
             function_list = getattr(self, function_list)
             if function_save:
                 if function_save(form_mode, self.id_data_selected):

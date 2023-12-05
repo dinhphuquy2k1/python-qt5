@@ -1,8 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QMainWindow, QTableWidgetItem, QAbstractItemView, QApplication, \
-    QCompleter
-from PyQt5.QtCore import Qt, QPoint, pyqtSlot
-from PyQt5.QtGui import QMouseEvent, QIcon, QPixmap
-from PyQt5 import QtCore, QtGui, QtWidgets
+    QCompleter, QComboBox
+from PyQt5.QtCore import QLocale, pyqtSlot
 from src.views.ui_generated.admin.order_detail import Ui_Form
 from src.views.common.Common import *
 from src.enums.enums import *
@@ -25,6 +23,7 @@ class OrderDetailWindow(QWidget):
         self.user_le = self.ui.user_le
         self.user_le.lineEdit().setPlaceholderText("Tìm kiếm theo số điện thoại")
         self.table_product_order = self.ui.table_product_order
+        self.table_product_order.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         # khởi tạo biến
         self.user_controller = UserController()
@@ -35,7 +34,9 @@ class OrderDetailWindow(QWidget):
         self.product_list = []
         self.user_selected = None
         # danh sách sản phẩm được chọn
-        self.product_selected = []
+        self.product_selected = {}
+        # tổng tiền các sản phẩm
+        self.total_price = 0
 
         self.user_le.setInsertPolicy(QComboBox.NoInsert)
         self.user_le.completer().setCompletionMode(QCompleter.PopupCompletion)
@@ -60,109 +61,140 @@ class OrderDetailWindow(QWidget):
 
     # xử lý khi người dùng chọn sản phẩm
     def handle_product_le_selected(self, index):
-        self.product_selected.insert(index, self.product_list[index])
+        # quantity_order_product = 1
+        # # nếu sản phẩm đã được thêm thì tăng số lượng
+        # if index in self.product_selected:
+        #     quantity_order_product = self.product_selected.get(index).quantity_order + 1
+
+
         self.show_table_product()
 
+    # Hiển thị các sản phẩm được chọn
     def show_table_product(self):
         self.table_product_order.setRowCount(0)
         if self.product_selected:
             try:
-                for index, item in enumerate(self.product_selected):
-                    print()
+                for index, item in self.product_selected.items():
                     column_index = 0
                     self.table_product_order.setRowCount(index + 1)
                     self.table_product_order.setRowHeight(index, 120)
-                    self.table_product_order.setItem(index, column_index, QTableWidgetItem(str(index + 1)))
-                    widget = Test()
-                    # self.table_product_order.setItem(index, column_index + 1, QTableWidgetItem(str(item.id)))
-                    # self.table_product_order.setItem(index, column_index + 2, QTableWidgetItem(str(item.product_name)))
-                    # widget, edit_btn, delete_btn = generate_action_row(item.id, "user")
-                    # edit_btn.clicked.connect(
-                    #     lambda: self.on_row_click(FormMode.EDIT.value,
-                    #                               self.page_index["CATEGORY_PAGE_DETAIL"], self.category_widget_detail,
-                    #                               self.page_index["CATEGORY_PAGE"], "category"))
-                    # delete_btn.clicked.connect(
-                    #     lambda: self.on_row_click(FormMode.DELETE.value,
-                    #                               self.page_index["CATEGORY_PAGE_DETAIL"], self.category_widget_detail,
-                    #                               self.page_index["CATEGORY_PAGE"], "category"))
-                    self.table_product_order.setCellWidget(index, column_index + 1, widget)
+                    # cột sản phẩm
+                    self.table_product_order.setCellWidget(index, column_index, self.generate_info_product_order())
+                    self.table_product_order.setColumnWidth(column_index, 200)
+                    # cột đơn giá
+                    self.table_product_order.setItem(index, column_index + 1, QTableWidgetItem(formatCurrency(int(item.price), 'đ')))
+                    # cột số lượng
+                    widget,  minus_order_btn, plus_order_btn, quantity_label = generate_group_order_btn(item.id) # tạo view
+                    minus_order_btn.clicked.connect(
+                        lambda: self.decreaseQuantity(quantity_label)
+                    )
+                    plus_order_btn.clicked.connect(
+                        lambda: self.increaseQuantity(quantity_label)
+                    )
+                    self.table_product_order.setCellWidget(index, column_index + 2, widget)
+
             except Exception as E:
                 print(f"{E} - OrderDetail.py")
                 return
 
-    def generate_group_order_btn(self):
-        widget_container = QWidget()
-        widget_container.setObjectName("Form_gourp_btn")
-        widget_container.setStyleSheet("#order_group_btn{\n"
-                                     "    border: 1px solid #e5e5e5;\n"
-                                     "}\n"
-                                     "\n"
-                                     "#minus_order_btn, #plus_order_btn{\n"
-                                     "    border: none;\n"
-                                     "}\n"
-                                     "\n"
-                                     "#minus_order_btn{\n"
-                                     "    border-right: 1px solid #e5e5e5;\n"
-                                     "}\n"
-                                     "\n"
-                                     "#plus_order_btn{\n"
-                                     "        border-left: 1px solid #e5e5e5;\n"
-                                     "}")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setSpacing(0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.order_group_btn = QtWidgets.QWidget()
-        self.order_group_btn.setMaximumSize(QtCore.QSize(100, 28))
-        self.order_group_btn.setObjectName("order_group_btn")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.order_group_btn)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setSpacing(0)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.widget = QtWidgets.QWidget(self.order_group_btn)
-        self.widget.setMinimumSize(QtCore.QSize(0, 28))
-        self.widget.setMaximumSize(QtCore.QSize(16777215, 28))
+    # sự kiện click button giảm số lượng sản phẩm
+    def decreaseQuantity(self, quantity_label):
+        print(1)
+
+    def increaseQuantity(self, quantity_label):
+        button = self.sender()
+        row_id = int(button.objectName().strip().rsplit('_', 1)[-1])
+        quantity = int(quantity_label.value())
+        quantity += 1
+        quantity_label.setValue(quantity)
+
+
+    def generate_info_product_order(self):
+        self.widget = QtWidgets.QWidget()
+        self.widget.setMinimumSize(QtCore.QSize(0, 100))
+        self.widget.setMaximumSize(QtCore.QSize(16777215, 110))
+        self.widget.setStyleSheet("#delete_order_product{\n"
+                                  "    max-width: 30px;\n"
+                                  "    min-width: 30px;\n"
+                                  "    width: 30px;\n"
+                                  "    height: 18px;\n"
+                                  "    min-height: 18px;\n"
+                                  "    text-align: left;\n"
+                                  "    border: none;\n"
+                                  "    padding: 0;\n"
+                                  "    color: #46694f;\n"
+                                  "    background: transparent;\n"
+                                  "}\n"
+                                  "\n"
+                                  "#delete_order_product:hover, #product_name_order:hover{\n"
+                                  "    color: #80b885;\n"
+                                  "}\n"
+                                  "\n"
+                                  "\n"
+                                  "")
         self.widget.setObjectName("widget")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.minus_order_btn = QtWidgets.QPushButton(self.widget)
-        self.minus_order_btn.setMinimumSize(QtCore.QSize(28, 28))
-        self.minus_order_btn.setMaximumSize(QtCore.QSize(28, 28))
-        self.minus_order_btn.setText("-")
-        font = QtGui.QFont()
-        font.setFamily("Cambria")
-        self.minus_order_btn.setFont(font)
-        self.minus_order_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.minus_order_btn.setObjectName("minus_order_btn")
-        self.horizontalLayout_2.addWidget(self.minus_order_btn)
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_6.setSpacing(10)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         self.label = QtWidgets.QLabel(self.widget)
-        self.label.setMinimumSize(QtCore.QSize(28, 28))
-        self.label.setMaximumSize(QtCore.QSize(28, 28))
-        self.label.setSizeIncrement(QtCore.QSize(0, 0))
-        font = QtGui.QFont()
-        font.setFamily("Cambria")
-        self.label.setFont(font)
-        self.label.setScaledContents(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy)
+        self.label.setMinimumSize(QtCore.QSize(80, 80))
+        self.label.setMaximumSize(QtCore.QSize(80, 80))
+        self.label.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.label.setText("Iphone 11")
+        self.label.setPixmap(QtGui.QPixmap(":/icon/resources/img/facebook.png"))
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
-        self.horizontalLayout_2.addWidget(self.label)
-        self.plus_order_btn = QtWidgets.QPushButton(self.widget)
-        self.plus_order_btn.setMinimumSize(QtCore.QSize(28, 28))
-        self.plus_order_btn.setMaximumSize(QtCore.QSize(28, 28))
-        self.plus_order_btn.setText("+")
-        font = QtGui.QFont()
-        font.setFamily("Cambria")
-        self.plus_order_btn.setFont(font)
-        self.plus_order_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.plus_order_btn.setObjectName("plus_order_btn")
-        self.horizontalLayout_2.addWidget(self.plus_order_btn)
-        self.horizontalLayout_3.addWidget(self.widget)
-        self.horizontalLayout.addWidget(self.order_group_btn, 0, QtCore.Qt.AlignTop)
-        widget_container.setLayout(self.horizontalLayout)
-        return widget_container
-
+        self.horizontalLayout_6.addWidget(self.label)
+        self.group_info_order = QtWidgets.QWidget(self.widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.group_info_order.sizePolicy().hasHeightForWidth())
+        self.group_info_order.setSizePolicy(sizePolicy)
+        self.group_info_order.setMaximumSize(QtCore.QSize(16777215, 110))
+        self.group_info_order.setObjectName("group_info_order")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.group_info_order)
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_3.setSpacing(0)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_2.addItem(spacerItem)
+        self.verticalLayout_2.setSpacing(10)
+        self.product_name_order = QtWidgets.QLabel(self.group_info_order)
+        self.product_name_order.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.product_name_order.setWordWrap(True)
+        self.product_name_order.setText("Iphone 11")
+        self.product_name_order.setObjectName("product_name_order")
+        self.verticalLayout_2.addWidget(self.product_name_order)
+        self.product_code_order = QtWidgets.QLabel(self.group_info_order)
+        self.product_code_order.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.product_code_order.setText("test")
+        self.product_code_order.setObjectName("product_code_order")
+        self.verticalLayout_2.addWidget(self.product_code_order)
+        self.delete_order_product = QtWidgets.QPushButton(self.group_info_order)
+        self.delete_order_product.setMinimumSize(QtCore.QSize(30, 20))
+        self.delete_order_product.setMaximumSize(QtCore.QSize(30, 20))
+        self.delete_order_product.setText("Xóa")
+        self.delete_order_product.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.delete_order_product.setObjectName("delete_order_product")
+        self.verticalLayout_2.addWidget(self.delete_order_product)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_2.addItem(spacerItem1)
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
+        self.horizontalLayout_6.addWidget(self.group_info_order)
+        self.horizontalLayout_2.addLayout(self.horizontalLayout_6)
+        return self.widget
 
     def on_btn_save_order_clicked(self):
         print(self.combo_box_handler.selected_item)

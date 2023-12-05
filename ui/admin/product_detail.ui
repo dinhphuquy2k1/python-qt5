@@ -136,7 +136,6 @@ QHBoxLayout QLabel{
 #btn_save_product{
 	min-height: 36px;
 	border-radius: 4px;
-	overflow: hidden;
 	color: #fff;
     background: #2979ff;
 	border: 1px;
@@ -148,7 +147,6 @@ QHBoxLayout QLabel{
 #btn_add_product_category{
 	min-height: 42px;
 	border-radius: 4px;
-	overflow: hidden;
 	color: #fff;
     background: #2979ff;
 	border: 1px;
@@ -254,7 +252,6 @@ QLineEdit, QComboxBox,QSpinBox{
 #btnUser{
 	min-height: 36px;
 	border-radius: 4px;
-	overflow: hidden;
 	color: #fff;
     background: #2979ff;
 	border: 1px;
@@ -399,7 +396,7 @@ QPushButton, QComboBox{
 
 #btn_image_product{
 	min-height:  40px;
-	min-weight: 64px;
+	min-width: 64px;
 }
 
 QPlainTextEdit{

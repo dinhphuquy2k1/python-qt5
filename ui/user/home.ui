@@ -23,8 +23,7 @@
 	padding: 10px 30px;
 	border-top-left-radius: 23px;
 	border-bottom-left-radius: 23px;
-	border: 1px solid #DEDACE;	
-	overflow: visible;
+	border: 1px solid #DEDACE;
 	outline: none;
 }
 
@@ -87,7 +86,6 @@
     white-space: nowrap;
     border-radius: 5px;
 	font-weight: bold;
-    overflow: hidden;
 	padding-left: 15px;
 	padding-right: 15px;
 }

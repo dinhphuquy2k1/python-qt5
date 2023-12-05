@@ -159,7 +159,6 @@ QHBoxLayout QLabel{
 #btn_save_order{
 	min-height: 36px;
 	border-radius: 4px;
-	overflow: hidden;
 	color: #fff;
     background: #2979ff;
 	border: 1px;
@@ -171,7 +170,6 @@ QHBoxLayout QLabel{
 #btn_add_product_category{
 	min-height: 42px;
 	border-radius: 4px;
-	overflow: hidden;
 	color: #fff;
     background: #2979ff;
 	border: 1px;
@@ -277,7 +275,6 @@ QLineEdit, QComboxBox,QSpinBox{
 #btnUser{
 	min-height: 36px;
 	border-radius: 4px;
-	overflow: hidden;
 	color: #fff;
     background: #2979ff;
 	border: 1px;
@@ -318,7 +315,7 @@ QPushButton{
 	min-height: 24px;
 }
 
-#widget_12, #widget_10, #widget_7, #confirmContainer, #widget_2, #widget_12, #widget_26{
+#widget_12, #widget_10, #widget_7, #confirmContainer, #widget_12, #widget_26{
 		border-bottom: 1px solid #e0e0e0;
 }
 
@@ -426,7 +423,7 @@ QPushButton, QComboBox{
 
 #btn_image_product{
 	min-height:  40px;
-	min-weight: 64px;
+	min-width: 64px;
 }
 
 QPlainTextEdit{
@@ -528,6 +525,7 @@ QPlainTextEdit{
                   <font>
                    <family>Cambria</family>
                    <pointsize>-1</pointsize>
+                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -667,9 +665,9 @@ QPlainTextEdit{
                        <property name="geometry">
                         <rect>
                          <x>0</x>
-                         <y>-240</y>
+                         <y>0</y>
                          <width>783</width>
-                         <height>1055</height>
+                         <height>1039</height>
                         </rect>
                        </property>
                        <property name="sizePolicy">
@@ -780,6 +778,7 @@ QPlainTextEdit{
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -978,6 +977,7 @@ QPlainTextEdit{
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1063,7 +1063,7 @@ QPlainTextEdit{
                                              <property name="editable">
                                               <bool>true</bool>
                                              </property>
-                                             <property name="placeholderText">
+                                             <property name="placeholderText" stdset="0">
                                               <string>Tìm theo tên, số điện thoại,...</string>
                                              </property>
                                             </widget>
@@ -1389,7 +1389,7 @@ QPlainTextEdit{
                                             <property name="currentText">
                                              <string/>
                                             </property>
-                                            <property name="placeholderText">
+                                            <property name="placeholderText" stdset="0">
                                              <string extracomment="test">Tìm kiếm theo mã, tên sản phẩm</string>
                                             </property>
                                            </widget>
@@ -1431,6 +1431,21 @@ QPlainTextEdit{
                                           </size>
                                          </property>
                                          <layout class="QVBoxLayout" name="verticalLayout_14">
+                                          <property name="spacing">
+                                           <number>0</number>
+                                          </property>
+                                          <property name="leftMargin">
+                                           <number>0</number>
+                                          </property>
+                                          <property name="topMargin">
+                                           <number>0</number>
+                                          </property>
+                                          <property name="rightMargin">
+                                           <number>0</number>
+                                          </property>
+                                          <property name="bottomMargin">
+                                           <number>0</number>
+                                          </property>
                                           <item>
                                            <widget class="QFrame" name="tableUserContainer">
                                             <property name="minimumSize">
@@ -1503,7 +1518,7 @@ QPlainTextEdit{
                                                 </size>
                                                </property>
                                                <property name="textElideMode">
-                                                <enum>Qt::ElideRight</enum>
+                                                <enum>Qt::ElideNone</enum>
                                                </property>
                                                <property name="verticalScrollMode">
                                                 <enum>QAbstractItemView::ScrollPerItem</enum>
@@ -1517,11 +1532,14 @@ QPlainTextEdit{
                                                <property name="sortingEnabled">
                                                 <bool>false</bool>
                                                </property>
+                                               <property name="cornerButtonEnabled">
+                                                <bool>false</bool>
+                                               </property>
                                                <property name="rowCount">
                                                 <number>2</number>
                                                </property>
                                                <property name="columnCount">
-                                                <number>3</number>
+                                                <number>4</number>
                                                </property>
                                                <attribute name="horizontalHeaderVisible">
                                                 <bool>true</bool>
@@ -1533,7 +1551,7 @@ QPlainTextEdit{
                                                 <number>57</number>
                                                </attribute>
                                                <attribute name="horizontalHeaderDefaultSectionSize">
-                                                <number>228</number>
+                                                <number>165</number>
                                                </attribute>
                                                <attribute name="horizontalHeaderHighlightSections">
                                                 <bool>true</bool>
@@ -1598,6 +1616,11 @@ QPlainTextEdit{
                                                 </property>
                                                 <property name="textAlignment">
                                                  <set>AlignLeading|AlignVCenter</set>
+                                                </property>
+                                               </column>
+                                               <column>
+                                                <property name="text">
+                                                 <string>Thành tiền</string>
                                                 </property>
                                                </column>
                                               </widget>
@@ -1748,6 +1771,7 @@ QPlainTextEdit{
                                                           <font>
                                                            <family>Cambria</family>
                                                            <pointsize>-1</pointsize>
+                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                           </font>
                                                          </property>
@@ -1775,6 +1799,7 @@ QPlainTextEdit{
                                                           <font>
                                                            <family>Cambria</family>
                                                            <pointsize>-1</pointsize>
+                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                           </font>
                                                          </property>
@@ -1891,6 +1916,7 @@ QPlainTextEdit{
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>

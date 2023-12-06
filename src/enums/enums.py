@@ -19,3 +19,7 @@ class FormMode(Enum):
 class SelectBox(Enum):
     DEFAULT = 'Không có dữ liệu'
 
+class OrderStatus(Enum):
+    PROGRESS = 0
+    ORDER_SUCCESS = 1
+    ORDER_FAIL = 2

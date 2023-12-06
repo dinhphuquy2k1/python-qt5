@@ -7,7 +7,9 @@ from src.enums.enums import *
 from src.views.common.Common import *
 from src.controllers.admin.UserController import UserController
 from src.controllers.admin.ProductController import ProductController
-from src.models.category import Category
+from src.controllers.admin.OrderController import OrderController
+from src.models.orders import Order
+from src.models.order_details import OrderDetail
 from src.views.common.form_group_btn_order import Test
 
 
@@ -24,10 +26,13 @@ class OrderDetailWindow(QWidget):
         self.user_le.lineEdit().setPlaceholderText("Tìm kiếm theo số điện thoại")
         self.table_product_order = self.ui.table_product_order
         self.table_product_order.setEditTriggers(QAbstractItemView.NoEditTriggers)
-
+        self.total_quantity_product_order = self.ui.total_quantity_product_order
+        self.table_info_user = self.ui.table_info_user
+        self.table_info_user.setEditTriggers(QAbstractItemView.NoEditTriggers)
         # khởi tạo biến
         self.user_controller = UserController()
         self.product_controller = ProductController()
+        self.order_controller = OrderController()
         # danh sách người dùng
         self.user_list = []
         # danh sách sản phẩm
@@ -35,14 +40,18 @@ class OrderDetailWindow(QWidget):
         self.user_selected = None
         # danh sách sản phẩm được chọn
         self.product_selected = {}
+        # người đặt hàng
+        self.user_selected = None
         # tổng tiền các sản phẩm
         self.total_price = 0
 
         self.user_le.setInsertPolicy(QComboBox.NoInsert)
         self.user_le.completer().setCompletionMode(QCompleter.PopupCompletion)
+        self.user_le.completer().setCaseSensitivity(0)
         self.user_le.activated.connect(self.handle_user_le_selected)
         self.search_box_product_order.setInsertPolicy(QComboBox.NoInsert)
         self.search_box_product_order.completer().setCompletionMode(QCompleter.PopupCompletion)
+        self.search_box_product_order.completer().setCaseSensitivity(0)
         self.search_box_product_order.activated.connect(self.handle_product_le_selected)
 
     # Hàm luôn chạy khi form được show
@@ -57,23 +66,33 @@ class OrderDetailWindow(QWidget):
 
     # Xử lý khi người dùng chọn người đặt hàng
     def handle_user_le_selected(self, index):
-        print(self.user_list[index])
+        self.user_selected = None
+        self.user_selected = self.user_list[index]
+        self.table_info_user.setRowCount(1)
+        self.table_info_user.setRowHeight(0, 32)
+        self.table_info_user.setItem(0, 0, QTableWidgetItem(str(self.user_selected.name)))
+        self.table_info_user.setItem(0, 1, QTableWidgetItem(str(self.user_selected.username)))
+
+
+    # Xử lý tính tổng tiền đơn hàng
+    def handle_total_quantity_product_order(self):
+        self.total_price = sum(int(product.total_price) for product in self.product_selected.values())
+        self.total_quantity_product_order.setText(formatCurrency(int(self.total_price), 'đ'))
 
     # xử lý khi người dùng chọn sản phẩm
     def handle_product_le_selected(self, index):
+        selected_item = self.product_list[index]
+
         try:
-            # nếu sản phẩm đã được thêm thì tăng số lượng
-            if index in self.product_selected:
-                self.product_selected[index].quantity_order += 1
-                self.product_selected[index].total_price = self.product_selected[index].price * self.product_selected[index].quantity_order
-            else:
-                selected = self.product_list[index]
-                selected.quantity_order = 1
-                selected.total_price = selected.price * selected.quantity_order
-                self.product_selected[index] = selected
+            if selected_item.id not in self.product_selected:
+                selected_item.quantity_order = 1
+                selected_item.total_price = selected_item.price * selected_item.quantity_order
+                self.product_selected[selected_item.id] = selected_item
         except Exception as E:
-            print(E)
+            print(index)
+            print(f"{E}- file OrderDetail.py function handle_product_le_selected")
             return
+        self.handle_total_quantity_product_order()
         self.show_table_product()
 
     def generate_group_order_btn(self, row, total_quantity, label_price):
@@ -155,7 +174,7 @@ class OrderDetailWindow(QWidget):
         quantity_order.setObjectName(f"quantity_order_{row}")
         quantity_order.setMinimum(1)
         quantity_order.setValue(total_quantity)
-        quantity_order.setMaximum(50)
+        quantity_order.setMaximum(10)
         horizontalLayout.addWidget(quantity_order, 0, Qt.AlignTop)
         plus_order_btn = QtWidgets.QPushButton(order_group_btn)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -172,10 +191,10 @@ class OrderDetailWindow(QWidget):
         horizontalLayout_3.addLayout(horizontalLayout)
         horizontalLayout_2.addWidget(order_group_btn)
         minus_order_btn.clicked.connect(
-            lambda: self.decreaseQuantity()
+            lambda: self.decreaseQuantity(quantity_order, label_price)
         )
         plus_order_btn.clicked.connect(
-            lambda: self.increaseQuantity(quantity_order, row, label_price)
+            lambda: self.increaseQuantity(quantity_order, label_price)
         )
         return widget, minus_order_btn, plus_order_btn, quantity_order
 
@@ -190,13 +209,13 @@ class OrderDetailWindow(QWidget):
                     self.table_product_order.setRowCount(row_index + 1)
                     self.table_product_order.setRowHeight(row_index, 120)
                     # cột sản phẩm
-                    self.table_product_order.setCellWidget(row_index, column_index, self.generate_info_product_order())
+                    self.table_product_order.setCellWidget(row_index, column_index, self.generate_info_product_order(item))
                     self.table_product_order.setColumnWidth(column_index, 200)
                     # cột đơn giá
                     self.table_product_order.setItem(row_index, column_index + 1, QTableWidgetItem(formatCurrency(int(item.price), 'đ')))
 
-                    widget_price, label_price = self.generate_column_price(row_index) # tạo view cột thành tiền
-                    widget,  minus_order_btn, plus_order_btn, quantity_label = self.generate_group_order_btn(row_index, item.quantity_order, label_price) # tạo view group button
+                    widget_price, label_price = self.generate_column_price(row_index, item) # tạo view cột thành tiền
+                    widget,  minus_order_btn, plus_order_btn, quantity_label = self.generate_group_order_btn(item.id, item.quantity_order, label_price) # tạo view group button
                     # cột số lượng
                     self.table_product_order.setCellWidget(row_index, column_index + 2, widget)
                     # cột thành tiền
@@ -208,28 +227,46 @@ class OrderDetailWindow(QWidget):
                 return
 
     # sự kiện click button giảm số lượng sản phẩm
-    def decreaseQuantity(self, quantity_label):
-        print(1)
-
-    def increaseQuantity(self, quantity_label, row, label_price):
+    def decreaseQuantity(self, quantity_label, label_price):
         try:
             # lấy data
             button = self.sender()
-            print(quantity_label.maximum())
             # quantity_label.maximum()
             index = int(button.objectName().strip().rsplit('_', 1)[-1])
-            self.product_selected[index].quantity_order += 1
             # cập nhật cột thành tiền
-            if quantity_label.value() <= quantity_label.maximum():
-                label_price.setText(formatCurrency(int(self.product_selected[index].quantity_order) * int(self.product_selected[index].price), 'đ'))
+            if quantity_label.value() > quantity_label.minimum():
+                self.product_selected[index].quantity_order -= 1
+                self.product_selected[index].total_price = int(self.product_selected[index].quantity_order) * int(
+                    self.product_selected[index].price)
+                label_price.setText(formatCurrency(self.product_selected[index].total_price, 'đ'))
                 quantity_label.setValue(int(self.product_selected[index].quantity_order))
-
+            self.handle_total_quantity_product_order()
         except Exception as E:
             print(f"{E} - file OrderDetail.py")
             return
 
+    # tăng số lượng sản phẩm
+    def increaseQuantity(self, quantity_label, label_price):
+        try:
+            # lấy data
+            button = self.sender()
+            print(self.product_selected)
+            # quantity_label.maximum()
+            index = int(button.objectName().strip().rsplit('_', 1)[-1])
+            print(index)
+            # cập nhật cột thành tiền
+            if quantity_label.value() < quantity_label.maximum():
+                self.product_selected[index].quantity_order += 1
+                self.product_selected[index].total_price = int(self.product_selected[index].quantity_order) * int(self.product_selected[index].price)
+                label_price.setText(formatCurrency(self.product_selected[index].total_price, 'đ'))
+                quantity_label.setValue(int(self.product_selected[index].quantity_order))
+            self.handle_total_quantity_product_order()
+        except Exception as E:
+            print(f"{E} - file OrderDetail.py")
+            return
 
-    def generate_column_price(self, row):
+    # tạo view cột thành tiền
+    def generate_column_price(self, row, data):
         self.label = QtWidgets.QLabel()
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -237,7 +274,10 @@ class OrderDetailWindow(QWidget):
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy)
         self.label.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.label.setText("Iphone 11")
+
+        # sét giá trị cột thành tiền
+        self.label.setText(formatCurrency(int(data.quantity_order) * int(data.price),
+                           'đ'))
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setObjectName(f"label_price_{row}")
         layout = QHBoxLayout()
@@ -248,12 +288,12 @@ class OrderDetailWindow(QWidget):
         widget.setLayout(layout)
         return widget, self.label
 
-
-    def generate_info_product_order(self):
+    # tạo view cột thông tin sản phẩm
+    def generate_info_product_order(self, data):
         self.widget = QtWidgets.QWidget()
         self.widget.setMinimumSize(QtCore.QSize(0, 100))
         self.widget.setMaximumSize(QtCore.QSize(16777215, 110))
-        self.widget.setStyleSheet("#delete_order_product{\n"
+        self.widget.setStyleSheet("#info_product_order QPushButton{\n"
                                   "    max-width: 30px;\n"
                                   "    min-width: 30px;\n"
                                   "    width: 30px;\n"
@@ -272,7 +312,7 @@ class OrderDetailWindow(QWidget):
                                   "\n"
                                   "\n"
                                   "")
-        self.widget.setObjectName("widget")
+        self.widget.setObjectName("info_product_order")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setSpacing(0)
@@ -289,8 +329,10 @@ class OrderDetailWindow(QWidget):
         self.label.setMinimumSize(QtCore.QSize(80, 80))
         self.label.setMaximumSize(QtCore.QSize(80, 80))
         self.label.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.label.setText("Iphone 11")
-        self.label.setPixmap(QtGui.QPixmap(":/icon/resources/img/facebook.png"))
+        image_url = None
+        if data.product_image:
+            image_url = data.product_image[0].image_url
+        self.label.setPixmap(QPixmap(image_url))
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.horizontalLayout_6.addWidget(self.label)
@@ -314,12 +356,12 @@ class OrderDetailWindow(QWidget):
         self.product_name_order = QtWidgets.QLabel(self.group_info_order)
         self.product_name_order.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.product_name_order.setWordWrap(True)
-        self.product_name_order.setText("Iphone 11")
+        self.product_name_order.setText(data.product_name)
         self.product_name_order.setObjectName("product_name_order")
         self.verticalLayout_2.addWidget(self.product_name_order)
         self.product_code_order = QtWidgets.QLabel(self.group_info_order)
         self.product_code_order.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.product_code_order.setText("test")
+        self.product_code_order.setText(data.product_code)
         self.product_code_order.setObjectName("product_code_order")
         self.verticalLayout_2.addWidget(self.product_code_order)
         self.delete_order_product = QtWidgets.QPushButton(self.group_info_order)
@@ -327,7 +369,7 @@ class OrderDetailWindow(QWidget):
         self.delete_order_product.setMaximumSize(QtCore.QSize(30, 20))
         self.delete_order_product.setText("Xóa")
         self.delete_order_product.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.delete_order_product.setObjectName("delete_order_product")
+        self.delete_order_product.setObjectName(f"delete_order_product_{data.id}")
         self.verticalLayout_2.addWidget(self.delete_order_product)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem1)
@@ -336,48 +378,46 @@ class OrderDetailWindow(QWidget):
         self.horizontalLayout_2.addLayout(self.horizontalLayout_6)
         return self.widget
 
-    def on_btn_save_order_clicked(self):
-        print(self.combo_box_handler.selected_item)
-
     @pyqtSlot()
     def save_order(self, form_mode, order_id=None):
-        # category_name = self.ui.category_name_le.text().strip()
-        # color_style = "color: #ef5350;"
-        # border_style = "border: 1px solid #ef5350;"
-        # # sét border mặc định cho input
-        # self.ui.category_name_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        # # xóa error text
-        # self.ui.error_category_name.setText("")
-        #
-        # messages = {
-        #     'category_nameEmpty': "Vui lòng nhập tên loại sản phẩm.",
-        #     'category_nameExit': "Tên loại sản phẩm đã tồn tại.",
-        # }
-        #
-        # # validate dữ liệu các cột không được trống
-        # is_valid = validateEmpty(self,{'category_name': category_name}, messages)
-        # if is_valid:
-        #     return
-        # try:
-        #     if form_mode == FormMode.ADD.value:
-        #         if self.category_controller.checkExitsDataWithModel(Category.category_name, data=category_name):
-        #             self.ui.error_category_name.setStyleSheet(color_style)
-        #             self.ui.error_category_name.setText(messages["category_nameExit"])
-        #             self.ui.category_name_le.setStyleSheet(border_style)
-        #             return
-        #         self.category_controller.insertData(Category(category_name=category_name))
-        #     elif form_mode == FormMode.EDIT.value:
-        #         if self.category_controller.checkExitsDataUpdateWithModel(Category.category_name, data=category_name, model_id=order_id):
-        #             self.ui.error_category_name.setStyleSheet(color_style)
-        #             self.ui.error_category_name.setText(messages["category_nameExit"])
-        #             self.ui.category_name_le.setStyleSheet(border_style)
-        #             return
-        #         self.category_controller.updateDataWithModel(data={'category_name': category_name}, model_id=order_id)
-        #     else:
-        #         return
-        # except Exception as E:
-        #     print(E)
-        #     return
+        order_code = self.ui.order_code_le.text().strip()
+        price = self.total_price
+        self.clear_error()
+        messages = {
+            'order_codeEmpty': "Vui lòng nhập mã đơn hàng",
+            'userEmpty': "Vui lòng chọn người đặt hàng",
+            'productEmpty': "Vui lòng chọn sản phẩm đặt hàng",
+        }
+
+        # validate dữ liệu các cột không được trống
+        is_valid = validateEmpty(self,{'order_code': order_code, 'user': self.user_selected, 'product': self.product_selected}, messages)
+
+        for index, item in self.product_selected.items():
+            order_detail = OrderDetail()
+        if is_valid:
+            return
+        try:
+            if form_mode == FormMode.ADD.value:
+
+                if self.order_controller.checkExitsDataWithModel(Order.order_code, data=order_code):
+                    self.ui.error_order_code.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
+                    self.ui.error_order_code.setText(messages["category_nameExit"])
+                    self.ui.order_code_le.setStyleSheet(Validate.BORDER_ERROR.value)
+                    return
+                # self.category_controller.insertData(Category(category_name=category_name))
+            elif form_mode == FormMode.EDIT.value:
+                print(2)
+                # if self.category_controller.checkExitsDataUpdateWithModel(Category.category_name, data=category_name, model_id=order_id):
+                #     self.ui.error_category_name.setStyleSheet(color_style)
+                #     self.ui.error_category_name.setText(messages["category_nameExit"])
+                #     self.ui.category_name_le.setStyleSheet(border_style)
+                #     return
+                # self.category_controller.updateDataWithModel(data={'category_name': category_name}, model_id=order_id)
+            else:
+                return
+        except Exception as E:
+            print(E)
+            return
 
         return True
 
@@ -389,6 +429,20 @@ class OrderDetailWindow(QWidget):
 
     # clear dữ liệu trên form
     def clear_form(self):
-        self.ui.order_code_le.setStyleSheet("border: 1px solid #e0e5e9;")
+        self.clear_error()
+        self.ui.user_le.setCurrentIndex(-1)
+        self.ui.search_box_product_order.setCurrentIndex(-1)
+        self.ui.search_box_product_order.setStyleSheet(Validate.BORDER_VALID.value)
+        self.ui.total_quantity_product_order.setText("0đ")
+        self.ui.status_order.setCurrentIndex(1)
+        self.ui.table_product_order.setRowCount(0)
+        self.ui.table_info_user.setRowCount(0)
+
+    # clear lỗi
+    def clear_error(self):
+        self.ui.order_code_le.setStyleSheet(Validate.BORDER_VALID.value)
         self.ui.order_code_le.setText("")
-        self.ui.user_le.setText("")
+        self.ui.user_le.setStyleSheet(Validate.BORDER_VALID.value)
+        self.ui.error_user.setText("")
+        self.ui.error_product.setText("")
+

@@ -1,11 +1,11 @@
 from src.controllers.BaseController import BaseController
 import re
-from src.models.products import Product
+from src.models.orders import Order
 from src.models.images import Image
 
 
-class ProductController(BaseController):
+class OrderController(BaseController):
 
     def __init__(self):
-        super().__init__(model=Product)
+        super().__init__(model=Order)
 

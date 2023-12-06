@@ -80,6 +80,11 @@ class HomeWindow(QMainWindow):
         self.back_btn_product = self.product_widget_detail.ui.back_btn_product
         self.btn_save_product = self.product_widget_detail.ui.btn_save_product
         self.btn_cancel_product = self.product_widget_detail.ui.btn_cancel_product
+        # khởi tạo các button order
+        self.btn_add_order = self.ui.btn_add_order
+        self.btn_save_order = self.order_widget_detail.ui.btn_save_order
+        self.btn_cancel_order = self.order_widget_detail.ui.btn_cancel_order
+        self.back_btn_order = self.order_widget_detail.ui.back_btn_order
 
         # page index của các trang
         self.page_index = dict(
@@ -133,7 +138,7 @@ class HomeWindow(QMainWindow):
         )
         # kết nối sự kiện màn loại sản phẩm và chi tiết loại sản phẩm
         self.btn_add_category.clicked.connect(
-            lambda: self.hanle_btn_add(self.category_widget_detail, FormMode.EDIT.value, self.page_index['CATEGORY_PAGE_DETAIL'])
+            lambda: self.hanle_btn_add(self.category_widget_detail, FormMode.ADD.value, self.page_index['CATEGORY_PAGE_DETAIL'])
         )
         self.back_btn_category.clicked.connect(
             lambda: self.do_change_page(self.page_index['CATEGORY_PAGE'])
@@ -146,7 +151,7 @@ class HomeWindow(QMainWindow):
         )
         # kết nôi sự kiện màn sản phẩm
         self.btn_add_product.clicked.connect(
-            lambda: self.hanle_btn_add(self.product_widget_detail, FormMode.EDIT.value,
+            lambda: self.hanle_btn_add(self.product_widget_detail, FormMode.ADD.value,
                                        self.page_index['PRODUCT_PAGE_DETAIL'])
         )
         self.back_btn_product.clicked.connect(
@@ -158,6 +163,22 @@ class HomeWindow(QMainWindow):
         self.btn_save_product.clicked.connect(
             lambda: self.handle_save(self.product_widget_detail, self.mode, self.page_index['PRODUCT_PAGE'],
                                      "product")
+        )
+
+        # kết nối sự kiện màn order
+        self.btn_add_order.clicked.connect(
+            lambda: self.hanle_btn_add(self.order_widget_detail, FormMode.ADD.value,
+                                       self.page_index['ORDER_PAGE_DETAIL'])
+        )
+        self.back_btn_order.clicked.connect(
+            lambda: self.do_change_page(self.page_index['ORDER_PAGE'])
+        )
+        self.btn_cancel_order.clicked.connect(
+            lambda: self.do_change_page(self.page_index['ORDER_PAGE'])
+        )
+        self.btn_save_order.clicked.connect(
+            lambda: self.handle_save(self.order_widget_detail, self.mode, self.page_index['ORDER_PAGE'],
+                                     "order")
         )
 
 
@@ -354,6 +375,7 @@ class HomeWindow(QMainWindow):
     # xử lý sự kiện click button add trên màn danh sách
     def hanle_btn_add(self, widget_detail, form_mode, page_to_index):
         # gắn data lên form
+        self.mode = form_mode
         function_clear_data = getattr(widget_detail, "clear_form")
         function_clear_data()
         self.do_change_page(page_to_index)
@@ -364,7 +386,7 @@ class HomeWindow(QMainWindow):
             # lấy ra tên function lưu của các trang
             function_save_name = f"save_{widget_name}"
             function_save = getattr(widget_detail, function_save_name)
-            function_list = f"show_category_table"
+            function_list = f"show_{widget_name}_table"
             function_list = getattr(self, function_list)
             if function_save:
                 if function_save(form_mode, self.id_data_selected):
@@ -441,3 +463,6 @@ class HomeWindow(QMainWindow):
                 delete_btn.clicked.connect(
                     lambda: self.on_row_click(self.product_table, FormMode.DELETE.value, self.page_index["USER_PAGE_DETAIL"]))
                 self.product_table.setCellWidget(index, column_index + 4, widget)
+
+    def show_order_table(self):
+        print(1)

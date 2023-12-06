@@ -3,10 +3,9 @@ from mysql import connector
 
 class BaseController:
 
-    def __init__(self, model, model_name):
+    def __init__(self, model):
         self.connection = ConnectMySQL()
         self.model = model
-        self.model_name = model_name
 
     def getDataByModel(self):
         return self.connection.getDataByModel(self.model)

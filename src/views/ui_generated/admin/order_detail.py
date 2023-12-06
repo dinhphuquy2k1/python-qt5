@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(949, 962)
+        Form.resize(1017, 962)
         Form.setStyleSheet("QLineEdit, QPlainTextEdit{\n"
 "    border: 1px solid #e0e5e9;\n"
 "    font-size: 16px;\n"
@@ -353,7 +353,7 @@ class Ui_Form(object):
 "    font-size: 15px;\n"
 "}\n"
 "\n"
-"#error_product_image, #error_quantity, #error_manufacture_date, #error_description, #error_price, #error_category, #error_product_name, #error_product_code{\n"
+"#error_user, #error_quantity, #error_manufacture_date, #error_description, #error_price, #error_category, #error_order_code, #error_product_code{\n"
 "    padding-top: 8px;\n"
 "    padding-bottom: 8px;\n"
 "}\n"
@@ -437,6 +437,13 @@ class Ui_Form(object):
 "\n"
 "#table_product_order_container{\n"
 "    border: 1px;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    width: 34px;\n"
+"    min-width: 34px;\n"
+"    max-width: 34px;\n"
+"    padding: 10px;\n"
 "}")
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -523,7 +530,7 @@ class Ui_Form(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 783, 1039))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, -326, 783, 1094))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -682,6 +689,8 @@ class Ui_Form(object):
         font.setFamily("Cambria Math")
         font.setPointSize(-1)
         self.user_le.setFont(font)
+        self.user_le.setMouseTracking(False)
+        self.user_le.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.user_le.setEditable(True)
         self.user_le.setObjectName("user_le")
         self.horizontalLayout_30.addWidget(self.user_le)
@@ -702,10 +711,10 @@ class Ui_Form(object):
         self.horizontalLayout_30.addWidget(self.btn_add_order_user)
         self.verticalLayout_22.addLayout(self.horizontalLayout_30)
         self.verticalLayout_16.addWidget(self.widget_29)
-        self.error_user_le = QtWidgets.QLabel(self.widget_15)
-        self.error_user_le.setText("")
-        self.error_user_le.setObjectName("error_user_le")
-        self.verticalLayout_16.addWidget(self.error_user_le)
+        self.error_user = QtWidgets.QLabel(self.widget_15)
+        self.error_user.setText("")
+        self.error_user.setObjectName("error_user")
+        self.verticalLayout_16.addWidget(self.error_user)
         self.formInput_5.addWidget(self.widget_15)
         self.horizontalLayout_14.addLayout(self.formInput_5)
         self.verticalLayout_12.addWidget(self.widget_14)
@@ -717,7 +726,7 @@ class Ui_Form(object):
         self.verticalLayout_18.setSpacing(0)
         self.verticalLayout_18.setObjectName("verticalLayout_18")
         self.table_info_user = QtWidgets.QTableWidget(self.table_info_user_container)
-        self.table_info_user.setMinimumSize(QtCore.QSize(0, 100))
+        self.table_info_user.setMinimumSize(QtCore.QSize(0, 80))
         self.table_info_user.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.table_info_user.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.table_info_user.setShowGrid(True)
@@ -813,8 +822,11 @@ class Ui_Form(object):
         font.setPointSize(-1)
         self.search_box_product_order.setFont(font)
         self.search_box_product_order.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.search_box_product_order.setFocusPolicy(QtCore.Qt.NoFocus)
         self.search_box_product_order.setEditable(True)
         self.search_box_product_order.setCurrentText("")
+        self.search_box_product_order.setIconSize(QtCore.QSize(30, 30))
+        self.search_box_product_order.setFrame(True)
         self.search_box_product_order.setObjectName("search_box_product_order")
         self.horizontalLayout_10.addWidget(self.search_box_product_order)
         spacerItem2 = QtWidgets.QSpacerItem(308, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -860,7 +872,7 @@ class Ui_Form(object):
         self.table_product_order.setShowGrid(True)
         self.table_product_order.setGridStyle(QtCore.Qt.CustomDashLine)
         self.table_product_order.setCornerButtonEnabled(False)
-        self.table_product_order.setRowCount(2)
+        self.table_product_order.setRowCount(0)
         self.table_product_order.setColumnCount(4)
         self.table_product_order.setObjectName("table_product_order")
         item = QtWidgets.QTableWidgetItem()
@@ -898,6 +910,10 @@ class Ui_Form(object):
         self.gridLayout_9.addWidget(self.table_product_order, 0, 0, 1, 1)
         self.verticalLayout_14.addWidget(self.tableUserContainer)
         self.verticalLayout_13.addWidget(self.table_product_order_container)
+        self.error_product = QtWidgets.QLabel(self.widget_2)
+        self.error_product.setText("")
+        self.error_product.setObjectName("error_product")
+        self.verticalLayout_13.addWidget(self.error_product)
         self.widget_56 = QtWidgets.QWidget(self.widget_2)
         self.widget_56.setMaximumSize(QtCore.QSize(16777215, 100))
         self.widget_56.setObjectName("widget_56")
@@ -1107,7 +1123,7 @@ class Ui_Form(object):
         item = self.table_product_order.horizontalHeaderItem(3)
         item.setText(_translate("Form", "Thành tiền"))
         self.label.setText(_translate("Form", "Tổng tiền:"))
-        self.total_quantity_product_order.setText(_translate("Form", "4.700.000đ"))
+        self.total_quantity_product_order.setText(_translate("Form", "0đ"))
         self.label_5.setText(_translate("Form", "Trạng thái đơn hàng"))
         self.status_order.setItemText(0, _translate("Form", "Chờ xử lý"))
         self.status_order.setItemText(1, _translate("Form", "Hoàn thành"))

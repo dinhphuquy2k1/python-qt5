@@ -1,10 +1,9 @@
 from sqlalchemy import create_engine, text, update, or_
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, joinedload
 from src.models.base import Base
 from src.views.common.Common import warningMessagebox
 import configparser
 import sqlalchemy
-print(sqlalchemy.__version__)
 class ConnectMySQL:
     def __init__(self, config_file_path="alembic.ini"):
         config = configparser.ConfigParser()
@@ -168,8 +167,8 @@ class ConnectMySQL:
         """
         try:
             self.connect()
-            query = self.session.query(model)
-            result = query.distinct().all()
+            query = self.session.query(model).options(joinedload('*'))
+            result = query.distinct().order_by(model.created_at).all()
             return result
 
         except Exception as E:

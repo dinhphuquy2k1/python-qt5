@@ -9,6 +9,7 @@ class OrderDetail(Base, BaseMixin):
     __tablename__ = 'order_details'
     order_id = Column(INTEGER(unsigned=True), ForeignKey('orders.id'))
     product_id = Column(INTEGER(unsigned=True), ForeignKey('products.id'))
+    total_price = Column(DECIMAL(18, 0), default=0)
     # Mối quan hệ Many-to-One với Order
     order = relationship('Order', back_populates='order_details')
     # Mối quan hệ Many-to-One với Product

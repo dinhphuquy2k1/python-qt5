@@ -6,7 +6,7 @@ from src.models.users import User
 class UserController(BaseController):
 
     def __init__(self):
-        super().__init__(model=User, model_name="users")
+        super().__init__(model=User)
 
     def checkExitsUser(self, username):
         sql = f"SELECT * FROM users WHERE username='{username}'"

@@ -45,6 +45,7 @@ class Ui_MainWindow(object):
 "    height: 50px;\n"
 "    border-bottom: 1px solid #ddd;    \n"
 "    border-right: 1px solid #ddd;\n"
+"    cursor: pointer;\n"
 "}\n"
 "\n"
 "#stackedWidget{\n"
@@ -486,7 +487,7 @@ class Ui_MainWindow(object):
         self.table_order.setShowGrid(False)
         self.table_order.setGridStyle(QtCore.Qt.NoPen)
         self.table_order.setRowCount(0)
-        self.table_order.setColumnCount(7)
+        self.table_order.setColumnCount(6)
         self.table_order.setObjectName("table_order")
         item = QtWidgets.QTableWidgetItem()
         item.setTextAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignVCenter)
@@ -524,15 +525,9 @@ class Ui_MainWindow(object):
         font.setFamily("Cambria")
         item.setFont(font)
         self.table_order.setHorizontalHeaderItem(5, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setTextAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignVCenter)
-        font = QtGui.QFont()
-        font.setFamily("Cambria")
-        item.setFont(font)
-        self.table_order.setHorizontalHeaderItem(6, item)
         self.table_order.horizontalHeader().setVisible(True)
         self.table_order.horizontalHeader().setCascadingSectionResizes(False)
-        self.table_order.horizontalHeader().setDefaultSectionSize(250)
+        self.table_order.horizontalHeader().setDefaultSectionSize(165)
         self.table_order.horizontalHeader().setHighlightSections(True)
         self.table_order.horizontalHeader().setMinimumSectionSize(57)
         self.table_order.horizontalHeader().setSortIndicatorShown(False)
@@ -841,7 +836,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_122.setSpacing(0)
         self.verticalLayout_122.setObjectName("verticalLayout_122")
         self.btn_add_user = QtWidgets.QPushButton(self.widget_51)
-        self.btn_add_user.setMinimumSize(QtCore.QSize(124, 40))
+        self.btn_add_user.setMinimumSize(QtCore.QSize(104, 40))
         font = QtGui.QFont()
         font.setFamily("Cambria")
         font.setPointSize(-1)
@@ -1611,7 +1606,7 @@ class Ui_MainWindow(object):
         MainWindow.setMenuBar(self.menuBar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(6)
+        self.stackedWidget.setCurrentIndex(2)
         self.exit_btn_1.clicked.connect(MainWindow.close) # type: ignore
         self.change_btn.toggled['bool'].connect(self.icon_only_widget.setVisible) # type: ignore
         self.dashboard_btn_1.toggled['bool'].connect(self.dashboard_btn_2.setChecked) # type: ignore
@@ -1643,18 +1638,16 @@ class Ui_MainWindow(object):
         self.btn_add_order.setText(_translate("MainWindow", "Thêm mới"))
         self.table_order.setSortingEnabled(False)
         item = self.table_order.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "#"))
+        item.setText(_translate("MainWindow", "Mã đơn hàng"))
         item = self.table_order.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "ID"))
+        item.setText(_translate("MainWindow", "Người đặt"))
         item = self.table_order.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "Tên sản phẩm"))
+        item.setText(_translate("MainWindow", "Tài khoản"))
         item = self.table_order.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "Hình ảnh"))
+        item.setText(_translate("MainWindow", "Số lượng sản phẩm"))
         item = self.table_order.horizontalHeaderItem(4)
-        item.setText(_translate("MainWindow", "Giá"))
+        item.setText(_translate("MainWindow", "Tổng tiền"))
         item = self.table_order.horizontalHeaderItem(5)
-        item.setText(_translate("MainWindow", "Ngày sản xuất"))
-        item = self.table_order.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Thao tác"))
         self.label1.setText(_translate("MainWindow", "Danh sách sản phẩm"))
         self.search_input_product_2.setPlaceholderText(_translate("MainWindow", "Search..."))

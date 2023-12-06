@@ -506,7 +506,7 @@ QPushButton{
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>8</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_2">
@@ -883,7 +883,7 @@ QPushButton{
                        <number>0</number>
                       </property>
                       <property name="columnCount">
-                       <number>7</number>
+                       <number>6</number>
                       </property>
                       <attribute name="horizontalHeaderVisible">
                        <bool>true</bool>
@@ -895,7 +895,7 @@ QPushButton{
                        <number>57</number>
                       </attribute>
                       <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>250</number>
+                       <number>165</number>
                       </attribute>
                       <attribute name="horizontalHeaderHighlightSections">
                        <bool>true</bool>
@@ -929,7 +929,7 @@ QPushButton{
                       </attribute>
                       <column>
                        <property name="text">
-                        <string>#</string>
+                        <string>Mã đơn hàng</string>
                        </property>
                        <property name="font">
                         <font>
@@ -942,7 +942,7 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>ID</string>
+                        <string>Người đặt</string>
                        </property>
                        <property name="font">
                         <font>
@@ -955,7 +955,7 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>Tên sản phẩm</string>
+                        <string>Tài khoản</string>
                        </property>
                        <property name="font">
                         <font>
@@ -968,7 +968,7 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>Hình ảnh</string>
+                        <string>Số lượng sản phẩm</string>
                        </property>
                        <property name="font">
                         <font>
@@ -981,20 +981,7 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>Giá</string>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <family>Cambria</family>
-                        </font>
-                       </property>
-                       <property name="textAlignment">
-                        <set>AlignLeading|AlignVCenter</set>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string>Ngày sản xuất</string>
+                        <string>Tổng tiền</string>
                        </property>
                        <property name="font">
                         <font>
@@ -1736,7 +1723,7 @@ QPushButton{
                         <widget class="QPushButton" name="btn_add_user">
                          <property name="minimumSize">
                           <size>
-                           <width>124</width>
+                           <width>104</width>
                            <height>40</height>
                           </size>
                          </property>

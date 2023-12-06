@@ -9,6 +9,7 @@ from src.enums.enums import *
 from src.controllers.admin.UserController import UserController
 from src.controllers.admin.CategoryController import CategoryController
 from src.controllers.admin.ProductController import ProductController
+from src.controllers.admin.OrderController import OrderController
 from src.models.users import User
 from src.views.admin.Product import ProductWindow
 from src.views.admin.Category import CategoryWindow
@@ -42,11 +43,14 @@ class HomeWindow(QMainWindow):
         self.user_controller = UserController()
         self.category_controller = CategoryController()
         self.product_controller = ProductController()
+        self.order_controller = OrderController()
+
 
         # khởi tạo table
         self.user_table = self.ui.tableUser
         self.category_table = self.ui.table_category
         self.product_table = self.ui.table_product
+        self.order_table = self.ui.table_order
 
         # hiển thị header cho table
         self.user_table.horizontalHeader().setVisible(True)
@@ -104,7 +108,7 @@ class HomeWindow(QMainWindow):
             USER_PAGE_DETAIL=8,
         )
         # hiển thị page mặc định khi mở form
-        self.pages.setCurrentIndex(self.page_index['ORDER_PAGE_DETAIL'])
+        self.pages.setCurrentIndex(self.page_index['ORDER_PAGE'])
         self.show_product_table()
 
         self.initializeSignal()
@@ -112,6 +116,9 @@ class HomeWindow(QMainWindow):
 
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+
+    def showEvent(self, event):
+        self.show_order_table()
 
     # Khởi tạo kết nối các button liên kết
     def initializeSignal(self):
@@ -251,23 +258,27 @@ class HomeWindow(QMainWindow):
         return result
 
     # function click edit row
-    def on_row_click(self, form_mode, page_index, widget_detail, page_back_index, widget_name):
-        # lấy data
-        button = self.sender()
-        row_id = int(button.objectName().strip().rsplit('_', 1)[-1])
-        # xử lý sự kiện cho từng màn
-        if page_index == self.page_index["USER_PAGE_DETAIL"]:
-            if form_mode == FormMode.DELETE.value:
-                self.on_delete_user(row_id)
-            elif form_mode == FormMode.EDIT.value:
-                # hiển thị màn hình
-                self.pages.setCurrentIndex(page_index)
-                self.on_edit_user(row_id)
-        else:
-            if form_mode == FormMode.DELETE.value:
-                self.on_delete_user(row_id)
-            elif form_mode == FormMode.EDIT.value:
-                self.handle_btn_row_edit(widget_detail, page_index, row_id)
+    def on_row_click(self, form_mode, page_index, widget_detail):
+        try:
+            # lấy data
+            button = self.sender()
+            row_id = int(button.objectName().strip().rsplit('_', 1)[-1])
+            # xử lý sự kiện cho từng màn
+            if page_index == self.page_index["USER_PAGE_DETAIL"]:
+                if form_mode == FormMode.DELETE.value:
+                    self.on_delete_user(row_id)
+                elif form_mode == FormMode.EDIT.value:
+                    # hiển thị màn hình
+                    self.pages.setCurrentIndex(page_index)
+                    self.on_edit_user(row_id)
+            else:
+                if form_mode == FormMode.DELETE.value:
+                    self.on_delete_user(row_id)
+                elif form_mode == FormMode.EDIT.value:
+                    self.handle_btn_row_edit(widget_detail, page_index, row_id)
+        except Exception as E:
+            print(f"{E} - file Home.py function on_row_click")
+            return
 
 
 
@@ -400,12 +411,15 @@ class HomeWindow(QMainWindow):
 
     # xử lý sự kiện click button edit trên row
     def handle_btn_row_edit(self, widget_detail, page_index, row_id):
-        self.mode = FormMode.EDIT.value
-        self.id_data_selected = row_id
-        self.pages.setCurrentIndex(page_index)
-        # gắn data lên form
-        function_binding_data = getattr(widget_detail, "handle_edit_event")
-        function_binding_data(row_id)
+        try:
+            self.mode = FormMode.EDIT.value
+            self.id_data_selected = row_id
+            self.pages.setCurrentIndex(page_index)
+            # gắn data lên form
+            function_binding_data = getattr(widget_detail, "handle_edit_event")
+            function_binding_data(row_id)
+        except Exception as E:
+            print(f"{E} - file Home.py function handle_btn_row_edit")
 
     # table category
     def show_category_table(self):
@@ -465,4 +479,22 @@ class HomeWindow(QMainWindow):
                 self.product_table.setCellWidget(index, column_index + 4, widget)
 
     def show_order_table(self):
-        print(1)
+        order_list = self.order_controller.getDataByModel()
+        self.order_table.setRowCount(0)
+        if order_list:
+            for index, item in enumerate(order_list):
+                column_index = 0
+                self.order_table.setRowCount(index + 1)
+                self.order_table.setItem(index, column_index, QTableWidgetItem(str(item.order_code)))
+                self.order_table.setItem(index, column_index + 1, QTableWidgetItem(str(item.user.name)))
+                self.order_table.setItem(index, column_index + 2, QTableWidgetItem(str(item.user.username)))
+                self.order_table.setItem(index, column_index + 3, QTableWidgetItem(str(item.quantity)))
+                self.order_table.setItem(index, column_index + 4, QTableWidgetItem(str(formatCurrency(int(item.price), 'đ'))))
+                widget, edit_btn, delete_btn = generate_action_row(item.id, "order")
+                edit_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.EDIT.value,
+                                              self.page_index["ORDER_PAGE_DETAIL"], self.order_widget_detail))
+                delete_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.DELETE.value,
+                                              self.page_index["ORDER_PAGE_DETAIL"], self.order_widget_detail))
+                self.order_table.setCellWidget(index, column_index + 5, widget)

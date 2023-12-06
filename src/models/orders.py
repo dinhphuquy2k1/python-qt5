@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, ForeignKey, DateTime, DECIMAL, Text
+from sqlalchemy import Column, String, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 from .base import Base, BaseMixin
 from sqlalchemy.dialects.mysql import INTEGER
@@ -15,8 +15,6 @@ class Order(Base, BaseMixin):
     order_details = relationship('OrderDetail', back_populates='order')
     # tổng giá tiền
     price = Column(String(255))
-    # ngày đặt hàng
-    order_date = Column(DateTime(timezone=True))
     # số lượng sản phẩm
     quantity = Column(INTEGER)
     # trạng thái đơn hàng

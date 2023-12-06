@@ -28,6 +28,14 @@ class BaseController:
     def getDataByIdWithModel(self, model_id):
         return self.connection.getDataByIdWithModel(self.model, model_id)
 
+    def getDataByModelIdWithRelation(self, model_id):
+        return self.connection.getDataByModelIdWithRelation(self.model, model_id)
+
+    def deleteDataMutipleWithModel(self, ids):
+        return self.connection.deleteDataMutipleWithModel(self.model, ids)
+
+    def updateOrInsert(self, data):
+        self.connection.updateOrInsert(data)
 
     def deleteDataWithModel(self, model, model_id):
         return self.connection.deleteDataWithModel(model, model_id)

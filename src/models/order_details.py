@@ -10,6 +10,8 @@ class OrderDetail(Base, BaseMixin):
     order_id = Column(INTEGER(unsigned=True), ForeignKey('orders.id'))
     product_id = Column(INTEGER(unsigned=True), ForeignKey('products.id'))
     total_price = Column(DECIMAL(18, 0), default=0)
+    # số lượng sản phẩm
+    quantity_order = Column(INTEGER)
     # Mối quan hệ Many-to-One với Order
     order = relationship('Order', back_populates='order_details')
     # Mối quan hệ Many-to-One với Product

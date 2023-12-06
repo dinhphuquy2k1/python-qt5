@@ -30,6 +30,19 @@ class ConnectMySQL:
         self.connection = self.engine.connect()
         self.session = self.Session()
 
+    def deleteDataMutipleWithModel(self, model, ids):
+        try:
+            self.connect()
+            self.session.query(model).filter(model.id.in_((ids))).delete()
+            self.session.commit()
+            return True
+        except Exception as E:
+            print(E)
+            return
+
+        finally:
+            self.close()
+
     def close(self):
         self.connection.close()
         self.session.close()
@@ -52,6 +65,19 @@ class ConnectMySQL:
         try:
             self.connect()
             self.session.add(data)
+            self.session.commit()
+            return True
+        except Exception as E:
+            print(E)
+            self.session.rollback()
+            return False
+        finally:
+            self.close()
+
+    def updateOrInsert(self, data):
+        try:
+            self.connect()
+            self.session.merge(data)
             self.session.commit()
             return True
         except Exception as E:
@@ -160,6 +186,24 @@ class ConnectMySQL:
 
         finally:
             self.close()
+
+    def getDataByModelIdWithRelation(self, model, model_id):
+        """
+               Common function to get data from database.
+               """
+        try:
+            self.connect()
+            query = self.session.query(model).filter(model.id == model_id).options(joinedload('*'))
+            result = query.distinct().order_by(model.created_at).first()
+            return result
+
+        except Exception as E:
+            print(E)
+            return []
+
+        finally:
+            self.close()
+
 
     def getDataByModel(self, model):
         """

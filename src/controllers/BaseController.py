@@ -10,6 +10,9 @@ class BaseController:
     def getDataByModel(self):
         return self.connection.getDataByModel(self.model)
 
+    def insertDataMultipleWithModel(self, data):
+        return self.connection.insertDataMultipleWithModel(data)
+
     def getDataByQuery(self, query):
         return self.connection.getDataByQuery(query=query)
 

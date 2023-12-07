@@ -43,6 +43,19 @@ class ConnectMySQL:
         finally:
             self.close()
 
+    def insertDataMultipleWithModel(self, data):
+        try:
+            self.connect()
+            self.session.bulk_save_objects(data)
+            self.session.commit()
+            return True
+        except Exception as E:
+            print(E)
+            return
+
+        finally:
+            self.close()
+
     def close(self):
         self.connection.close()
         self.session.close()

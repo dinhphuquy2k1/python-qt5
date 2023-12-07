@@ -1,8 +1,8 @@
 """first commit
 
-Revision ID: 269c7d6134fa
+Revision ID: dfd0770bb44b
 Revises: 
-Create Date: 2023-12-06 17:33:35.386770
+Create Date: 2023-12-07 10:22:19.355838
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision: str = '269c7d6134fa'
+revision: str = 'dfd0770bb44b'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -42,7 +42,6 @@ def upgrade() -> None:
     sa.Column('order_code', sa.String(length=255), nullable=True),
     sa.Column('user_id', mysql.INTEGER(unsigned=True), nullable=True),
     sa.Column('price', sa.String(length=255), nullable=True),
-    sa.Column('order_date', sa.DateTime(timezone=True), nullable=True),
     sa.Column('quantity', mysql.INTEGER(), nullable=True),
     sa.Column('status', mysql.INTEGER(), nullable=True),
     sa.Column('id', mysql.INTEGER(unsigned=True), autoincrement=True, nullable=False),
@@ -91,6 +90,7 @@ def upgrade() -> None:
     sa.Column('order_id', mysql.INTEGER(unsigned=True), nullable=True),
     sa.Column('product_id', mysql.INTEGER(unsigned=True), nullable=True),
     sa.Column('total_price', sa.DECIMAL(precision=18, scale=0), nullable=True),
+    sa.Column('quantity_order', mysql.INTEGER(), nullable=True),
     sa.Column('id', mysql.INTEGER(unsigned=True), autoincrement=True, nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),

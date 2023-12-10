@@ -12,7 +12,7 @@ class Order(Base, BaseMixin):
     user_id = Column(INTEGER(unsigned=True), ForeignKey('users.id'))
     # người đặt
     user = relationship('User', back_populates='orders')
-    order_details = relationship('OrderDetail', back_populates='order')
+    order_details = relationship('OrderDetail', back_populates='order', cascade="all, delete-orphan")
     # tổng giá tiền
     price = Column(String(255))
     # số lượng sản phẩm

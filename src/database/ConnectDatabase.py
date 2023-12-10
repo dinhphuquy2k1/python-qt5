@@ -1,9 +1,10 @@
 from sqlalchemy import create_engine, text, update, or_
 from sqlalchemy.orm import sessionmaker, joinedload
+
+from src.models import OrderDetail
 from src.models.base import Base
 from src.views.common.Common import warningMessagebox
 import configparser
-import sqlalchemy
 class ConnectMySQL:
     def __init__(self, config_file_path="alembic.ini"):
         config = configparser.ConfigParser()
@@ -43,6 +44,27 @@ class ConnectMySQL:
         finally:
             self.close()
 
+    def process_relation_with_request(self, relation, items):
+        for model in relation:
+            for item in items:
+                if model.uuid == item.get('uuid'):
+                    model.update(item)
+                    self.session.commit()
+                    break
+            else:
+                # If the item's uuid doesn't match any existing model, delete the model
+                relation.remove(model)
+                self.session.delete(model)
+                self.session.commit()
+
+        for item in items:
+            if 'uuid' not in item:
+                # If the item has no uuid, create a new model in the relation
+                model_class = type(relation)
+                new_model = model_class(**item)
+                relation.append(new_model)
+                self.session.commit()
+
     def insertDataMultipleWithModel(self, data):
         try:
             self.connect()
@@ -53,6 +75,25 @@ class ConnectMySQL:
             print(E)
             return
 
+        finally:
+            self.close()
+
+    # cập nhật bản ghi và thêm mới các bản ghi cho 1 relation
+    def updateDataWithModelRelation(self, data, model, model_id, data_relation):
+        try:
+            self.connect()
+            # query = update(model).where(model.id == model_id).values(data)
+            # self.session.execute(query)
+            self.session.merge(data)
+            # thêm mới các bản ghi cho relation
+            # self.session.bulk_save_objects(data_relation)
+            self.session.commit()
+            return True
+        except Exception as E:
+            print(E)
+            warningMessagebox("Đã xảy ra lỗi")
+            self.session.rollback()
+            return False
         finally:
             self.close()
 

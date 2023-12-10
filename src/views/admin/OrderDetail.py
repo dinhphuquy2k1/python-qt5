@@ -10,6 +10,7 @@ from src.controllers.admin.ProductController import ProductController
 from src.controllers.admin.OrderController import OrderController
 from src.controllers.admin.OrderDetailController import OrderDetailController
 from src.models.orders import Order
+from src.models.products import Product
 from src.models.order_details import OrderDetail
 from src.views.common.form_group_btn_order import Test
 
@@ -51,7 +52,7 @@ class OrderDetailWindow(QWidget):
         self.mode = FormMode.ADD.value
         self.order_selected = None
         self.order_details = []
-        self.order_detail_ids = []
+        self.product_update = {}
 
         self.user_le.setInsertPolicy(QComboBox.NoInsert)
         self.user_le.completer().setCompletionMode(QCompleter.PopupCompletion)
@@ -65,6 +66,7 @@ class OrderDetailWindow(QWidget):
     # Hàm luôn chạy khi form được show
     # Thực hiện lấy dữ liệu từ database
     def showEvent(self, event):
+        self.product_selected = {}
         self.user_le.clear()
         self.search_box_product_order.clear()
         # Lấy dữ liệu từ database
@@ -86,7 +88,6 @@ class OrderDetailWindow(QWidget):
         self.table_info_user.setItem(0, 0, QTableWidgetItem(str(self.user_selected.name)))
         self.table_info_user.setItem(0, 1, QTableWidgetItem(str(self.user_selected.username)))
 
-
     # Xử lý tính tổng tiền đơn hàng
     def handle_total_quantity_product_order(self):
         self.total_price = sum(int(product.total_price) for product in self.product_selected.values())
@@ -98,10 +99,15 @@ class OrderDetailWindow(QWidget):
         selected_item = self.product_list[index]
 
         try:
+            # trường hợp sản phẩm chưa có trong danh sách đã chọn trước đó
             if selected_item.id not in self.product_selected:
                 selected_item.quantity_order = 1
+                selected_item.quantity -= 1
+                if not hasattr(selected_item, 'order_detail_id'):
+                    selected_item.order_detail_id = None
                 selected_item.total_price = selected_item.price * selected_item.quantity_order
                 self.product_selected[selected_item.id] = selected_item
+                self.product_update[selected_item.id] = selected_item
         except Exception as E:
             print(f"{E}- file OrderDetail.py function handle_product_le_selected")
             return
@@ -187,7 +193,7 @@ class OrderDetailWindow(QWidget):
         quantity_order.setObjectName(f"quantity_order_{row}")
         quantity_order.setMinimum(1)
         quantity_order.setValue(total_quantity)
-        quantity_order.setMaximum(10)
+        quantity_order.setMaximum(ProductSelected.MAX_SELECTED.value)
         horizontalLayout.addWidget(quantity_order, 0, Qt.AlignTop)
         plus_order_btn = QtWidgets.QPushButton(order_group_btn)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -222,13 +228,17 @@ class OrderDetailWindow(QWidget):
                     self.table_product_order.setRowCount(row_index + 1)
                     self.table_product_order.setRowHeight(row_index, 120)
                     # cột sản phẩm
-                    self.table_product_order.setCellWidget(row_index, column_index, self.generate_info_product_order(item))
+                    self.table_product_order.setCellWidget(row_index, column_index,
+                                                           self.generate_info_product_order(item))
                     self.table_product_order.setColumnWidth(column_index, 200)
                     # cột đơn giá
-                    self.table_product_order.setItem(row_index, column_index + 1, QTableWidgetItem(formatCurrency(int(item.price), 'đ')))
+                    self.table_product_order.setItem(row_index, column_index + 1,
+                                                     QTableWidgetItem(formatCurrency(int(item.price), 'đ')))
 
-                    widget_price, label_price = self.generate_column_price(row_index, item) # tạo view cột thành tiền
-                    widget,  minus_order_btn, plus_order_btn, quantity_label = self.generate_group_order_btn(item.id, item.quantity_order, label_price) # tạo view group button
+                    widget_price, label_price = self.generate_column_price(row_index, item)  # tạo view cột thành tiền
+                    widget, minus_order_btn, plus_order_btn, quantity_label = self.generate_group_order_btn(item.id,
+                                                                                                            item.quantity_order,
+                                                                                                            label_price)  # tạo view group button
                     # cột số lượng
                     self.table_product_order.setCellWidget(row_index, column_index + 2, widget)
                     # cột thành tiền
@@ -249,6 +259,8 @@ class OrderDetailWindow(QWidget):
             # cập nhật cột thành tiền
             if quantity_label.value() > quantity_label.minimum():
                 self.product_selected[index].quantity_order -= 1
+                # giảm số lượng trong bảng product
+                self.product_selected[index].quantity += 1
                 self.product_selected[index].total_price = int(self.product_selected[index].quantity_order) * int(
                     self.product_selected[index].price)
                 label_price.setText(formatCurrency(self.product_selected[index].total_price, 'đ'))
@@ -268,6 +280,7 @@ class OrderDetailWindow(QWidget):
             # cập nhật cột thành tiền
             if quantity_label.value() < quantity_label.maximum():
                 self.product_selected[index].quantity_order += 1
+                self.product_selected[index].quantity -= 1
                 self.product_selected[index].total_price = int(self.product_selected[index].quantity_order) * int(self.product_selected[index].price)
                 label_price.setText(formatCurrency(self.product_selected[index].total_price, 'đ'))
                 quantity_label.setValue(int(self.product_selected[index].quantity_order))
@@ -288,7 +301,7 @@ class OrderDetailWindow(QWidget):
 
         # sét giá trị cột thành tiền
         self.label.setText(formatCurrency(int(data.quantity_order) * int(data.price),
-                           'đ'))
+                                          'đ'))
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setObjectName(f"label_price_{row}")
         layout = QHBoxLayout()
@@ -392,16 +405,21 @@ class OrderDetailWindow(QWidget):
 
     # xóa sản phẩm đã chọn
     def on_delete_product_order_detail(self):
-        button = self.sender()
-        row_id = int(button.objectName().strip().rsplit('_', 1)[-1])
-        self.product_selected.pop(row_id, None)
-        self.handle_total_quantity_product_order()
-        self.show_table_product()
+        try:
+            button = self.sender()
+            row_id = int(button.objectName().strip().rsplit('_', 1)[-1])
+            self.product_update[row_id] = self.product_selected[row_id]
+            self.product_update[row_id].quantity += self.product_update[row_id].quantity_order
+            # self.product_update[row_id].quantity += self.product_selected[row_id].quantity
+            self.product_selected.pop(row_id, None)
+            self.handle_total_quantity_product_order()
+            self.show_table_product()
+        except Exception as E:
+            print(f"{E} file OrderDetail function on_delete_product_order_detail")
 
     @pyqtSlot()
     def save_order(self, form_mode, order_id=None):
         order_code = self.ui.order_code_le.text().strip()
-        price = self.total_price
         self.clear_error()
         messages = {
             'order_codeEmpty': "Vui lòng nhập mã đơn hàng",
@@ -411,30 +429,26 @@ class OrderDetailWindow(QWidget):
         }
 
         # validate dữ liệu các cột không được trống
-        is_valid = validateEmpty(self,{'order_code': order_code, 'user': self.user_selected, 'product': self.product_selected}, messages)
-        order = Order(order_code=order_code, user_id=self.user_selected.id, price=self.total_price, quantity=self.total_quantity_order, status=OrderStatus.PROGRESS.value)
+        is_valid = validateEmpty(self, {'order_code': order_code, 'user': self.user_selected,
+                                        'product': self.product_selected}, messages)
+        order = Order(order_code=order_code, user_id=self.user_selected.id, price=self.total_price,
+                      quantity=self.total_quantity_order, status=OrderStatus.PROGRESS.value)
         if is_valid:
             return
 
         for index, item in self.product_selected.items():
-            # nếu trong sản phẩm được chọn đã tồn tại cột order_detail_id thì cập nhật dữ liệu OrderDetail
-            # if hasattr(item, 'order_detail_id'):
-            #     self.order_controller.updateDataWithModel(
-            #         {'total_price': item.total_price, 'quantity_order': item.quantity_order}, item.order_detail_id)
-            # else:
             order_detail = OrderDetail(total_price=item.total_price, quantity_order=item.quantity_order,
                                        product_id=item.id)
             if self.mode == FormMode.EDIT.value:
                 order_detail.order_id = order_id
-                self.order_details.append({'total_price': item.total_price, 'quantity_order': item.quantity_order,
-                                       'product_id':item.id, 'order_id': order_id})
             order.order_details.append(order_detail)
+            # update order_detail
+            self.order_details.append({'total_price': item.total_price, 'quantity_order': item.quantity_order,
+                             'product_id': item.id, 'order_id': order_id, 'id': item.order_detail_id})
 
-            order_details_objects = [
-                OrderDetail(total_price=item.total_price, quantity_order=item.quantity_order,
-                            product_id=item.id, order_id=order_id)
-                for index, item in self.product_selected.items()
-            ]
+            # lưu thông tin product để cập nhật lại số lượng
+            self.product_update[index] = Product(id=item.id, quantity=item.quantity)
+
         try:
             if form_mode == FormMode.ADD.value:
                 if self.order_controller.checkExitsDataWithModel(Order.order_code, data=order_code):
@@ -444,22 +458,29 @@ class OrderDetailWindow(QWidget):
                     return
                 self.order_controller.insertData(order)
             elif form_mode == FormMode.EDIT.value:
-                if self.order_controller.checkExitsDataUpdateWithModel(Order.order_code, data=order_code, model_id=order_id):
+                del order.order_details
+                order.id = order_id
+                if self.order_controller.checkExitsDataUpdateWithModel(Order.order_code, data=order_code,
+                                                                       model_id=order_id):
                     self.ui.error_order_code.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
                     self.ui.error_order_code.setText(messages["order_codeExit"])
                     self.ui.order_code_le.setStyleSheet(Validate.BORDER_ERROR.value)
                     return
-                # xóa các product
-                test = [order_detail_object for order_detail_object in self.order_details]
-                self.order_controller.updateDataWithModel(
-                    data={'order_code': order_code, 'user_id': self.user_selected.id, 'price': self.total_price,
-                          'quantity': self.total_quantity_order, 'status': OrderStatus.PROGRESS.value, 'order_details': order_details_objects },
-                    model_id=order_id)
-
-
-                # if self.order_detail_ids:
-                #     self.order_detail_controller.deleteDataMutipleWithModel(self.order_detail_ids)
-                # self.order_detail_controller.insertData(self.order_details)
+                self.order_controller.updateDataWithModelRelation(
+                    order,
+                    {
+                        'order_details': self.order_details,
+                    },
+                    [
+                        {
+                            'action': FormMode.EDIT.value,
+                            'data': self.product_update,
+                        }
+                    ]
+                )
+                # self.order_controller.updateDataWithModelRelation(
+                #     data=Order(order_code=order_code, user_id=self.user_selected.id, price=self.total_price, quantity=self.total_quantity_order, status=OrderStatus.PROGRESS.value),
+                #     model_id=order_id, data_relation=order.order_details)
 
             else:
                 return
@@ -477,11 +498,10 @@ class OrderDetailWindow(QWidget):
             self.ui.order_code_le.setText(self.order_selected.order_code)
             self.user_selected = self.order_selected.user
             for index, item in enumerate(self.order_selected.order_details):
-                # lưu lại id các bản ghi chi tiết để thực hiện xóa
-                self.order_detail_ids.append(item.id)
                 self.product_selected[item.product.id] = item
                 self.product_selected[item.product.id].order_detail_id = item.id
                 self.product_selected[item.product.id].id = item.product.id
+                self.product_selected[item.product.id].quantity = item.product.quantity
                 self.product_selected[item.product.id].product_image = item.product.product_image
                 self.product_selected[item.product.id].product_name = item.product.product_name
                 self.product_selected[item.product.id].product_code = item.product.product_code
@@ -507,4 +527,3 @@ class OrderDetailWindow(QWidget):
         self.ui.user_le.setStyleSheet(Validate.BORDER_VALID.value)
         self.ui.error_user.setText("")
         self.ui.error_product.setText("")
-

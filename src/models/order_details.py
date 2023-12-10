@@ -13,6 +13,6 @@ class OrderDetail(Base, BaseMixin):
     # số lượng sản phẩm
     quantity_order = Column(INTEGER)
     # Mối quan hệ Many-to-One với Order
-    order = relationship('Order', back_populates='order_details')
+    order = relationship('Order', back_populates='order_details', passive_deletes=True)
     # Mối quan hệ Many-to-One với Product
     product = relationship('Product')

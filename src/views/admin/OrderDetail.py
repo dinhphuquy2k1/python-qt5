@@ -410,7 +410,6 @@ class OrderDetailWindow(QWidget):
             row_id = int(button.objectName().strip().rsplit('_', 1)[-1])
             self.product_update[row_id] = self.product_selected[row_id]
             self.product_update[row_id].quantity += self.product_update[row_id].quantity_order
-            # self.product_update[row_id].quantity += self.product_selected[row_id].quantity
             self.product_selected.pop(row_id, None)
             self.handle_total_quantity_product_order()
             self.show_table_product()

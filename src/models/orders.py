@@ -9,9 +9,9 @@ class Order(Base, BaseMixin):
     __tablename__ = 'orders'
     # mã đơn hàng
     order_code = Column(String(255), unique=True)
-    user_id = Column(INTEGER(unsigned=True), ForeignKey('users.id'))
+    customer_id = Column(INTEGER(unsigned=True), ForeignKey('customers.id'))
     # người đặt
-    user = relationship('User', back_populates='orders')
+    customer = relationship('Customer', back_populates='orders')
     order_details = relationship('OrderDetail', back_populates='order', cascade="all, delete-orphan")
     # tổng giá tiền
     price = Column(String(255))

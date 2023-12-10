@@ -16,6 +16,7 @@ from src.views.admin.Category import CategoryWindow
 from src.views.admin.CategoryDetail import CategoryDetailWindow
 from src.views.admin.ProductDetail import ProductDetailWindow
 from src.views.admin.OrderDetail import OrderDetailWindow
+from src.views.admin.CustomerDetail import CustomerDetailWindow
 from functools import partial
 
 
@@ -38,6 +39,7 @@ class HomeWindow(QMainWindow):
         self.category_widget_detail = CategoryDetailWindow()
         self.product_widget_detail = ProductDetailWindow()
         self.order_widget_detail = OrderDetailWindow()
+        self.customer_widget_detail = CustomerDetailWindow()
 
         # khởi tạo controller
         self.user_controller = UserController()
@@ -89,6 +91,11 @@ class HomeWindow(QMainWindow):
         self.btn_save_order = self.order_widget_detail.ui.btn_save_order
         self.btn_cancel_order = self.order_widget_detail.ui.btn_cancel_order
         self.back_btn_order = self.order_widget_detail.ui.back_btn_order
+        # khởi tạo các button customer
+        self.btn_add_customer = self.ui.btn_add_customer
+        self.btn_save_customer = self.customer_widget_detail.ui.btn_save_customer
+        self.btn_cancel_customer = self.customer_widget_detail.ui.btn_cancel_customer
+        self.back_btn_customer = self.customer_widget_detail.ui.back_btn_customer
 
         # page index của các trang
         self.page_index = dict(
@@ -102,13 +109,14 @@ class HomeWindow(QMainWindow):
             ORDER_PAGE_DETAIL=self.pages.addWidget(self.order_widget_detail),
             PRODUCT_PAGE=3,
             CUSTOMER_PAGE=4,
+            CUSTOMER_PAGE_DETAIL=self.pages.addWidget(self.customer_widget_detail),
             # trang thông tin người dùng
             USER_PAGE=6,
             # trang chi tiết người dùng
             USER_PAGE_DETAIL=8,
         )
         # hiển thị page mặc định khi mở form
-        self.pages.setCurrentIndex(self.page_index['ORDER_PAGE'])
+        self.pages.setCurrentIndex(self.page_index['CUSTOMER_PAGE_DETAIL'])
         self.show_product_table()
 
         self.initializeSignal()
@@ -188,6 +196,21 @@ class HomeWindow(QMainWindow):
                                      "order")
         )
 
+        # kết nối sự kiện màn order
+        self.btn_add_customer.clicked.connect(
+            lambda: self.hanle_btn_add(self.customer_widget_detail, FormMode.ADD.value,
+                                       self.page_index['CUSTOMER_PAGE_DETAIL'])
+        )
+        self.back_btn_customer.clicked.connect(
+            lambda: self.do_change_page(self.page_index['CUSTOMER_PAGE'])
+        )
+        self.btn_cancel_customer.clicked.connect(
+            lambda: self.do_change_page(self.page_index['CUSTOMER_PAGE'])
+        )
+        self.btn_save_customer.clicked.connect(
+            lambda: self.handle_save(self.customer_widget_detail, self.mode, self.page_index['CUSTOMER_PAGE'],
+                                     "customer")
+        )
 
     def on_search_btn_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(5)
@@ -498,3 +521,6 @@ class HomeWindow(QMainWindow):
                     lambda: self.on_row_click(FormMode.DELETE.value,
                                               self.page_index["ORDER_PAGE_DETAIL"], self.order_widget_detail))
                 self.order_table.setCellWidget(index, column_index + 5, widget)
+
+    def show_customer_table(self):
+        print(1)

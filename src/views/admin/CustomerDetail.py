@@ -90,10 +90,10 @@ class CustomerDetailWindow(QWidget):
             return
 
         customer = Customer(name=name, account=account)
-        message = self.user_controller.checkUserEmailOrPhone(account)
+        message = self.user_controller.checkUserEmailOrPhone(username=account)
         if message:
             self.ui.error_account.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
-            self.ui.error_account.setText(messages["accountExit"])
+            self.ui.error_account.setText(message)
             self.ui.account_le.setStyleSheet(Validate.BORDER_ERROR.value)
             return
         try:

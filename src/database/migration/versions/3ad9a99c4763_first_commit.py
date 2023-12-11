@@ -1,8 +1,8 @@
 """first commit
 
-Revision ID: 03f567a193ee
+Revision ID: 3ad9a99c4763
 Revises: 
-Create Date: 2023-12-10 21:21:52.171253
+Create Date: 2023-12-11 16:11:44.071236
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision: str = '03f567a193ee'
+revision: str = '3ad9a99c4763'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -30,13 +30,14 @@ def upgrade() -> None:
     )
     op.create_table('member_ranks',
     sa.Column('name', sa.String(length=255), nullable=True),
+    sa.Column('code', sa.String(length=255), nullable=True),
     sa.Column('spending', sa.DECIMAL(precision=18, scale=0), nullable=True),
     sa.Column('discount', sa.String(length=255), nullable=True),
     sa.Column('id', mysql.INTEGER(unsigned=True), autoincrement=True, nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
+    sa.UniqueConstraint('code')
     )
     op.create_table('users',
     sa.Column('username', sa.String(length=255), nullable=True),
@@ -130,8 +131,7 @@ def upgrade() -> None:
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['item_classification_id'], ['item_classifications.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('sub_item_classification_name')
+    sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
 

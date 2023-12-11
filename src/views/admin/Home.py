@@ -10,6 +10,7 @@ from src.controllers.admin.UserController import UserController
 from src.controllers.admin.CategoryController import CategoryController
 from src.controllers.admin.ProductController import ProductController
 from src.controllers.admin.OrderController import OrderController
+from src.controllers.admin.CustomerController import CustomerController
 from src.models.users import User
 from src.views.admin.Product import ProductWindow
 from src.views.admin.Category import CategoryWindow
@@ -17,6 +18,7 @@ from src.views.admin.CategoryDetail import CategoryDetailWindow
 from src.views.admin.ProductDetail import ProductDetailWindow
 from src.views.admin.OrderDetail import OrderDetailWindow
 from src.views.admin.CustomerDetail import CustomerDetailWindow
+from src.views.admin.MemberRankDetail import MemberRankDetailWindow
 from functools import partial
 
 
@@ -40,12 +42,14 @@ class HomeWindow(QMainWindow):
         self.product_widget_detail = ProductDetailWindow()
         self.order_widget_detail = OrderDetailWindow()
         self.customer_widget_detail = CustomerDetailWindow()
+        self.member_rank_widget_detail = MemberRankDetailWindow()
 
         # khởi tạo controller
         self.user_controller = UserController()
         self.category_controller = CategoryController()
         self.product_controller = ProductController()
         self.order_controller = OrderController()
+        self.customer_controller = CustomerController()
 
 
         # khởi tạo table
@@ -53,10 +57,16 @@ class HomeWindow(QMainWindow):
         self.category_table = self.ui.table_category
         self.product_table = self.ui.table_product
         self.order_table = self.ui.table_order
+        self.customer_table = self.ui.table_customer
+        self.table_rank = self.ui.table_rank
 
         # hiển thị header cho table
         self.user_table.horizontalHeader().setVisible(True)
         self.category_table.horizontalHeader().setVisible(True)
+        self.customer_table.horizontalHeader().setVisible(True)
+        self.product_table.horizontalHeader().setVisible(True)
+        self.order_table.horizontalHeader().setVisible(True)
+        self.table_rank.horizontalHeader().setVisible(True)
         # lưu giá trị data khi click row trong table
         self.id_data_selected = None
         # trạng thái form
@@ -76,6 +86,7 @@ class HomeWindow(QMainWindow):
         self.back_btn_category = self.category_widget_detail.ui.back_btn_category
         self.cancel_btn_category = self.category_widget_detail.ui.btn_cancel_category
         self.products_btn_2 = self.ui.products_btn_2
+        self.rank_btn_2 = self.ui.rank_btn_2
 
         self.btn_add_category = self.ui.btn_add_category
         self.btn_save_category = self.category_widget_detail.ui.btn_save_category
@@ -96,27 +107,34 @@ class HomeWindow(QMainWindow):
         self.btn_save_customer = self.customer_widget_detail.ui.btn_save_customer
         self.btn_cancel_customer = self.customer_widget_detail.ui.btn_cancel_customer
         self.back_btn_customer = self.customer_widget_detail.ui.back_btn_customer
+        # khởi tạo các button member rank
+        self.btn_add_rank = self.ui.btn_add_rank
+        self.btn_save_rank = self.member_rank_widget_detail.ui.btn_save_rank
+        self.btn_cancel_rank = self.member_rank_widget_detail.ui.btn_cancel_rank
+        self.back_btn_rank = self.member_rank_widget_detail.ui.back_btn_rank
 
         # page index của các trang
         self.page_index = dict(
             HOME_PAGE=0,
             DASHBOARD_PAGE=1,
             # trang loại sản phẩm
-            CATEGORY_PAGE=7,
+            CATEGORY_PAGE=8,
             CATEGORY_PAGE_DETAIL=self.pages.addWidget(self.category_widget_detail),
-            PRODUCT_PAGE_DETAIL=self.pages.addWidget(self.product_widget_detail),
             ORDER_PAGE=2,
             ORDER_PAGE_DETAIL=self.pages.addWidget(self.order_widget_detail),
             PRODUCT_PAGE=3,
+            PRODUCT_PAGE_DETAIL=self.pages.addWidget(self.product_widget_detail),
             CUSTOMER_PAGE=4,
             CUSTOMER_PAGE_DETAIL=self.pages.addWidget(self.customer_widget_detail),
+            MEMBER_RANK_PAGE=7,
+            MEMBER_RANK_PAGE_DETAIL=self.pages.addWidget(self.member_rank_widget_detail),
             # trang thông tin người dùng
             USER_PAGE=6,
             # trang chi tiết người dùng
             USER_PAGE_DETAIL=8,
         )
         # hiển thị page mặc định khi mở form
-        self.pages.setCurrentIndex(self.page_index['CUSTOMER_PAGE_DETAIL'])
+        self.pages.setCurrentIndex(self.page_index['MEMBER_RANK_PAGE_DETAIL'])
         self.show_product_table()
 
         self.initializeSignal()
@@ -150,6 +168,9 @@ class HomeWindow(QMainWindow):
         )
         self.category_btn_2.toggled.connect(
             lambda: self.do_change_page(self.page_index["CATEGORY_PAGE"])
+        )
+        self.rank_btn_2.toggled.connect(
+            lambda: self.do_change_page(self.page_index["MEMBER_RANK_PAGE"])
         )
         # kết nối sự kiện màn loại sản phẩm và chi tiết loại sản phẩm
         self.btn_add_category.clicked.connect(
@@ -212,6 +233,22 @@ class HomeWindow(QMainWindow):
                                      "customer")
         )
 
+        # kết nối sự kiện màn hạng thành viên
+        self.btn_save_rank.clicked.connect(
+            lambda: self.hanle_btn_add(self.member_rank_widget_detail, FormMode.ADD.value,
+                                       self.page_index['MEMBER_RANK_PAGE_DETAIL'])
+        )
+        self.back_btn_rank.clicked.connect(
+            lambda: self.do_change_page(self.page_index['MEMBER_RANK_PAGE'])
+        )
+        self.btn_cancel_rank.clicked.connect(
+            lambda: self.do_change_page(self.page_index['MEMBER_RANK_PAGE'])
+        )
+        self.btn_save_rank.clicked.connect(
+            lambda: self.handle_save(self.member_rank_widget_detail, self.mode, self.page_index['MEMBER_RANK_PAGE'],
+                                     "member_rank")
+        )
+
     def on_search_btn_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(5)
         search_text = self.ui.search_input.text().strip()
@@ -248,6 +285,7 @@ class HomeWindow(QMainWindow):
 
     def do_change_page(self, index):
         self.pages.setCurrentIndex(index)
+        self.show_customer_table()
         if index == self.page_index['USER_PAGE']:
             self.show_user_table()
 
@@ -522,5 +560,45 @@ class HomeWindow(QMainWindow):
                                               self.page_index["ORDER_PAGE_DETAIL"], self.order_widget_detail))
                 self.order_table.setCellWidget(index, column_index + 5, widget)
 
+    # danh sách khách hàng
     def show_customer_table(self):
-        print(1)
+        customer_list = self.customer_controller.getDataByModel()
+        self.customer_table.setRowCount(0)
+        if customer_list:
+            for index, item in enumerate(customer_list):
+                column_index = 0
+                self.customer_table.setRowCount(index + 1)
+                self.customer_table.setItem(index, column_index, QTableWidgetItem(str(index + 1)))
+                self.customer_table.setItem(index, column_index + 1, QTableWidgetItem(str(item.id)))
+                self.customer_table.setItem(index, column_index + 2, QTableWidgetItem(str(item.name)))
+                self.customer_table.setItem(index, column_index + 3, QTableWidgetItem(str(item.account)))
+                widget, edit_btn, delete_btn = generate_action_row(item.id, "customer")
+                edit_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.EDIT.value,
+                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.order_widget_detail))
+                delete_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.DELETE.value,
+                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.order_widget_detail))
+                self.customer_table.setCellWidget(index, column_index + 4, widget)
+
+        # danh sách khách hàng
+
+    def show_member_rank_table(self):
+        customer_list = self.customer_controller.getDataByModel()
+        self.customer_table.setRowCount(0)
+        if customer_list:
+            for index, item in enumerate(customer_list):
+                column_index = 0
+                self.customer_table.setRowCount(index + 1)
+                self.customer_table.setItem(index, column_index, QTableWidgetItem(str(index + 1)))
+                self.customer_table.setItem(index, column_index + 1, QTableWidgetItem(str(item.id)))
+                self.customer_table.setItem(index, column_index + 2, QTableWidgetItem(str(item.name)))
+                self.customer_table.setItem(index, column_index + 3, QTableWidgetItem(str(item.account)))
+                widget, edit_btn, delete_btn = generate_action_row(item.id, "customer")
+                edit_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.EDIT.value,
+                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.order_widget_detail))
+                delete_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.DELETE.value,
+                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.order_widget_detail))
+                self.customer_table.setCellWidget(index, column_index + 4, widget)

@@ -33,6 +33,37 @@ class BaseController:
     def updateDataWithQuery(self, data, query):
         return
 
+    def insertDataWithModelRelation(self, data, other_data=None):
+        try:
+            with self.connection.session.begin_nested():
+                self.connection.session.add(data)
+                # xử lý cập nhât, thêm mới cho các bản ghi khác
+                for other in other_data:
+                    action = other.get('action', None)
+                    data = other.get('data', [])
+                    data_dict = []
+                    other_model = None
+                    if isinstance(data, dict):
+                        data = list(data.values())
+                    for item in data:
+                        other_model = item.__class__
+                        item_dict = vars(item)
+                        item_dict.pop('_sa_instance_state', None)
+                        data_dict.append(item_dict)
+                    if action == FormMode.ADD.value and other_model:
+                        print(1)
+                    elif action == FormMode.EDIT.value and other_model:
+                        # update data
+                        self.connection.session.bulk_update_mappings(other_model, data_dict)
+
+                self.connection.session.commit()
+                return True
+
+        except SQLAlchemyError as e:
+            print(e)
+            self.connection.session.rollback()
+            raise e
+
     def updateDataWithModelRelation(self, item_data, relations_data, other_data=None):
         try:
             with self.connection.session.begin_nested():

@@ -44,7 +44,7 @@ def validateEmpty(self, data: dict, messages: dict):
                     input_text.setStyleSheet(Validate.BORDER_VALID.value)
 
     except Exception as E:
-        print(E)
+        print(f"{E} file Common.py function validateEmpty")
         return
     return result
 

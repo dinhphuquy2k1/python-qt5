@@ -1,8 +1,8 @@
 """first commit
 
-Revision ID: 3ad9a99c4763
+Revision ID: f633022512f7
 Revises: 
-Create Date: 2023-12-11 16:11:44.071236
+Create Date: 2023-12-11 21:45:33.497813
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision: str = '3ad9a99c4763'
+revision: str = 'f633022512f7'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -99,7 +99,9 @@ def upgrade() -> None:
     op.create_table('orders',
     sa.Column('order_code', sa.String(length=255), nullable=True),
     sa.Column('customer_id', mysql.INTEGER(unsigned=True), nullable=True),
-    sa.Column('price', sa.String(length=255), nullable=True),
+    sa.Column('original_price', sa.String(length=255), nullable=True),
+    sa.Column('discount', mysql.INTEGER(), nullable=True),
+    sa.Column('final_price', sa.String(length=255), nullable=True),
     sa.Column('quantity', mysql.INTEGER(), nullable=True),
     sa.Column('status', mysql.INTEGER(), nullable=True),
     sa.Column('id', mysql.INTEGER(unsigned=True), autoincrement=True, nullable=False),

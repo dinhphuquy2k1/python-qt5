@@ -11,6 +11,7 @@ from src.controllers.admin.CategoryController import CategoryController
 from src.controllers.admin.ProductController import ProductController
 from src.controllers.admin.OrderController import OrderController
 from src.controllers.admin.CustomerController import CustomerController
+from src.controllers.admin.MemberRankController import MemberRankController
 from src.models.users import User
 from src.views.admin.Product import ProductWindow
 from src.views.admin.Category import CategoryWindow
@@ -50,6 +51,7 @@ class HomeWindow(QMainWindow):
         self.product_controller = ProductController()
         self.order_controller = OrderController()
         self.customer_controller = CustomerController()
+        self.member_rank_controller = MemberRankController()
 
 
         # khởi tạo table
@@ -134,7 +136,7 @@ class HomeWindow(QMainWindow):
             USER_PAGE_DETAIL=8,
         )
         # hiển thị page mặc định khi mở form
-        self.pages.setCurrentIndex(self.page_index['MEMBER_RANK_PAGE_DETAIL'])
+        self.pages.setCurrentIndex(self.page_index['MEMBER_RANK_PAGE'])
         self.show_product_table()
 
         self.initializeSignal()
@@ -144,7 +146,7 @@ class HomeWindow(QMainWindow):
         self.setAttribute(Qt.WA_TranslucentBackground)
 
     def showEvent(self, event):
-        self.show_order_table()
+        self.show_member_rank_table()
 
     # Khởi tạo kết nối các button liên kết
     def initializeSignal(self):
@@ -234,7 +236,7 @@ class HomeWindow(QMainWindow):
         )
 
         # kết nối sự kiện màn hạng thành viên
-        self.btn_save_rank.clicked.connect(
+        self.btn_add_rank.clicked.connect(
             lambda: self.hanle_btn_add(self.member_rank_widget_detail, FormMode.ADD.value,
                                        self.page_index['MEMBER_RANK_PAGE_DETAIL'])
         )
@@ -285,9 +287,18 @@ class HomeWindow(QMainWindow):
 
     def do_change_page(self, index):
         self.pages.setCurrentIndex(index)
-        self.show_customer_table()
         if index == self.page_index['USER_PAGE']:
             self.show_user_table()
+        if index == self.page_index['ORDER_PAGE']:
+            self.show_order_table()
+        if index == self.page_index['PRODUCT_PAGE']:
+            self.show_product_table()
+        if index == self.page_index['CUSTOMER_PAGE']:
+            self.show_customer_table()
+        if index == self.page_index['MEMBER_RANK_PAGE']:
+            self.show_member_rank_table()
+        if index == self.page_index['CATEGORY_PAGE']:
+            self.show_category_table()
 
     ## Change QPushButton Checkable status when stackedWidget index changed
     def on_stackedWidget_currentChanged(self, index):
@@ -540,25 +551,29 @@ class HomeWindow(QMainWindow):
                 self.product_table.setCellWidget(index, column_index + 4, widget)
 
     def show_order_table(self):
-        order_list = self.order_controller.getDataByModel()
-        self.order_table.setRowCount(0)
-        if order_list:
-            for index, item in enumerate(order_list):
-                column_index = 0
-                self.order_table.setRowCount(index + 1)
-                self.order_table.setItem(index, column_index, QTableWidgetItem(str(item.order_code)))
-                self.order_table.setItem(index, column_index + 1, QTableWidgetItem(str(item.user.name)))
-                self.order_table.setItem(index, column_index + 2, QTableWidgetItem(str(item.user.username)))
-                self.order_table.setItem(index, column_index + 3, QTableWidgetItem(str(item.quantity)))
-                self.order_table.setItem(index, column_index + 4, QTableWidgetItem(str(formatCurrency(int(item.price), 'đ'))))
-                widget, edit_btn, delete_btn = generate_action_row(item.id, "order")
-                edit_btn.clicked.connect(
-                    lambda: self.on_row_click(FormMode.EDIT.value,
-                                              self.page_index["ORDER_PAGE_DETAIL"], self.order_widget_detail))
-                delete_btn.clicked.connect(
-                    lambda: self.on_row_click(FormMode.DELETE.value,
-                                              self.page_index["ORDER_PAGE_DETAIL"], self.order_widget_detail))
-                self.order_table.setCellWidget(index, column_index + 5, widget)
+        try:
+            order_list = self.order_controller.getDataByModel()
+            self.order_table.setRowCount(0)
+            if order_list:
+                for index, item in enumerate(order_list):
+                    column_index = 0
+                    self.order_table.setRowCount(index + 1)
+                    self.order_table.setItem(index, column_index, QTableWidgetItem(str(item.order_code)))
+                    self.order_table.setItem(index, column_index + 1, QTableWidgetItem(str(item.customer.name)))
+                    self.order_table.setItem(index, column_index + 2, QTableWidgetItem(str(item.customer.account)))
+                    self.order_table.setItem(index, column_index + 3, QTableWidgetItem(str(item.quantity)))
+                    self.order_table.setItem(index, column_index + 4, QTableWidgetItem(str(formatCurrency(int(item.final_price), 'đ'))))
+                    widget, edit_btn, delete_btn = generate_action_row(item.id, "order")
+                    edit_btn.clicked.connect(
+                        lambda: self.on_row_click(FormMode.EDIT.value,
+                                                  self.page_index["ORDER_PAGE_DETAIL"], self.order_widget_detail))
+                    delete_btn.clicked.connect(
+                        lambda: self.on_row_click(FormMode.DELETE.value,
+                                                  self.page_index["ORDER_PAGE_DETAIL"], self.order_widget_detail))
+                    self.order_table.setCellWidget(index, column_index + 5, widget)
+        except Exception as E:
+            print(E)
+            return
 
     # danh sách khách hàng
     def show_customer_table(self):
@@ -575,30 +590,37 @@ class HomeWindow(QMainWindow):
                 widget, edit_btn, delete_btn = generate_action_row(item.id, "customer")
                 edit_btn.clicked.connect(
                     lambda: self.on_row_click(FormMode.EDIT.value,
-                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.order_widget_detail))
+                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.customer_widget_detail))
                 delete_btn.clicked.connect(
                     lambda: self.on_row_click(FormMode.DELETE.value,
-                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.order_widget_detail))
+                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.customer_widget_detail))
                 self.customer_table.setCellWidget(index, column_index + 4, widget)
 
         # danh sách khách hàng
 
     def show_member_rank_table(self):
-        customer_list = self.customer_controller.getDataByModel()
-        self.customer_table.setRowCount(0)
-        if customer_list:
-            for index, item in enumerate(customer_list):
+        member_rank_list = self.member_rank_controller.getDataByModel()
+        self.table_rank.setRowCount(0)
+        if member_rank_list:
+            for index, item in enumerate(member_rank_list):
                 column_index = 0
-                self.customer_table.setRowCount(index + 1)
-                self.customer_table.setItem(index, column_index, QTableWidgetItem(str(index + 1)))
-                self.customer_table.setItem(index, column_index + 1, QTableWidgetItem(str(item.id)))
-                self.customer_table.setItem(index, column_index + 2, QTableWidgetItem(str(item.name)))
-                self.customer_table.setItem(index, column_index + 3, QTableWidgetItem(str(item.account)))
-                widget, edit_btn, delete_btn = generate_action_row(item.id, "customer")
+                # sét độ rộng cột
+                self.table_rank.setColumnWidth(0, 40)
+                self.table_rank.setColumnWidth(column_index + 1, 200)
+                self.table_rank.setColumnWidth(column_index + 2, 250)
+
+
+                self.table_rank.setRowCount(index + 1)
+                self.table_rank.setItem(index, column_index, QTableWidgetItem(str(index + 1)))
+                self.table_rank.setItem(index, column_index + 1, QTableWidgetItem(str(item.code)))
+                self.table_rank.setItem(index, column_index + 2, QTableWidgetItem(str(item.name)))
+                self.table_rank.setItem(index, column_index + 3, QTableWidgetItem(str(formatCurrency(int(item.spending), 'đ'))))
+                self.table_rank.setItem(index, column_index + 4, QTableWidgetItem(str(item.discount)))
+                widget, edit_btn, delete_btn = generate_action_row(item.id, "member_rank")
                 edit_btn.clicked.connect(
                     lambda: self.on_row_click(FormMode.EDIT.value,
-                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.order_widget_detail))
+                                              self.page_index["MEMBER_RANK_PAGE_DETAIL"], self.member_rank_widget_detail))
                 delete_btn.clicked.connect(
                     lambda: self.on_row_click(FormMode.DELETE.value,
-                                              self.page_index["CUSTOMER_PAGE_DETAIL"], self.order_widget_detail))
-                self.customer_table.setCellWidget(index, column_index + 4, widget)
+                                              self.page_index["MEMBER_RANK_PAGE_DETAIL"], self.member_rank_widget_detail))
+                self.table_rank.setCellWidget(index, column_index + 5, widget)

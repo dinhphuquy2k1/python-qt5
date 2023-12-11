@@ -132,8 +132,8 @@ class CustomerDetailWindow(QWidget):
         return True
 
     # gán các giá trị lên form
-    def handle_edit_event(self, category_id):
-        customer = self.product_controller.getDataByIdWithModel(category_id)
+    def handle_edit_event(self, customer_id):
+        customer = self.customer_controller.getDataByIdWithModel(customer_id)
         if customer:
             self.ui.name_le.setText(customer.name)
             self.ui.account_le.setText(customer.account)

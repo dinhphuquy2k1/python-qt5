@@ -30,6 +30,8 @@ pyuic5 ui/admin/product_detail.ui -o src/views/ui_generated/admin/product_detail
 pyuic5 ui/admin/order_detail.ui -o src/views/ui_generated/admin/order_detail.py
 
 pyuic5 ui/admin/member_rank_detail.ui -o src/views/ui_generated/admin/member_rank_detail.py
+
+pyuic5 ui/admin/customer_detail.ui -o src/views/ui_generated/admin/customer_detail.py   
 ```
 
 

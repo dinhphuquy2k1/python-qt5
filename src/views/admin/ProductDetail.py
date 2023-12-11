@@ -187,6 +187,7 @@ class ProductDetailWindow(QWidget):
         self.ui.error_quantity.setText("")
         self.ui.error_manufacture_date.setText("")
         self.ui.product_name_le.setText("")
+        self.ui.product_code_le.setText("")
         self.ui.product_image_le.setText("")
         # self.ui.combobox_category_i
         self.ui.price_le.setValue(0)

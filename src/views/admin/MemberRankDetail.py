@@ -99,11 +99,13 @@ class MemberRankDetailWindow(QWidget):
         return True
 
     # gán các giá trị lên form
-    def handle_edit_event(self, category_id):
-        customer = self.product_controller.getDataByIdWithModel(category_id)
-        if customer:
-            self.ui.name_le.setText(customer.name)
-            self.ui.account_le.setText(customer.account)
+    def handle_edit_event(self, member_rank_id):
+        rank = self.member_rank_controller.getDataByIdWithModel(member_rank_id)
+        if rank:
+            self.ui.name_le.setText(rank.name)
+            self.ui.code_le.setText(rank.code)
+            self.ui.spending_le.setValue(int(rank.spending))
+            self.ui.discount_le.setValue(int(rank.discount))
 
     # clear dữ liệu trên form
     def clear_form(self):

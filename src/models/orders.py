@@ -14,7 +14,9 @@ class Order(Base, BaseMixin):
     customer = relationship('Customer', back_populates='orders')
     order_details = relationship('OrderDetail', back_populates='order', cascade="all, delete-orphan")
     # tổng giá tiền
-    price = Column(String(255))
+    original_price = Column(String(255))
+    discount = Column(INTEGER, default=0)
+    final_price = Column(String(255))
     # số lượng sản phẩm
     quantity = Column(INTEGER)
     # trạng thái đơn hàng

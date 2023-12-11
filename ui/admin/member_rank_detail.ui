@@ -420,6 +420,21 @@ QPlainTextEdit{
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QWidget" name="customerDialog" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -471,6 +486,18 @@ QPlainTextEdit{
              </property>
              <item>
               <widget class="QPushButton" name="back_btn_rank">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Cambria</family>
+                 <pointsize>-1</pointsize>
+                </font>
+               </property>
                <property name="cursor">
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
@@ -487,8 +514,8 @@ QPlainTextEdit{
               <widget class="QLabel" name="dialogTitleUser">
                <property name="font">
                 <font>
+                 <family>Cambria</family>
                  <pointsize>-1</pointsize>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -643,14 +670,11 @@ QPlainTextEdit{
                         <property name="topMargin">
                          <number>0</number>
                         </property>
-                        <property name="rightMargin">
-                         <number>0</number>
-                        </property>
                         <property name="bottomMargin">
                          <number>0</number>
                         </property>
-                        <item>
-                         <widget class="QWidget" name="widget_8" native="true">
+                        <item alignment="Qt::AlignTop">
+                         <widget class="QWidget" name="label_product_2" native="true">
                           <property name="minimumSize">
                            <size>
                             <width>200</width>
@@ -663,6 +687,11 @@ QPlainTextEdit{
                             <height>16777215</height>
                            </size>
                           </property>
+                          <property name="font">
+                           <font>
+                            <family>Cambria</family>
+                           </font>
+                          </property>
                           <layout class="QHBoxLayout" name="horizontalLayout_10">
                            <property name="spacing">
                             <number>0</number>
@@ -671,7 +700,7 @@ QPlainTextEdit{
                             <number>0</number>
                            </property>
                            <property name="topMargin">
-                            <number>0</number>
+                            <number>30</number>
                            </property>
                            <property name="rightMargin">
                             <number>0</number>
@@ -680,7 +709,14 @@ QPlainTextEdit{
                             <number>0</number>
                            </property>
                            <item>
-                            <widget class="QLabel" name="labelName_2">
+                            <widget class="QLabel" name="label_4">
+                             <property name="font">
+                              <font>
+                               <family>Cambria</family>
+                               <pointsize>-1</pointsize>
+                               <bold>false</bold>
+                              </font>
+                             </property>
                              <property name="text">
                               <string>Mã hạng thành viên</string>
                              </property>
@@ -739,6 +775,12 @@ QPlainTextEdit{
                                <width>16777215</width>
                                <height>16777215</height>
                               </size>
+                             </property>
+                             <property name="font">
+                              <font>
+                               <family>Cambria</family>
+                               <pointsize>-1</pointsize>
+                              </font>
                              </property>
                              <property name="text">
                               <string/>
@@ -800,8 +842,8 @@ QPlainTextEdit{
                      <property name="bottomMargin">
                       <number>0</number>
                      </property>
-                     <item>
-                      <widget class="QWidget" name="widget_6" native="true">
+                     <item alignment="Qt::AlignTop">
+                      <widget class="QWidget" name="label_product_3" native="true">
                        <property name="minimumSize">
                         <size>
                          <width>200</width>
@@ -814,7 +856,7 @@ QPlainTextEdit{
                          <height>16777215</height>
                         </size>
                        </property>
-                       <layout class="QHBoxLayout" name="horizontalLayout_6">
+                       <layout class="QHBoxLayout" name="horizontalLayout_14">
                         <property name="spacing">
                          <number>0</number>
                         </property>
@@ -831,14 +873,21 @@ QPlainTextEdit{
                          <number>0</number>
                         </property>
                         <item>
-                         <widget class="QLabel" name="labelName">
+                         <widget class="QLabel" name="label_5">
+                          <property name="font">
+                           <font>
+                            <family>Cambria</family>
+                            <pointsize>-1</pointsize>
+                            <bold>false</bold>
+                           </font>
+                          </property>
                           <property name="text">
                            <string>Tên hạng thành viên</string>
                           </property>
                          </widget>
                         </item>
                         <item>
-                         <widget class="QLabel" name="label_required_5">
+                         <widget class="QLabel" name="label_required_8">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -890,6 +939,12 @@ QPlainTextEdit{
                             <width>16777215</width>
                             <height>16777215</height>
                            </size>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <family>Cambria</family>
+                            <pointsize>-1</pointsize>
+                           </font>
                           </property>
                           <property name="placeholderText">
                            <string>Tên hạng thành viên</string>
@@ -997,6 +1052,13 @@ QPlainTextEdit{
                              </property>
                              <item>
                               <widget class="QLabel" name="label_7">
+                               <property name="font">
+                                <font>
+                                 <family>Cambria</family>
+                                 <pointsize>-1</pointsize>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
                                <property name="text">
                                 <string>Chi tiêu tối thiểu</string>
                                </property>
@@ -1044,6 +1106,12 @@ QPlainTextEdit{
                              </property>
                              <item>
                               <widget class="QSpinBox" name="spending_le">
+                               <property name="font">
+                                <font>
+                                 <family>Cambria</family>
+                                 <pointsize>-1</pointsize>
+                                </font>
+                               </property>
                                <property name="buttonSymbols">
                                 <enum>QAbstractSpinBox::NoButtons</enum>
                                </property>
@@ -1118,7 +1186,7 @@ QPlainTextEdit{
                         <property name="bottomMargin">
                          <number>0</number>
                         </property>
-                        <item>
+                        <item alignment="Qt::AlignTop">
                          <widget class="QWidget" name="widget_dis" native="true">
                           <property name="minimumSize">
                            <size>
@@ -1140,7 +1208,7 @@ QPlainTextEdit{
                             <number>0</number>
                            </property>
                            <property name="topMargin">
-                            <number>0</number>
+                            <number>30</number>
                            </property>
                            <property name="rightMargin">
                             <number>0</number>
@@ -1150,6 +1218,13 @@ QPlainTextEdit{
                            </property>
                            <item>
                             <widget class="QLabel" name="labelName_3">
+                             <property name="font">
+                              <font>
+                               <family>Cambria</family>
+                               <pointsize>-1</pointsize>
+                               <bold>false</bold>
+                              </font>
+                             </property>
                              <property name="text">
                               <string>Khuyến mãi</string>
                              </property>
@@ -1197,6 +1272,12 @@ QPlainTextEdit{
                            </property>
                            <item>
                             <widget class="QSpinBox" name="discount_le">
+                             <property name="font">
+                              <font>
+                               <family>Cambria</family>
+                               <pointsize>-1</pointsize>
+                              </font>
+                             </property>
                              <property name="maximum">
                               <number>100</number>
                              </property>
@@ -1281,6 +1362,12 @@ QPlainTextEdit{
                        </item>
                        <item>
                         <widget class="QPushButton" name="btn_cancel_rank">
+                         <property name="font">
+                          <font>
+                           <family>Cambria</family>
+                           <pointsize>-1</pointsize>
+                          </font>
+                         </property>
                          <property name="cursor">
                           <cursorShape>PointingHandCursor</cursorShape>
                          </property>
@@ -1291,6 +1378,12 @@ QPlainTextEdit{
                        </item>
                        <item>
                         <widget class="QPushButton" name="btn_save_rank">
+                         <property name="font">
+                          <font>
+                           <family>Cambria</family>
+                           <pointsize>-1</pointsize>
+                          </font>
+                         </property>
                          <property name="cursor">
                           <cursorShape>PointingHandCursor</cursorShape>
                          </property>

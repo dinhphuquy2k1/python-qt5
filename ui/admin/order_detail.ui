@@ -443,6 +443,10 @@ QComboBox::drop-down {
 	min-width: 34px;
 	max-width: 34px;
 	padding: 10px;
+}
+
+#total_price_main{
+	margin-right: 20px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -532,7 +536,6 @@ QComboBox::drop-down {
                   <font>
                    <family>Cambria</family>
                    <pointsize>-1</pointsize>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -672,7 +675,7 @@ QComboBox::drop-down {
                        <property name="geometry">
                         <rect>
                          <x>0</x>
-                         <y>-326</y>
+                         <y>-323</y>
                          <width>783</width>
                          <height>1094</height>
                         </rect>
@@ -785,7 +788,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -984,7 +986,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1076,7 +1077,7 @@ QComboBox::drop-down {
                                              <property name="editable">
                                               <bool>true</bool>
                                              </property>
-                                             <property name="placeholderText" stdset="0">
+                                             <property name="placeholderText">
                                               <string>Tìm theo tên, số điện thoại,...</string>
                                              </property>
                                             </widget>
@@ -1190,7 +1191,7 @@ QComboBox::drop-down {
                                     <number>0</number>
                                    </property>
                                    <attribute name="horizontalHeaderDefaultSectionSize">
-                                    <number>350</number>
+                                    <number>230</number>
                                    </attribute>
                                    <attribute name="horizontalHeaderStretchLastSection">
                                     <bool>true</bool>
@@ -1217,6 +1218,19 @@ QComboBox::drop-down {
                                    <column>
                                     <property name="text">
                                      <string>Tài khoản</string>
+                                    </property>
+                                    <property name="font">
+                                     <font>
+                                      <family>Cambria</family>
+                                     </font>
+                                    </property>
+                                    <property name="textAlignment">
+                                     <set>AlignLeading|AlignVCenter</set>
+                                    </property>
+                                   </column>
+                                   <column>
+                                    <property name="text">
+                                     <string>Khuyến mãi</string>
                                     </property>
                                     <property name="font">
                                      <font>
@@ -1411,11 +1425,11 @@ QComboBox::drop-down {
                                               <height>30</height>
                                              </size>
                                             </property>
+                                            <property name="placeholderText">
+                                             <string>Tìm kiếm theo mã, tên sản phẩm</string>
+                                            </property>
                                             <property name="frame">
                                              <bool>true</bool>
-                                            </property>
-                                            <property name="placeholderText" stdset="0">
-                                             <string>Tìm kiếm theo mã, tên sản phẩm</string>
                                             </property>
                                            </widget>
                                           </item>
@@ -1801,7 +1815,6 @@ QComboBox::drop-down {
                                                           <font>
                                                            <family>Cambria</family>
                                                            <pointsize>-1</pointsize>
-                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                           </font>
                                                          </property>
@@ -1824,12 +1837,29 @@ QComboBox::drop-down {
                                                         </spacer>
                                                        </item>
                                                        <item>
+                                                        <widget class="QLabel" name="total_price_main">
+                                                         <property name="font">
+                                                          <font>
+                                                           <pointsize>-1</pointsize>
+                                                           <bold>false</bold>
+                                                           <underline>false</underline>
+                                                           <strikeout>true</strikeout>
+                                                          </font>
+                                                         </property>
+                                                         <property name="text">
+                                                          <string/>
+                                                         </property>
+                                                         <property name="textFormat">
+                                                          <enum>Qt::AutoText</enum>
+                                                         </property>
+                                                        </widget>
+                                                       </item>
+                                                       <item>
                                                         <widget class="QLabel" name="total_quantity_product_order">
                                                          <property name="font">
                                                           <font>
                                                            <family>Cambria</family>
                                                            <pointsize>-1</pointsize>
-                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                           </font>
                                                          </property>
@@ -1946,7 +1976,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>

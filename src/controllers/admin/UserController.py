@@ -55,6 +55,3 @@ class UserController(BaseController):
         sql = f"SELECT * FROM users WHERE username='{username}' and password = '{password}'"
 
         return self.connection.findFirstByQuery(sql)
-
-    def deleteUserWithModel(self, user_id):
-        return self.deleteDataWithModel(User, user_id)

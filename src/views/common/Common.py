@@ -19,6 +19,14 @@ def warningMessagebox(content):
 
     msgbox.exec_()
 
+def message_box_delete(content="Bạn có chắc chắn muốn xóa không?"):
+        msgBox = QMessageBox()
+        msgBox.setWindowIcon(QIcon("./static/icon/key-6-128.ico"))
+        msgBox.setIconPixmap(QPixmap("./static/icon/question-mark-7-48.ico"))
+        msgBox.setWindowTitle("Thông báo")
+        msgBox.setText(content)
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        return msgBox.exec_()
 
 # validate form input not empty
 def validateEmpty(self, data: dict, messages: dict):

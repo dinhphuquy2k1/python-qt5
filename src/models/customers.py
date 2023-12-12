@@ -10,5 +10,5 @@ class Customer(Base, BaseMixin):
     total_spending = Column(DECIMAL(30, 0), default=0)
     rank_id = Column(INTEGER(unsigned=True), ForeignKey('member_ranks.id'))
     rank = relationship('MemberRank', back_populates='customers')
-    orders = relationship('Order', back_populates='customer')
+    orders = relationship('Order', back_populates='customer', cascade="all, delete-orphan")
 

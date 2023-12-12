@@ -146,8 +146,8 @@ class BaseController:
     def updateOrInsert(self, data):
         self.connection.updateOrInsert(data)
 
-    def deleteDataWithModel(self, model, model_id):
-        return self.connection.deleteDataWithModel(model, model_id)
+    def deleteDataWithModel(self, model_id):
+        return self.connection.deleteDataWithModel(self.model, model_id)
 
     # kiểm tra data đã tồn tại khi insert
     def checkExitsDataWithModel(self, column, data):

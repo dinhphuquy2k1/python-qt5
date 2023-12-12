@@ -149,3 +149,14 @@ class CustomerDetailWindow(QWidget):
         self.ui.account_le.setStyleSheet(Validate.BORDER_VALID.value)
         self.ui.error_name.setText("")
         self.ui.error_account.setText("")
+
+    # xử lý xóa
+    def handle_delete_event(self, customer_id):
+        try:
+            reply = message_box_delete("Nếu bạn xóa tài khoản này sẽ xóa toàn bộ các đơn hàng của tài khoản này. Bạn có chắc chắn muốn xóa?")
+            if reply == QMessageBox.Yes:
+                self.customer_controller.deleteDataWithModel(customer_id)
+        except Exception as E:
+            print(E)
+            return False
+        return True

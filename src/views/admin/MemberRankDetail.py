@@ -77,19 +77,6 @@ class MemberRankDetailWindow(QWidget):
                     self.ui.error_account.setText(messages["accountExit"])
                     self.ui.account_le.setStyleSheet(Validate.BORDER_ERROR.value)
                     return
-                # self.order_controller.updateDataWithModelRelation(
-                #     order,
-                #     {
-                #         'order_details': self.order_details,
-                #     },
-                #     [
-                #         {
-                #             'action': FormMode.EDIT.value,
-                #             'data': self.product_update,
-                #         }
-                #     ]
-                # )
-
             else:
                 return
         except Exception as E:
@@ -124,3 +111,13 @@ class MemberRankDetailWindow(QWidget):
         self.ui.error_name.setText("")
         self.ui.error_spending.setText("")
         self.ui.error_discount.setText("")
+
+    def handle_delete_event(self, member_rank_id):
+        try:
+            reply = message_box_delete()
+            if reply == QMessageBox.Yes:
+                self.category_controller.deleteDataWithModel(member_rank_id)
+        except Exception as E:
+            print(E)
+            return False
+        return True

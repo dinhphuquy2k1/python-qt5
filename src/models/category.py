@@ -7,4 +7,4 @@ from sqlalchemy.orm import relationship
 class Category(Base, BaseMixin):
     __tablename__ = 'categories'
     category_name = Column(String(255), unique=True)
-    product = relationship('Product', back_populates='category')
+    products = relationship('Product', back_populates='category', cascade="all, delete-orphan")

@@ -164,7 +164,7 @@ class ConnectMySQL:
     def getDataByIdWithModel(self, model, model_id):
         try:
             self.connect()
-            result = self.session.query(model).filter_by(id=model_id).first()
+            result = self.session.query(model).options(joinedload('*')).filter_by(id=model_id).first()
             return result
 
         except Exception as E:
@@ -266,7 +266,7 @@ class ConnectMySQL:
         try:
             self.connect()
             query = self.session.query(model).options(joinedload('*'))
-            result = query.distinct().order_by(model.created_at).all()
+            result = query.distinct().order_by(model.created_at.desc()).all()
             return result
 
         except Exception as E:

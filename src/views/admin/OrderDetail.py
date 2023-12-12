@@ -98,14 +98,14 @@ class OrderDetailWindow(QWidget):
                 self.discount = self.customer_selected.rank.discount
             self.table_info_user.setItem(0, 2, QTableWidgetItem(str(f"{self.discount} %")))
         except Exception as E:
-            print(E)
+            print(f"{E} file OrderDetail function show_table_user")
             return
 
     # Xử lý tính tổng tiền đơn hàng
     def handle_total_quantity_product_order(self):
         try:
             # có khuyến mãi
-            if self.customer_selected.rank:
+            if self.customer_selected and self.customer_selected.rank:
                 # hiển thị giá gốc
                 self.total_price = sum(int(product.total_price) for product in self.product_selected.values())
                 self.total_quantity_order = sum(int(product.quantity_order) for product in self.product_selected.values())
@@ -119,7 +119,7 @@ class OrderDetailWindow(QWidget):
                 self.total_quantity_order = sum(int(product.quantity_order) for product in self.product_selected.values())
                 self.total_quantity_product_order.setText(formatCurrency(int(self.total_price), 'đ'))
         except Exception as E:
-            print(E)
+            print(f"{E} \n file OrderDetail function handle_total_quantity_product_order")
             return
 
     # xử lý khi người dùng chọn sản phẩm

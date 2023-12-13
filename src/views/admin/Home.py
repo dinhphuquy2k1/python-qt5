@@ -16,6 +16,7 @@ from src.views.admin.OrderDetail import OrderDetailWindow
 from src.views.admin.CustomerDetail import CustomerDetailWindow
 from src.views.admin.MemberRankDetail import MemberRankDetailWindow
 from src.views.admin.UserDetail import UserDetailWindow
+from src.views.admin.SupplierDetail import SupplierDetailWindow
 
 
 class HomeWindow(QMainWindow):
@@ -40,6 +41,7 @@ class HomeWindow(QMainWindow):
         self.customer_widget_detail = CustomerDetailWindow()
         self.member_rank_widget_detail = MemberRankDetailWindow()
         self.user_widget_detail = UserDetailWindow()
+        self.supplier_widget_detail = SupplierDetailWindow()
 
         # khởi tạo controller
         self.user_controller = UserController()
@@ -120,7 +122,7 @@ class HomeWindow(QMainWindow):
             HOME_PAGE=0,
             DASHBOARD_PAGE=1,
             # trang loại sản phẩm
-            CATEGORY_PAGE=8,
+            CATEGORY_PAGE=10,
             CATEGORY_PAGE_DETAIL=self.pages.addWidget(self.category_widget_detail),
             ORDER_PAGE=2,
             ORDER_PAGE_DETAIL=self.pages.addWidget(self.order_widget_detail),
@@ -131,12 +133,15 @@ class HomeWindow(QMainWindow):
             MEMBER_RANK_PAGE=7,
             MEMBER_RANK_PAGE_DETAIL=self.pages.addWidget(self.member_rank_widget_detail),
             # trang thông tin người dùng
-            USER_PAGE=6,
+            USER_PAGE=8,
             # trang chi tiết người dùng
             USER_PAGE_DETAIL=self.pages.addWidget(self.user_widget_detail),
+            SUPPLIER_PAGE=6,
+            SUPPLIER_PAGE_DETAIL=self.pages.addWidget(self.supplier_widget_detail),
+            PURCHASE_ORDER=5,
         )
         # hiển thị page mặc định khi mở form
-        self.pages.setCurrentIndex(self.page_index['MEMBER_RANK_PAGE'])
+        self.pages.setCurrentIndex(self.page_index['SUPPLIER_PAGE_DETAIL'])
         self.show_product_table()
 
         self.initializeSignal()

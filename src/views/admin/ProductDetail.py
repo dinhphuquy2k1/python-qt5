@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QFileDialog, QCalendarWidget
-from PyQt5.QtCore import pyqtSlot, QFileInfo
+from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtCore import pyqtSlot, QFileInfo, QDate
 from src.views.ui_generated.admin.product_detail import Ui_Form
 from src.views.common.Common import *
 import os
@@ -142,7 +142,9 @@ class ProductDetailWindow(QWidget):
             return
 
         # xử lý ngày tháng
-        manufacture_date = ''
+        manufacture_date = datetime(self.selected_date.year(), self.selected_date.month(), self.selected_date.day())
+
+        # xử lý ảnh
         destination_folder = "resources/images/product"
         # Tạo thư mục lưu trữ ảnh sản phẩm nếu chưa có
         os.makedirs(destination_folder, exist_ok=True)
@@ -186,14 +188,15 @@ class ProductDetailWindow(QWidget):
             self.ui.price_le.setValue(int(product.price))
             self.ui.quantity_le.setValue(int(product.quantity))
             self.selected_date = product.manufacture_date
+            # loại sản phẩm
+            self.category_selected = product.category
+            index = self.category.index(product.category)
+            self.combobox_category.setCurrentIndex(index)
             if product.product_image:
                 self.ui.product_image_le.setText(product.product_image[0].image_url)
-            formatted_date_string = ''
+            self.selected_date = QDate(product.manufacture_date.year, product.manufacture_date.month, product.manufacture_date.day)
             # xử lý ngày tháng
-            if product.manufacture_date != '0000-00-00 00:00:00':
-                date = datetime.strptime(str(product.manufacture_date), "%Y-%m-%d %H:%M:%S")
-                formatted_date_string = date.strftime("%d/%m/%Y")
-            self.ui.manufacture_date_le.setText(formatted_date_string)
+            self.manufacture_date_le.setText(f"{self.selected_date.toString('dd/MM/yyyy')}")
             self.ui.description_le.setPlainText(product.description)
 
     # clear dữ liệu trên form

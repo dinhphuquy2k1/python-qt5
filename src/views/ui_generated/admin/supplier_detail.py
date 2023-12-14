@@ -306,7 +306,7 @@ class Ui_Form(object):
 "    background: transparent;\n"
 "}\n"
 "\n"
-"#dialogTitleUser{\n"
+"#dialog_supplier_title{\n"
 "    font-size: 20px;\n"
 "    font-weight: bold;\n"
 "}\n"
@@ -481,14 +481,14 @@ class Ui_Form(object):
         self.back_btn_supplier.setIcon(icon)
         self.back_btn_supplier.setObjectName("back_btn_supplier")
         self.horizontalLayout_7.addWidget(self.back_btn_supplier)
-        self.dialog_product_title = QtWidgets.QLabel(self.popupHeader)
+        self.dialog_supplier_title = QtWidgets.QLabel(self.popupHeader)
         font = QtGui.QFont()
         font.setFamily("Cambria")
         font.setPointSize(-1)
         font.setBold(True)
-        self.dialog_product_title.setFont(font)
-        self.dialog_product_title.setObjectName("dialog_product_title")
-        self.horizontalLayout_7.addWidget(self.dialog_product_title)
+        self.dialog_supplier_title.setFont(font)
+        self.dialog_supplier_title.setObjectName("dialog_supplier_title")
+        self.horizontalLayout_7.addWidget(self.dialog_supplier_title)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_7.addItem(spacerItem)
         self.horizontalLayout_8.addLayout(self.horizontalLayout_7)
@@ -881,7 +881,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.dialog_product_title.setText(_translate("Form", "Thêm mới nhà cung cấp"))
+        self.dialog_supplier_title.setText(_translate("Form", "Thêm mới nhà cung cấp"))
         self.label_4.setText(_translate("Form", "Mã đơn vị cung cấp"))
         self.label_required_5.setText(_translate("Form", " *"))
         self.code_le.setPlaceholderText(_translate("Form", "Mã đơn vị cung cấp"))

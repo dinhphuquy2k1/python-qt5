@@ -17,54 +17,15 @@ class SupplierDetailWindow(QWidget):
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
-        # # khởi tạo các ui
-        # self.search_box_product_order = self.ui.search_box_product_order
-        # self.search_box_product_order.lineEdit().setPlaceholderText("Tìm kiếm theo mã sản phẩm")
-        # self.user_le = self.ui.user_le
-        # self.user_le.lineEdit().setPlaceholderText("Tìm kiếm theo số điện thoại")
-        # self.table_product_order = self.ui.table_product_order
-        # self.table_product_order.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        # self.total_quantity_product_order = self.ui.total_quantity_product_order
-        # self.table_info_user = self.ui.table_info_user
-        # self.table_info_user.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        # # khởi tạo biến
-        # self.customer_controller = CustomerController()
         self.supplier_controller = SupplierController()
         self.user_controller = UserController()
-        # self.member_rank_controller = MemberRankController()
-        # self.order_detail_controller = OrderDetailController()
-        # # danh sách người dùng
-        # self.customer_list = []
-        # # danh sách sản phẩm
-        # self.product_list = []
-        # # danh sách sản phẩm được chọn
-        # self.product_selected = {}
-        # # người đặt hàng
-        # self.customer_selected = None
-        # # tổng tiền các sản phẩm
-        # self.total_price = 0
-        # # tổng tiền sau khuyến mãi
-        # self.final_price = 0
-        # # số lượng sản phẩm đặt hàng
-        # self.total_quantity_order = 0
-        # self.mode = FormMode.ADD.value
-        # self.order_selected = None
-        # self.order_details = []
-        # self.product_update = {}
-        # # giảm giá
-        # self.discount = 0
-        #
-        # self.user_le.setInsertPolicy(QComboBox.NoInsert)
-        # self.user_le.completer().setCompletionMode(QCompleter.PopupCompletion)
-        # self.user_le.completer().setCaseSensitivity(0)
-        # self.user_le.activated.connect(self.handle_user_le_selected)
-        # self.search_box_product_order.setInsertPolicy(QComboBox.NoInsert)
-        # self.search_box_product_order.completer().setCompletionMode(QCompleter.PopupCompletion)
-        # self.search_box_product_order.completer().setCaseSensitivity(0)
-        # self.search_box_product_order.activated.connect(self.handle_product_le_selected)
+        self.mode = FormMode.ADD.value
+
+    def showEvent(self, event):
+        self.ui.dialog_supplier_title.setText("Thêm mới nhà cung cấp")
 
     @pyqtSlot()
-    def save_supplier(self, form_mode, order_id=None):
+    def save_supplier(self, form_mode, supplier_id=None):
         code = self.ui.code_le.text().strip()
         name = self.ui.name_le.text().strip()
         phone = self.ui.phone_le.text().strip()
@@ -100,30 +61,14 @@ class SupplierDetailWindow(QWidget):
                     return
                 self.supplier_controller.insertData(supplier)
             elif form_mode == FormMode.EDIT.value:
-                del order.order_details
-                order.id = order_id
-                if self.order_controller.checkExitsDataUpdateWithModel(Order.order_code, data=order_code,
-                                                                       model_id=order_id):
-                    self.ui.error_order_code.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
-                    self.ui.error_order_code.setText(messages["order_codeExit"])
-                    self.ui.order_code_le.setStyleSheet(Validate.BORDER_ERROR.value)
+                if self.order_controller.checkExitsDataUpdateWithModel(Supplier.code, data=code,
+                                                                       model_id=supplier_id):
+                    self.ui.error_code.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
+                    self.ui.error_code.setText(messages["codeExit"])
+                    self.ui.code_le.setStyleSheet(Validate.BORDER_ERROR.value)
                     return
-                self.order_controller.updateDataWithModelRelation(
-                    order,
-                    {
-                        'order_details': self.order_details,
-                    },
-                    [
-                        {
-                            'action': FormMode.EDIT.value,
-                            'data': self.product_update,
-                        },
-                        {
-                            'action': FormMode.EDIT.value,
-                            'data': customer,
-                        },
-                    ]
-                )
+                data = {'code': code, 'name': name, 'phone': phone, 'address': address}
+                self.supplier_controller.updateDataWithModel(data=data, model_id=supplier_id)
 
             else:
                 return
@@ -134,24 +79,15 @@ class SupplierDetailWindow(QWidget):
         return True
 
     # gán các giá trị lên form
-    def handle_edit_event(self, order_id):
+    def handle_edit_event(self, supplier_id):
+        self.ui.dialog_supplier_title.setText("Sửa nhà cung cấp")
         self.mode = FormMode.EDIT.value
-        self.order_selected = self.order_controller.getDataByModelIdWithRelation(order_id)
-        if self.order_selected:
-            self.ui.order_code_le.setText(self.order_selected.order_code)
-            self.customer_selected = self.order_selected.customer
-            for index, item in enumerate(self.order_selected.order_details):
-                self.product_selected[item.product.id] = item
-                self.product_selected[item.product.id].order_detail_id = item.id
-                self.product_selected[item.product.id].id = item.product.id
-                self.product_selected[item.product.id].quantity = item.product.quantity
-                self.product_selected[item.product.id].product_image = item.product.product_image
-                self.product_selected[item.product.id].product_name = item.product.product_name
-                self.product_selected[item.product.id].product_code = item.product.product_code
-                self.product_selected[item.product.id].price = item.product.price
-            self.handle_total_quantity_product_order()
-            self.show_table_product()
-            self.show_table_user()
+        supplier = self.supplier_controller.getDataByModelIdWithRelation(supplier_id)
+        if supplier:
+            self.ui.code_le.setText(supplier.code)
+            self.ui.name_le.setText(supplier.name)
+            self.ui.phone_le.setText(supplier.phone)
+            self.ui.address_le.setText(supplier.address)
 
     # clear dữ liệu trên form
     def clear_form(self):
@@ -170,3 +106,14 @@ class SupplierDetailWindow(QWidget):
         self.ui.error_name.setText("")
         self.ui.error_phone.setText("")
         self.ui.error_address.setText("")
+
+    # xử lý xóa
+    def handle_delete_event(self, supplier_id):
+        try:
+            reply = message_box_delete()
+            if reply == QMessageBox.Yes:
+                self.supplier_controller.deleteDataWithModel(supplier_id)
+        except Exception as E:
+            print(E)
+            return False
+        return True

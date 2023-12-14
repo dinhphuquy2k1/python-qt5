@@ -602,15 +602,21 @@ class HomeWindow(QMainWindow):
                 self.table_supplier.setItem(index, column_index, QTableWidgetItem(str(index + 1)))
                 self.table_supplier.setItem(index, column_index + 1, QTableWidgetItem(str(item.code)))
                 self.table_supplier.setItem(index, column_index + 2, QTableWidgetItem(str(item.name)))
+                # cột số điện thoại
+                if not item.phone:
+                    item.phone = 'Chưa thiết lập'
                 self.table_supplier.setItem(index, column_index + 3, QTableWidgetItem(str(item.phone)))
+                # cột địa chỉ
+                if not item.address:
+                    item.address = 'Chưa thiết lập'
                 self.table_supplier.setItem(index, column_index + 4, QTableWidgetItem(str(item.address)))
                 widget, edit_btn, delete_btn = generate_action_row(item.id, "member_rank")
                 edit_btn.clicked.connect(
                     lambda: self.on_row_click(FormMode.EDIT.value,
-                                              self.page_index["MEMBER_RANK_PAGE_DETAIL"],
-                                              self.member_rank_widget_detail, "member_rank"))
+                                              self.page_index["SUPPLIER_PAGE_DETAIL"],
+                                              self.supplier_widget_detail, "supplier"))
                 delete_btn.clicked.connect(
                     lambda: self.on_row_click(FormMode.DELETE.value,
-                                              self.page_index["MEMBER_RANK_PAGE_DETAIL"],
-                                              self.member_rank_widget_detail, "member_rank"))
+                                              self.page_index["SUPPLIER_PAGE_DETAIL"],
+                                              self.supplier_widget_detail, "supplier"))
                 self.table_supplier.setCellWidget(index, column_index + 5, widget)

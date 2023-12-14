@@ -305,7 +305,7 @@ QPushButton{
 	background: transparent;
 }
 
-#dialogTitleUser{
+#dialog_supplier_title{
 	font-size: 20px;
 	font-weight: bold;
 }
@@ -531,7 +531,7 @@ QComboBox::drop-down {
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="dialog_product_title">
+                <widget class="QLabel" name="dialog_supplier_title">
                  <property name="font">
                   <font>
                    <family>Cambria</family>

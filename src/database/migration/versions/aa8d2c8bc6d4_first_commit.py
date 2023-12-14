@@ -1,8 +1,8 @@
 """first commit
 
-Revision ID: 9771e5198f7a
+Revision ID: aa8d2c8bc6d4
 Revises: 
-Create Date: 2023-12-12 16:01:10.086898
+Create Date: 2023-12-14 20:42:33.618366
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision: str = '9771e5198f7a'
+revision: str = 'aa8d2c8bc6d4'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,11 +28,40 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('category_name')
     )
+    op.create_table('imports',
+    sa.Column('code', sa.String(length=255), nullable=True),
+    sa.Column('import_date', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('delivery_date', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('quantity', mysql.INTEGER(), nullable=True),
+    sa.Column('price', sa.String(length=255), nullable=True),
+    sa.Column('discount', mysql.INTEGER(), nullable=True),
+    sa.Column('vat', mysql.INTEGER(), nullable=True),
+    sa.Column('original_price', sa.String(length=255), nullable=True),
+    sa.Column('final_price', sa.String(length=255), nullable=True),
+    sa.Column('status', mysql.INTEGER(), nullable=True),
+    sa.Column('description', sa.String(length=255), nullable=True),
+    sa.Column('id', mysql.INTEGER(unsigned=True), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('code')
+    )
     op.create_table('member_ranks',
     sa.Column('name', sa.String(length=255), nullable=True),
     sa.Column('code', sa.String(length=255), nullable=True),
     sa.Column('spending', sa.DECIMAL(precision=18, scale=0), nullable=True),
     sa.Column('discount', sa.String(length=255), nullable=True),
+    sa.Column('id', mysql.INTEGER(unsigned=True), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('code')
+    )
+    op.create_table('suppliers',
+    sa.Column('code', sa.String(length=255), nullable=True),
+    sa.Column('name', sa.String(length=255), nullable=True),
+    sa.Column('phone', sa.String(length=255), nullable=True),
+    sa.Column('address', sa.String(length=255), nullable=True),
     sa.Column('id', mysql.INTEGER(unsigned=True), autoincrement=True, nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
@@ -66,6 +95,7 @@ def upgrade() -> None:
     sa.Column('product_code', sa.String(length=255), nullable=True),
     sa.Column('promotion_price', sa.DECIMAL(precision=18, scale=0), nullable=True),
     sa.Column('category_id', mysql.INTEGER(unsigned=True), nullable=True),
+    sa.Column('supplier_id', mysql.INTEGER(unsigned=True), nullable=True),
     sa.Column('manufacture_date', sa.DateTime(timezone=True), nullable=True),
     sa.Column('price', sa.String(length=255), nullable=True),
     sa.Column('quantity', mysql.INTEGER(), nullable=True),
@@ -74,8 +104,19 @@ def upgrade() -> None:
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['supplier_id'], ['suppliers.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('product_code')
+    )
+    op.create_table('supplier_imports',
+    sa.Column('supplier_id', mysql.INTEGER(unsigned=True), nullable=True),
+    sa.Column('import_id', mysql.INTEGER(unsigned=True), nullable=True),
+    sa.Column('id', mysql.INTEGER(unsigned=True), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.ForeignKeyConstraint(['import_id'], ['imports.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['supplier_id'], ['suppliers.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('images',
     sa.Column('image_url', sa.String(length=255), nullable=True),
@@ -145,9 +186,12 @@ def downgrade() -> None:
     op.drop_table('orders')
     op.drop_table('item_classifications')
     op.drop_table('images')
+    op.drop_table('supplier_imports')
     op.drop_table('products')
     op.drop_table('customers')
     op.drop_table('users')
+    op.drop_table('suppliers')
     op.drop_table('member_ranks')
+    op.drop_table('imports')
     op.drop_table('categories')
     # ### end Alembic commands ###

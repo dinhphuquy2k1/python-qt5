@@ -536,7 +536,6 @@ QComboBox::drop-down {
                   <font>
                    <family>Cambria</family>
                    <pointsize>-1</pointsize>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -789,7 +788,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -988,7 +986,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1118,6 +1115,12 @@ QComboBox::drop-down {
                            </item>
                            <item>
                             <widget class="QWidget" name="widget_3" native="true">
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>105</height>
+                              </size>
+                             </property>
                              <layout class="QVBoxLayout" name="verticalLayout_4">
                               <property name="spacing">
                                <number>0</number>
@@ -1196,7 +1199,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1299,6 +1301,12 @@ QComboBox::drop-down {
                            </item>
                            <item>
                             <widget class="QWidget" name="widget_5" native="true">
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>105</height>
+                              </size>
+                             </property>
                              <layout class="QVBoxLayout" name="verticalLayout_17">
                               <property name="spacing">
                                <number>0</number>
@@ -1377,7 +1385,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>

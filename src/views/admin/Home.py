@@ -9,6 +9,7 @@ from src.controllers.admin.ProductController import ProductController
 from src.controllers.admin.OrderController import OrderController
 from src.controllers.admin.CustomerController import CustomerController
 from src.controllers.admin.MemberRankController import MemberRankController
+from src.controllers.admin.SupplierController import SupplierController
 from src.models.users import User
 from src.views.admin.CategoryDetail import CategoryDetailWindow
 from src.views.admin.ProductDetail import ProductDetailWindow
@@ -50,6 +51,7 @@ class HomeWindow(QMainWindow):
         self.order_controller = OrderController()
         self.customer_controller = CustomerController()
         self.member_rank_controller = MemberRankController()
+        self.supplier_controller = SupplierController()
 
         # khởi tạo table
         self.user_table = self.ui.tableUser
@@ -58,6 +60,7 @@ class HomeWindow(QMainWindow):
         self.order_table = self.ui.table_order
         self.customer_table = self.ui.table_customer
         self.table_rank = self.ui.table_rank
+        self.table_supplier = self.ui.table_supplier
 
         # hiển thị header cho table
         self.user_table.horizontalHeader().setVisible(True)
@@ -66,6 +69,7 @@ class HomeWindow(QMainWindow):
         self.product_table.horizontalHeader().setVisible(True)
         self.order_table.horizontalHeader().setVisible(True)
         self.table_rank.horizontalHeader().setVisible(True)
+        self.table_supplier.horizontalHeader().setVisible(True)
         # lưu giá trị data khi click row trong table
         self.id_data_selected = None
         # trạng thái form
@@ -86,6 +90,8 @@ class HomeWindow(QMainWindow):
         self.cancel_btn_category = self.category_widget_detail.ui.btn_cancel_category
         self.products_btn_2 = self.ui.products_btn_2
         self.rank_btn_2 = self.ui.rank_btn_2
+        self.supplier_btn_2 = self.ui.supplier_btn_2
+
 
         self.btn_add_category = self.ui.btn_add_category
         self.btn_save_category = self.category_widget_detail.ui.btn_save_category
@@ -116,6 +122,11 @@ class HomeWindow(QMainWindow):
         self.btn_save_user = self.user_widget_detail.ui.btn_save_user
         self.btn_cancel_user = self.user_widget_detail.ui.btn_cancel_user
         self.back_btn_user = self.user_widget_detail.ui.back_btn_user
+        # khởi tạo các button nhà supplier
+        self.btn_add_supplier = self.ui.btn_add_supplier
+        self.btn_save_supplier = self.supplier_widget_detail.ui.btn_save_supplier
+        self.btn_cancel_supplier = self.supplier_widget_detail.ui.btn_cancel_supplier
+        self.back_btn_supplier = self.supplier_widget_detail.ui.back_btn_supplier
 
         # page index của các trang
         self.page_index = dict(
@@ -130,7 +141,7 @@ class HomeWindow(QMainWindow):
             PRODUCT_PAGE_DETAIL=self.pages.addWidget(self.product_widget_detail),
             CUSTOMER_PAGE=4,
             CUSTOMER_PAGE_DETAIL=self.pages.addWidget(self.customer_widget_detail),
-            MEMBER_RANK_PAGE=7,
+            MEMBER_RANK_PAGE=9,
             MEMBER_RANK_PAGE_DETAIL=self.pages.addWidget(self.member_rank_widget_detail),
             # trang thông tin người dùng
             USER_PAGE=8,
@@ -141,7 +152,7 @@ class HomeWindow(QMainWindow):
             PURCHASE_ORDER=5,
         )
         # hiển thị page mặc định khi mở form
-        self.pages.setCurrentIndex(self.page_index['SUPPLIER_PAGE_DETAIL'])
+        self.pages.setCurrentIndex(self.page_index['SUPPLIER_PAGE'])
         self.show_product_table()
 
         self.initializeSignal()
@@ -172,6 +183,9 @@ class HomeWindow(QMainWindow):
         )
         self.home_btn_2.toggled.connect(
             lambda: self.do_change_page(0)
+        )
+        self.supplier_btn_2.toggled.connect(
+            lambda: self.do_change_page(self.page_index['SUPPLIER_PAGE'])
         )
         self.category_btn_2.toggled.connect(
             lambda: self.do_change_page(self.page_index["CATEGORY_PAGE"])
@@ -274,6 +288,22 @@ class HomeWindow(QMainWindow):
                                      "user")
         )
 
+        # kết nối sự kiện màn nhà cung cấp
+        self.btn_add_supplier.clicked.connect(
+            lambda: self.hanle_btn_add(self.supplier_widget_detail, FormMode.ADD.value,
+                                       self.page_index['SUPPLIER_PAGE_DETAIL'])
+        )
+        self.back_btn_supplier.clicked.connect(
+            lambda: self.do_change_page(self.page_index['SUPPLIER_PAGE'])
+        )
+        self.btn_cancel_supplier.clicked.connect(
+            lambda: self.do_change_page(self.page_index['SUPPLIER_PAGE'])
+        )
+        self.btn_save_supplier.clicked.connect(
+            lambda: self.handle_save(self.supplier_widget_detail, self.mode, self.page_index['SUPPLIER_PAGE'],
+                                     "supplier")
+        )
+
     def on_search_btn_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(5)
         search_text = self.ui.search_input.text().strip()
@@ -298,6 +328,8 @@ class HomeWindow(QMainWindow):
             self.show_member_rank_table()
         if index == self.page_index['CATEGORY_PAGE']:
             self.show_category_table()
+        if index == self.page_index['SUPPLIER_PAGE']:
+            self.show_supplier_table()
 
     ## Change QPushButton Checkable status when stackedWidget index changed
     def on_stackedWidget_currentChanged(self, index):
@@ -553,3 +585,32 @@ class HomeWindow(QMainWindow):
                                               self.page_index["MEMBER_RANK_PAGE_DETAIL"],
                                               self.member_rank_widget_detail, "member_rank"))
                 self.table_rank.setCellWidget(index, column_index + 5, widget)
+
+    def show_supplier_table(self):
+        supplier_list = self.supplier_controller.getDataByModel()
+        self.table_supplier.setRowCount(0)
+        # sét độ rộng cột
+        self.table_supplier.setColumnWidth(0, 40)
+        self.table_supplier.setColumnWidth(1, 180)
+        self.table_supplier.setColumnWidth(2, 260)
+        self.table_supplier.setColumnWidth(3, 200)
+        self.table_supplier.setColumnWidth(4, 200)
+        if supplier_list:
+            for index, item in enumerate(supplier_list):
+                column_index = 0
+                self.table_supplier.setRowCount(index + 1)
+                self.table_supplier.setItem(index, column_index, QTableWidgetItem(str(index + 1)))
+                self.table_supplier.setItem(index, column_index + 1, QTableWidgetItem(str(item.code)))
+                self.table_supplier.setItem(index, column_index + 2, QTableWidgetItem(str(item.name)))
+                self.table_supplier.setItem(index, column_index + 3, QTableWidgetItem(str(item.phone)))
+                self.table_supplier.setItem(index, column_index + 4, QTableWidgetItem(str(item.address)))
+                widget, edit_btn, delete_btn = generate_action_row(item.id, "member_rank")
+                edit_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.EDIT.value,
+                                              self.page_index["MEMBER_RANK_PAGE_DETAIL"],
+                                              self.member_rank_widget_detail, "member_rank"))
+                delete_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.DELETE.value,
+                                              self.page_index["MEMBER_RANK_PAGE_DETAIL"],
+                                              self.member_rank_widget_detail, "member_rank"))
+                self.table_supplier.setCellWidget(index, column_index + 5, widget)

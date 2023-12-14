@@ -1180,7 +1180,7 @@ QPushButton{
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>6</number>
+          <number>9</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_2">
@@ -1285,7 +1285,6 @@ QPushButton{
                        <font>
                         <family>Cambria</family>
                         <pointsize>15</pointsize>
-                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -1651,7 +1650,6 @@ QPushButton{
                        </property>
                        <property name="font">
                         <font>
-                         <weight>75</weight>
                          <bold>true</bold>
                         </font>
                        </property>
@@ -1797,7 +1795,6 @@ QPushButton{
                        <font>
                         <family>Cambria</family>
                         <pointsize>15</pointsize>
-                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -2154,7 +2151,6 @@ QPushButton{
                        </property>
                        <property name="font">
                         <font>
-                         <weight>75</weight>
                          <bold>true</bold>
                         </font>
                        </property>
@@ -2297,7 +2293,6 @@ QPushButton{
                        <font>
                         <family>Cambria</family>
                         <pointsize>15</pointsize>
-                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -2526,7 +2521,7 @@ QPushButton{
                        <bool>false</bool>
                       </property>
                       <property name="frameShape">
-                       <enum>QFrame::NoFrame</enum>
+                       <enum>QFrame::StyledPanel</enum>
                       </property>
                       <property name="frameShadow">
                        <enum>QFrame::Sunken</enum>
@@ -2574,7 +2569,7 @@ QPushButton{
                        <number>5</number>
                       </property>
                       <attribute name="horizontalHeaderVisible">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </attribute>
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
@@ -2617,7 +2612,6 @@ QPushButton{
                        </property>
                        <property name="font">
                         <font>
-                         <weight>75</weight>
                          <bold>true</bold>
                         </font>
                        </property>
@@ -2763,7 +2757,6 @@ QPushButton{
                        <font>
                         <family>Cambria</family>
                         <pointsize>15</pointsize>
-                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -3120,7 +3113,6 @@ QPushButton{
                        </property>
                        <property name="font">
                         <font>
-                         <weight>75</weight>
                          <bold>true</bold>
                         </font>
                        </property>
@@ -3278,7 +3270,6 @@ QPushButton{
                        <font>
                         <family>Cambria</family>
                         <pointsize>15</pointsize>
-                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -3528,7 +3519,7 @@ QPushButton{
                        <bool>false</bool>
                       </property>
                       <property name="frameShape">
-                       <enum>QFrame::NoFrame</enum>
+                       <enum>QFrame::StyledPanel</enum>
                       </property>
                       <property name="frameShadow">
                        <enum>QFrame::Sunken</enum>
@@ -3582,7 +3573,7 @@ QPushButton{
                        <bool>false</bool>
                       </property>
                       <property name="rowCount">
-                       <number>2</number>
+                       <number>0</number>
                       </property>
                       <property name="columnCount">
                        <number>6</number>
@@ -3629,8 +3620,6 @@ QPushButton{
                       <attribute name="verticalHeaderStretchLastSection">
                        <bool>false</bool>
                       </attribute>
-                      <row/>
-                      <row/>
                       <column>
                        <property name="text">
                         <string>#</string>
@@ -3646,11 +3635,11 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>Mã sản phẩm</string>
+                        <string>Mã đơn vị cung cấp</string>
                        </property>
                        <property name="font">
                         <font>
-                         <weight>75</weight>
+                         <family>Cambria</family>
                          <bold>true</bold>
                         </font>
                        </property>
@@ -3660,7 +3649,7 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>Tên sản phẩm</string>
+                        <string>Tên đơn vị cung cấp</string>
                        </property>
                        <property name="font">
                         <font>
@@ -3673,12 +3662,20 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>Số lượng sản phẩm</string>
+                        <string>Số điện thoại</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <family>Cambria</family>
+                        </font>
+                       </property>
+                       <property name="textAlignment">
+                        <set>AlignLeading|AlignVCenter</set>
                        </property>
                       </column>
                       <column>
                        <property name="text">
-                        <string>Giá</string>
+                        <string>Địa chỉ</string>
                        </property>
                        <property name="font">
                         <font>
@@ -3702,16 +3699,6 @@ QPushButton{
                         <set>AlignLeading|AlignVCenter</set>
                        </property>
                       </column>
-                      <item row="0" column="1">
-                       <property name="text">
-                        <string>1</string>
-                       </property>
-                      </item>
-                      <item row="1" column="1">
-                       <property name="text">
-                        <string>2</string>
-                       </property>
-                      </item>
                      </widget>
                     </item>
                    </layout>
@@ -3809,7 +3796,6 @@ QPushButton{
                        <font>
                         <family>Cambria</family>
                         <pointsize>15</pointsize>
-                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -4129,7 +4115,6 @@ QPushButton{
                        </property>
                        <property name="font">
                         <font>
-                         <weight>75</weight>
                          <bold>true</bold>
                         </font>
                        </property>
@@ -4260,7 +4245,6 @@ QPushButton{
                        <font>
                         <family>Cambria</family>
                         <pointsize>15</pointsize>
-                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -4506,7 +4490,7 @@ QPushButton{
                        <bool>false</bool>
                       </property>
                       <property name="frameShape">
-                       <enum>QFrame::NoFrame</enum>
+                       <enum>QFrame::StyledPanel</enum>
                       </property>
                       <property name="frameShadow">
                        <enum>QFrame::Sunken</enum>
@@ -4566,7 +4550,7 @@ QPushButton{
                        <number>6</number>
                       </property>
                       <attribute name="horizontalHeaderVisible">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </attribute>
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
@@ -4760,7 +4744,6 @@ QPushButton{
                        <font>
                         <family>Cambria</family>
                         <pointsize>15</pointsize>
-                        <weight>75</weight>
                         <bold>true</bold>
                        </font>
                       </property>
@@ -5080,7 +5063,6 @@ QPushButton{
                        </property>
                        <property name="font">
                         <font>
-                         <weight>75</weight>
                          <bold>true</bold>
                         </font>
                        </property>

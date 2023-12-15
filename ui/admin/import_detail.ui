@@ -183,7 +183,7 @@ QHBoxLayout QLabel{
 }
 
 
-#btn_cancel_supplier{
+#btn_cancel_import{
 	background: #ebebeb;
 	outline: none;
 	border: 1px solid #e0e0e0;
@@ -193,7 +193,7 @@ QHBoxLayout QLabel{
 	padding: 2px 12px;
 }
 
-#btn_cancel_supplier:hover{
+#btn_cancel_import:hover{
 	background: #f4f5f8;
 }
 
@@ -315,7 +315,7 @@ QPushButton{
 	min-height: 24px;
 }
 
-#widget_12, #widget_26, #widget_7, #widget_14, #widget_12, #widget_3{
+#code_import_container, #delivery_date_container, #import_date_container, #supplier_import_container, #vat_import_container, #discount_import_container{
 		border-bottom: 1px solid #e0e0e0;
 }
 
@@ -403,7 +403,7 @@ QPushButton, QComboBox{
 	background: #ddd;
 }
 
-#btn_add_order_user, #search_btn_5,  #search_btn_2, #back_btn_category, #search_btn_category_2, #search_btn_product_2, #btn_image_product, #btn_manufacture_date_product, #back_btn_supplier, #search_btn_order_2{
+#btn_add_order_user, #search_btn_5,  #search_btn_2, #back_btn_category, #search_btn_category_2, #search_btn_product_2, #btn_image_product, #btn_manufacture_date_product, #back_btn_import, #search_btn_order_2{
 	min-width: 30px;
 }
 
@@ -536,6 +536,7 @@ QComboBox::drop-down {
                   <font>
                    <family>Cambria</family>
                    <pointsize>-1</pointsize>
+                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -675,9 +676,9 @@ QComboBox::drop-down {
                        <property name="geometry">
                         <rect>
                          <x>0</x>
-                         <y>0</y>
+                         <y>-114</y>
                          <width>783</width>
-                         <height>1822</height>
+                         <height>1821</height>
                         </rect>
                        </property>
                        <property name="sizePolicy">
@@ -697,7 +698,7 @@ QComboBox::drop-down {
                           </property>
                           <layout class="QVBoxLayout" name="verticalLayout_21">
                            <item>
-                            <widget class="QWidget" name="widget_7" native="true">
+                            <widget class="QWidget" name="code_import_container" native="true">
                              <property name="minimumSize">
                               <size>
                                <width>0</width>
@@ -788,6 +789,7 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -805,7 +807,7 @@ QComboBox::drop-down {
                                          </sizepolicy>
                                         </property>
                                         <property name="text">
-                                         <string> *</string>
+                                         <string/>
                                         </property>
                                        </widget>
                                       </item>
@@ -889,7 +891,7 @@ QComboBox::drop-down {
                             </widget>
                            </item>
                            <item>
-                            <widget class="QWidget" name="widget_26" native="true">
+                            <widget class="QWidget" name="supplier_import_container" native="true">
                              <property name="sizePolicy">
                               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                                <horstretch>0</horstretch>
@@ -986,6 +988,7 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1003,7 +1006,7 @@ QComboBox::drop-down {
                                          </sizepolicy>
                                         </property>
                                         <property name="text">
-                                         <string> *</string>
+                                         <string/>
                                         </property>
                                        </widget>
                                       </item>
@@ -1077,7 +1080,7 @@ QComboBox::drop-down {
                                              <property name="editable">
                                               <bool>true</bool>
                                              </property>
-                                             <property name="placeholderText">
+                                             <property name="placeholderText" stdset="0">
                                               <string>Tìm theo tên, số điện thoại,...</string>
                                              </property>
                                             </widget>
@@ -1110,7 +1113,7 @@ QComboBox::drop-down {
                                              </property>
                                              <property name="icon">
                                               <iconset resource="../resource.qrc">
-                                               <normaloff>:/icon/resources/icon/multiple-images.svg</normaloff>:/icon/resources/icon/multiple-images.svg</iconset>
+                                               <normaloff>:/icon/resources/icon/plus-solid.svg</normaloff>:/icon/resources/icon/plus-solid.svg</iconset>
                                              </property>
                                              <property name="iconSize">
                                               <size>
@@ -1263,7 +1266,7 @@ QComboBox::drop-down {
                             </widget>
                            </item>
                            <item>
-                            <widget class="QWidget" name="widget_6" native="true">
+                            <widget class="QWidget" name="import_date_container" native="true">
                              <property name="minimumSize">
                               <size>
                                <width>0</width>
@@ -1354,6 +1357,7 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1425,11 +1429,14 @@ QComboBox::drop-down {
                                         <property name="text">
                                          <string/>
                                         </property>
+                                        <property name="readOnly">
+                                         <bool>true</bool>
+                                        </property>
                                         <property name="placeholderText">
                                          <string>Ngày nhập</string>
                                         </property>
                                         <property name="clearButtonEnabled">
-                                         <bool>true</bool>
+                                         <bool>false</bool>
                                         </property>
                                        </widget>
                                       </item>
@@ -1455,7 +1462,7 @@ QComboBox::drop-down {
                             </widget>
                            </item>
                            <item>
-                            <widget class="QWidget" name="widget_11" native="true">
+                            <widget class="QWidget" name="delivery_date_container" native="true">
                              <property name="minimumSize">
                               <size>
                                <width>0</width>
@@ -1546,6 +1553,7 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1617,11 +1625,14 @@ QComboBox::drop-down {
                                         <property name="text">
                                          <string/>
                                         </property>
+                                        <property name="readOnly">
+                                         <bool>true</bool>
+                                        </property>
                                         <property name="placeholderText">
                                          <string>Ngày giao</string>
                                         </property>
                                         <property name="clearButtonEnabled">
-                                         <bool>true</bool>
+                                         <bool>false</bool>
                                         </property>
                                        </widget>
                                       </item>
@@ -1647,7 +1658,7 @@ QComboBox::drop-down {
                             </widget>
                            </item>
                            <item>
-                            <widget class="QWidget" name="widget_13" native="true">
+                            <widget class="QWidget" name="discount_import_container" native="true">
                              <layout class="QVBoxLayout" name="verticalLayout_30">
                               <property name="spacing">
                                <number>0</number>
@@ -1738,6 +1749,7 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1815,7 +1827,7 @@ QComboBox::drop-down {
                             </widget>
                            </item>
                            <item>
-                            <widget class="QWidget" name="widget_12" native="true">
+                            <widget class="QWidget" name="vat_import_container" native="true">
                              <property name="minimumSize">
                               <size>
                                <width>0</width>
@@ -1906,6 +1918,7 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -2054,7 +2067,7 @@ QComboBox::drop-down {
                                      <number>0</number>
                                     </property>
                                     <item>
-                                     <widget class="QWidget" name="widget_3" native="true">
+                                     <widget class="QWidget" name="widget_s" native="true">
                                       <property name="sizePolicy">
                                        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                                         <horstretch>0</horstretch>
@@ -2145,11 +2158,11 @@ QComboBox::drop-down {
                                               <height>30</height>
                                              </size>
                                             </property>
-                                            <property name="placeholderText">
-                                             <string>Tìm kiếm theo mã, tên sản phẩm</string>
-                                            </property>
                                             <property name="frame">
                                              <bool>true</bool>
+                                            </property>
+                                            <property name="placeholderText" stdset="0">
+                                             <string>Tìm kiếm theo mã, tên sản phẩm</string>
                                             </property>
                                            </widget>
                                           </item>
@@ -2444,7 +2457,7 @@ QComboBox::drop-down {
                                               <number>1</number>
                                              </property>
                                              <item>
-                                              <layout class="QHBoxLayout" name="_2">
+                                              <layout class="QHBoxLayout" name="ds">
                                                <property name="spacing">
                                                 <number>0</number>
                                                </property>
@@ -2465,7 +2478,7 @@ QComboBox::drop-down {
                                                 </spacer>
                                                </item>
                                                <item>
-                                                <widget class="QWidget" name="widget_4" native="true">
+                                                <widget class="QWidget" name="widget_i" native="true">
                                                  <property name="minimumSize">
                                                   <size>
                                                    <width>0</width>
@@ -2495,7 +2508,7 @@ QComboBox::drop-down {
                                                    <number>0</number>
                                                   </property>
                                                   <item>
-                                                   <widget class="QWidget" name="widget_10" native="true">
+                                                   <widget class="QWidget" name="widget_import" native="true">
                                                     <property name="minimumSize">
                                                      <size>
                                                       <width>0</width>
@@ -2525,7 +2538,7 @@ QComboBox::drop-down {
                                                       <number>5</number>
                                                      </property>
                                                      <item>
-                                                      <layout class="QHBoxLayout" name="horizontalLayout_3">
+                                                      <layout class="QHBoxLayout" name="horizontalLayout_i">
                                                        <property name="spacing">
                                                         <number>0</number>
                                                        </property>
@@ -2535,6 +2548,7 @@ QComboBox::drop-down {
                                                           <font>
                                                            <family>Cambria</family>
                                                            <pointsize>-1</pointsize>
+                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                           </font>
                                                          </property>
@@ -2561,6 +2575,7 @@ QComboBox::drop-down {
                                                          <property name="font">
                                                           <font>
                                                            <pointsize>-1</pointsize>
+                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                            <underline>false</underline>
                                                            <strikeout>true</strikeout>
@@ -2580,6 +2595,7 @@ QComboBox::drop-down {
                                                           <font>
                                                            <family>Cambria</family>
                                                            <pointsize>-1</pointsize>
+                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                           </font>
                                                          </property>
@@ -2696,6 +2712,7 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
+                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>

@@ -18,6 +18,7 @@ from src.views.admin.CustomerDetail import CustomerDetailWindow
 from src.views.admin.MemberRankDetail import MemberRankDetailWindow
 from src.views.admin.UserDetail import UserDetailWindow
 from src.views.admin.SupplierDetail import SupplierDetailWindow
+from src.views.admin.ImportDetail import ImportDetailWindow
 
 
 class HomeWindow(QMainWindow):
@@ -43,6 +44,7 @@ class HomeWindow(QMainWindow):
         self.member_rank_widget_detail = MemberRankDetailWindow()
         self.user_widget_detail = UserDetailWindow()
         self.supplier_widget_detail = SupplierDetailWindow()
+        self.import_widget_detail = ImportDetailWindow()
 
         # khởi tạo controller
         self.user_controller = UserController()
@@ -147,12 +149,15 @@ class HomeWindow(QMainWindow):
             USER_PAGE=8,
             # trang chi tiết người dùng
             USER_PAGE_DETAIL=self.pages.addWidget(self.user_widget_detail),
+            # trang nhà cung cấp
             SUPPLIER_PAGE=6,
             SUPPLIER_PAGE_DETAIL=self.pages.addWidget(self.supplier_widget_detail),
-            PURCHASE_ORDER=5,
+            # trang nhập hàng
+            IMPORT_PAGE=5,
+            IMPORT_PAGE_DETAIL=self.pages.addWidget(self.import_widget_detail),
         )
         # hiển thị page mặc định khi mở form
-        self.pages.setCurrentIndex(self.page_index['SUPPLIER_PAGE'])
+        self.pages.setCurrentIndex(self.page_index['IMPORT_PAGE_DETAIL'])
         self.show_product_table()
 
         self.initializeSignal()

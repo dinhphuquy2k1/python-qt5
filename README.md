@@ -33,7 +33,9 @@ pyuic5 ui/admin/member_rank_detail.ui -o src/views/ui_generated/admin/member_ran
 
 pyuic5 ui/admin/customer_detail.ui -o src/views/ui_generated/admin/customer_detail.py  
 
- pyuic5 ui/admin/supplier_detail.ui -o src/views/ui_generated/admin/supplier_detail.py 
+pyuic5 ui/admin/supplier_detail.ui -o src/views/ui_generated/admin/supplier_detail.py 
+ 
+pyuic5 ui/admin/import_detail.ui -o src/views/ui_generated/admin/import_detail.py
 ```
 
 

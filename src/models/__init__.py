@@ -12,3 +12,4 @@ from .member_ranks import MemberRank
 from .suppliers import Supplier
 from .imports import Import
 from .supplier_imports import SupplierImport
+from .product_imports import ProductImport

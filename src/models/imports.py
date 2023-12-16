@@ -10,6 +10,7 @@ class Import(Base, BaseMixin):
     # mã
     code = Column(String(255), unique=True)
     suppliers = relationship('Supplier', secondary='supplier_imports', back_populates='imports')
+    products = relationship('Product', secondary='product_imports', back_populates='imports')
     # ngày nhập
     import_date = Column(DateTime(timezone=True))
     # ngày giao

@@ -10,7 +10,7 @@ from src.controllers.admin.OrderController import OrderController
 from src.controllers.admin.CustomerController import CustomerController
 from src.controllers.admin.MemberRankController import MemberRankController
 from src.controllers.admin.SupplierController import SupplierController
-from src.models.users import User
+from src.controllers.admin.ImportController import ImportController
 from src.views.admin.CategoryDetail import CategoryDetailWindow
 from src.views.admin.ProductDetail import ProductDetailWindow
 from src.views.admin.OrderDetail import OrderDetailWindow
@@ -54,6 +54,7 @@ class HomeWindow(QMainWindow):
         self.customer_controller = CustomerController()
         self.member_rank_controller = MemberRankController()
         self.supplier_controller = SupplierController()
+        self.import_controller = ImportController()
 
         # khởi tạo table
         self.user_table = self.ui.tableUser
@@ -63,6 +64,7 @@ class HomeWindow(QMainWindow):
         self.customer_table = self.ui.table_customer
         self.table_rank = self.ui.table_rank
         self.table_supplier = self.ui.table_supplier
+        self.table_purchase_order = self.ui.table_purchase_order
 
         # hiển thị header cho table
         self.user_table.horizontalHeader().setVisible(True)
@@ -72,6 +74,7 @@ class HomeWindow(QMainWindow):
         self.order_table.horizontalHeader().setVisible(True)
         self.table_rank.horizontalHeader().setVisible(True)
         self.table_supplier.horizontalHeader().setVisible(True)
+        self.table_purchase_order.horizontalHeader().setVisible(True)
         # lưu giá trị data khi click row trong table
         self.id_data_selected = None
         # trạng thái form
@@ -93,6 +96,7 @@ class HomeWindow(QMainWindow):
         self.products_btn_2 = self.ui.products_btn_2
         self.rank_btn_2 = self.ui.rank_btn_2
         self.supplier_btn_2 = self.ui.supplier_btn_2
+        self.purcharse_order_btn_2 = self.ui.purcharse_order_btn_2
 
 
         self.btn_add_category = self.ui.btn_add_category
@@ -124,12 +128,16 @@ class HomeWindow(QMainWindow):
         self.btn_save_user = self.user_widget_detail.ui.btn_save_user
         self.btn_cancel_user = self.user_widget_detail.ui.btn_cancel_user
         self.back_btn_user = self.user_widget_detail.ui.back_btn_user
-        # khởi tạo các button nhà supplier
+        # khởi tạo các button nhà cung cấp
         self.btn_add_supplier = self.ui.btn_add_supplier
         self.btn_save_supplier = self.supplier_widget_detail.ui.btn_save_supplier
         self.btn_cancel_supplier = self.supplier_widget_detail.ui.btn_cancel_supplier
         self.back_btn_supplier = self.supplier_widget_detail.ui.back_btn_supplier
-
+        # khởi tạo các button nhập hàng
+        self.btn_add_import = self.ui.btn_add_import
+        self.btn_save_import = self.import_widget_detail.ui.btn_save_import
+        self.btn_cancel_import = self.import_widget_detail.ui.btn_cancel_import
+        self.back_btn_import = self.import_widget_detail.ui.back_btn_import
         # page index của các trang
         self.page_index = dict(
             HOME_PAGE=0,
@@ -157,11 +165,10 @@ class HomeWindow(QMainWindow):
             IMPORT_PAGE_DETAIL=self.pages.addWidget(self.import_widget_detail),
         )
         # hiển thị page mặc định khi mở form
-        self.pages.setCurrentIndex(self.page_index['IMPORT_PAGE_DETAIL'])
-        self.show_product_table()
+        self.pages.setCurrentIndex(self.page_index['CATEGORY_PAGE'])
+        self.show_category_table()
 
         self.initializeSignal()
-        self.show_category_table()
 
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -191,6 +198,9 @@ class HomeWindow(QMainWindow):
         )
         self.supplier_btn_2.toggled.connect(
             lambda: self.do_change_page(self.page_index['SUPPLIER_PAGE'])
+        )
+        self.purcharse_order_btn_2.toggled.connect(
+            lambda: self.do_change_page(self.page_index['IMPORT_PAGE'])
         )
         self.category_btn_2.toggled.connect(
             lambda: self.do_change_page(self.page_index["CATEGORY_PAGE"])
@@ -309,6 +319,22 @@ class HomeWindow(QMainWindow):
                                      "supplier")
         )
 
+        # kết nối sự kiện màn nhập hàng
+        self.btn_add_import.clicked.connect(
+            lambda: self.hanle_btn_add(self.import_widget_detail, FormMode.ADD.value,
+                                       self.page_index['IMPORT_PAGE_DETAIL'])
+        )
+        self.back_btn_import.clicked.connect(
+            lambda: self.do_change_page(self.page_index['IMPORT_PAGE'])
+        )
+        self.btn_cancel_import.clicked.connect(
+            lambda: self.do_change_page(self.page_index['IMPORT_PAGE'])
+        )
+        self.btn_save_import.clicked.connect(
+            lambda: self.handle_save(self.import_widget_detail, self.mode, self.page_index['IMPORT_PAGE'],
+                                     "import")
+        )
+
     def on_search_btn_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(5)
         search_text = self.ui.search_input.text().strip()
@@ -335,6 +361,8 @@ class HomeWindow(QMainWindow):
             self.show_category_table()
         if index == self.page_index['SUPPLIER_PAGE']:
             self.show_supplier_table()
+        if index == self.page_index['IMPORT_PAGE']:
+            self.show_import_table()
 
     ## Change QPushButton Checkable status when stackedWidget index changed
     def on_stackedWidget_currentChanged(self, index):
@@ -383,11 +411,15 @@ class HomeWindow(QMainWindow):
 
     # xử lý sự kiện click button add trên màn danh sách
     def hanle_btn_add(self, widget_detail, form_mode, page_to_index):
-        # gắn data lên form
-        self.mode = form_mode
-        function_clear_data = getattr(widget_detail, "clear_form")
-        function_clear_data()
-        self.do_change_page(page_to_index)
+        try:
+            # gắn data lên form
+            self.mode = form_mode
+            function_clear_data = getattr(widget_detail, "clear_form")
+            function_clear_data()
+            self.do_change_page(page_to_index)
+        except Exception as E:
+            print(f"{E} - file Home.py function hanle_btn_add")
+            return
 
     # xử lý sự kiện click button lưu dữ liệu của form chi tiết
     def handle_save(self, widget_detail, form_mode, page_back_index, widget_name):
@@ -625,3 +657,33 @@ class HomeWindow(QMainWindow):
                                               self.page_index["SUPPLIER_PAGE_DETAIL"],
                                               self.supplier_widget_detail, "supplier"))
                 self.table_supplier.setCellWidget(index, column_index + 5, widget)
+
+    # table màn nhập hàng
+    def show_import_table(self):
+        import_list = self.import_controller.getDataByModel()
+        self.table_purchase_order.setRowCount(0)
+        # sét độ rộng cột
+        self.table_purchase_order.setColumnWidth(0, 40)
+        self.table_purchase_order.setColumnWidth(1, 180)
+        self.table_purchase_order.setColumnWidth(2, 260)
+        self.table_purchase_order.setColumnWidth(3, 200)
+        self.table_purchase_order.setColumnWidth(4, 200)
+        if import_list:
+            for index, item in enumerate(import_list):
+                column_index = 0
+                self.table_purchase_order.setRowCount(index + 1)
+                self.table_purchase_order.setItem(index, column_index, QTableWidgetItem(str(index + 1)))
+                self.table_purchase_order.setItem(index, column_index + 1, QTableWidgetItem(str(item.code)))
+                self.table_purchase_order.setItem(index, column_index + 2, QTableWidgetItem(str(item.created_at)))
+                self.table_purchase_order.setItem(index, column_index + 3, QTableWidgetItem(str(item.import_date)))
+                self.table_purchase_order.setItem(index, column_index + 4, QTableWidgetItem(formatCurrency(int(item.final_price), 'đ')))
+                widget, edit_btn, delete_btn = generate_action_row(item.id, "import")
+                edit_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.EDIT.value,
+                                              self.page_index["IMPORT_PAGE_DETAIL"],
+                                              self.import_widget_detail, "import"))
+                delete_btn.clicked.connect(
+                    lambda: self.on_row_click(FormMode.DELETE.value,
+                                              self.page_index["IMPORT_PAGE_DETAIL"],
+                                              self.import_widget_detail, "import"))
+                self.table_purchase_order.setCellWidget(index, column_index + 5, widget)

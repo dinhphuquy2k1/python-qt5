@@ -64,6 +64,28 @@ class BaseController:
             self.connection.session.rollback()
             raise e
 
+    def updateDataTest(self, item_data, relations_data):
+        try:
+            with self.connection.session.begin_nested():
+                model_data = vars(item_data)
+                # Loại bỏ trường '_sa_instance_state' nếu tồn tại
+                model_data.pop('_sa_instance_state', None)
+                query = self.connection.session.query(self.model).filter(self.model.id == model_data.get('id', ''))
+                query.update(model_data)
+                data = query.first()
+                for relation_name in relations_data:
+                    relationship_instance = getattr(data, relation_name, None)
+
+
+                self.connection.session.commit()
+                return True
+
+        except SQLAlchemyError as e:
+            print(e)
+            self.connection.session.rollback()
+            raise e
+
+
     def updateDataWithModelRelation(self, item_data, relations_data, other_data=None):
         try:
             with self.connection.session.begin_nested():

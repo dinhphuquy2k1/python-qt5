@@ -19,7 +19,7 @@ class Product(Base, BaseMixin):
     category = relationship('Category', back_populates='products', single_parent=True)
     supplier_id = Column(INTEGER(unsigned=True), ForeignKey('suppliers.id'))
     supplier = relationship('Supplier', back_populates='products')
-
+    imports = relationship('Import', secondary='product_imports', back_populates='products')
     # mã phân loại sản phẩm
     item_classification = relationship('ItemClassification', back_populates='product')
     # ngày sản xuất

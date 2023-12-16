@@ -305,7 +305,7 @@ QPushButton{
 	background: transparent;
 }
 
-#dialog_supplier_title{
+#dialog_import_title{
 	font-size: 20px;
 	font-weight: bold;
 }
@@ -531,12 +531,11 @@ QComboBox::drop-down {
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="dialog_product_title">
+                <widget class="QLabel" name="dialog_import_title">
                  <property name="font">
                   <font>
                    <family>Cambria</family>
                    <pointsize>-1</pointsize>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -676,9 +675,9 @@ QComboBox::drop-down {
                        <property name="geometry">
                         <rect>
                          <x>0</x>
-                         <y>-114</y>
+                         <y>0</y>
                          <width>783</width>
-                         <height>1821</height>
+                         <height>1822</height>
                         </rect>
                        </property>
                        <property name="sizePolicy">
@@ -789,7 +788,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -988,7 +986,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1080,7 +1077,7 @@ QComboBox::drop-down {
                                              <property name="editable">
                                               <bool>true</bool>
                                              </property>
-                                             <property name="placeholderText" stdset="0">
+                                             <property name="placeholderText">
                                               <string>Tìm theo tên, số điện thoại,...</string>
                                              </property>
                                             </widget>
@@ -1357,7 +1354,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1553,7 +1549,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1749,7 +1744,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -1918,7 +1912,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>
@@ -2158,11 +2151,11 @@ QComboBox::drop-down {
                                               <height>30</height>
                                              </size>
                                             </property>
+                                            <property name="placeholderText">
+                                             <string>Tìm kiếm theo mã, tên sản phẩm</string>
+                                            </property>
                                             <property name="frame">
                                              <bool>true</bool>
-                                            </property>
-                                            <property name="placeholderText" stdset="0">
-                                             <string>Tìm kiếm theo mã, tên sản phẩm</string>
                                             </property>
                                            </widget>
                                           </item>
@@ -2548,7 +2541,6 @@ QComboBox::drop-down {
                                                           <font>
                                                            <family>Cambria</family>
                                                            <pointsize>-1</pointsize>
-                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                           </font>
                                                          </property>
@@ -2575,7 +2567,6 @@ QComboBox::drop-down {
                                                          <property name="font">
                                                           <font>
                                                            <pointsize>-1</pointsize>
-                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                            <underline>false</underline>
                                                            <strikeout>true</strikeout>
@@ -2595,7 +2586,6 @@ QComboBox::drop-down {
                                                           <font>
                                                            <family>Cambria</family>
                                                            <pointsize>-1</pointsize>
-                                                           <weight>50</weight>
                                                            <bold>false</bold>
                                                           </font>
                                                          </property>
@@ -2712,7 +2702,6 @@ QComboBox::drop-down {
                                          <font>
                                           <family>Cambria</family>
                                           <pointsize>-1</pointsize>
-                                          <weight>50</weight>
                                           <bold>false</bold>
                                          </font>
                                         </property>

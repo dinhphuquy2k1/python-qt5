@@ -114,7 +114,7 @@ QLineEdit{
 	background: #f4f5f8;
 }
 
-#btnUser{
+#btn_add_import{
 	min-height: 36px;
 	border-radius: 4px;
 	color: #fff;
@@ -131,7 +131,7 @@ QPushButton{
 	padding: 2px 12px;
 }
 
-#btnUser:hover{
+#btn_add_import:hover{
 	    background: #0062cc;
 }
 
@@ -540,6 +540,12 @@ QPushButton{
          </item>
          <item>
           <widget class="QPushButton" name="rank_btn_2">
+           <property name="font">
+            <font>
+             <family>Cambria</family>
+             <pointsize>-1</pointsize>
+            </font>
+           </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
@@ -556,6 +562,12 @@ QPushButton{
          </item>
          <item>
           <widget class="QPushButton" name="purcharse_order_btn_2">
+           <property name="font">
+            <font>
+             <family>Cambria</family>
+             <pointsize>-1</pointsize>
+            </font>
+           </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
@@ -572,6 +584,12 @@ QPushButton{
          </item>
          <item>
           <widget class="QPushButton" name="supplier_btn_2">
+           <property name="font">
+            <font>
+             <family>Cambria</family>
+             <pointsize>-1</pointsize>
+            </font>
+           </property>
            <property name="text">
             <string>Nhà cung cấp</string>
            </property>
@@ -1180,7 +1198,7 @@ QPushButton{
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>9</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_2">
@@ -2820,6 +2838,12 @@ QPushButton{
                              <height>44</height>
                             </size>
                            </property>
+                           <property name="font">
+                            <font>
+                             <family>Cambria</family>
+                             <pointsize>-1</pointsize>
+                            </font>
+                           </property>
                            <property name="placeholderText">
                             <string>Search...</string>
                            </property>
@@ -2900,10 +2924,10 @@ QPushButton{
                         <number>0</number>
                        </property>
                        <item>
-                        <widget class="QPushButton" name="btn_add_purchase_order">
+                        <widget class="QPushButton" name="btn_add_import">
                          <property name="minimumSize">
                           <size>
-                           <width>124</width>
+                           <width>104</width>
                            <height>40</height>
                           </size>
                          </property>
@@ -2981,6 +3005,11 @@ QPushButton{
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="font">
+                       <font>
+                        <family>Cambria</family>
+                       </font>
+                      </property>
                       <property name="cursor" stdset="0">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
@@ -2991,7 +3020,7 @@ QPushButton{
                        <bool>false</bool>
                       </property>
                       <property name="frameShape">
-                       <enum>QFrame::NoFrame</enum>
+                       <enum>QFrame::StyledPanel</enum>
                       </property>
                       <property name="frameShadow">
                        <enum>QFrame::Sunken</enum>
@@ -3051,7 +3080,7 @@ QPushButton{
                        <number>6</number>
                       </property>
                       <attribute name="horizontalHeaderVisible">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </attribute>
                       <attribute name="horizontalHeaderCascadingSectionResizes">
                        <bool>false</bool>
@@ -3109,11 +3138,12 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>Mã sản phẩm</string>
+                        <string>Mã chứng từ</string>
                        </property>
                        <property name="font">
                         <font>
-                         <bold>true</bold>
+                         <family>Cambria</family>
+                         <bold>false</bold>
                         </font>
                        </property>
                        <property name="textAlignment">
@@ -3122,7 +3152,7 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>Tên sản phẩm</string>
+                        <string>Ngày tạo</string>
                        </property>
                        <property name="font">
                         <font>
@@ -3135,12 +3165,20 @@ QPushButton{
                       </column>
                       <column>
                        <property name="text">
-                        <string>Số lượng sản phẩm</string>
+                        <string>Ngày nhập</string>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <family>Cambria</family>
+                        </font>
+                       </property>
+                       <property name="textAlignment">
+                        <set>AlignLeading|AlignVCenter</set>
                        </property>
                       </column>
                       <column>
                        <property name="text">
-                        <string>Giá</string>
+                        <string>Tổng tiền</string>
                        </property>
                        <property name="font">
                         <font>

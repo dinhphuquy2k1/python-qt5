@@ -7,8 +7,10 @@ from src.enums.enums import *
 from src.views.common.Common import *
 from src.controllers.admin.ProductController import ProductController
 from src.controllers.admin.SupplierController import SupplierController
+from src.controllers.admin.ImportController import ImportController
 from src.models.products import Product
-from src.models.images import Image
+from src.models.imports import Import
+from src.models.suppliers import Supplier
 from datetime import datetime
 from functools import partial
 
@@ -20,10 +22,11 @@ class ImportDetailWindow(QWidget):
         self.ui.setupUi(self)
         self.product_controller = ProductController()
         self.supplier_controller = SupplierController()
+        self.import_controller = ImportController()
         # khởi tạo biến
         self.selected_date = {
-            'import_date': None,
-            'delivery_date': None,
+            'import_date': QDate.currentDate(),
+            'delivery_date': QDate.currentDate(),
         }
         # danh sách sản phẩm
         self.product_list = []
@@ -141,19 +144,23 @@ class ImportDetailWindow(QWidget):
     # hàm luôn chạy khi class được gọi đến
     # dùng để lấy dữ liệu mỗi lần vào form
     def showEvent(self, event):
-        # Lấy ngày tháng hiện tại
-        current_date = QDate.currentDate().toString("dd/MM/yyyy")
-        # gắn ngày tháng hiện tại lên 2 input date ngày nhập và ngày giao
-        self.ui.import_date_le.setText(current_date)
-        self.ui.delivery_date_le.setText(current_date)
+        try:
+            self.ui.dialog_import_title.setText("Thêm mới chứng từ")
+            self.selected_date['import_date'] = QDate.currentDate()
+            self.selected_date['delivery_date'] = QDate.currentDate()
+            # gắn ngày tháng hiện tại lên 2 input date ngày nhập và ngày giao
+            self.ui.import_date_le.setText(self.selected_date['import_date'].toString("dd/MM/yyyy"))
+            self.ui.delivery_date_le.setText(self.selected_date['delivery_date'].toString("dd/MM/yyyy"))
 
-        # lấy dữ liệu
-        self.product_list = self.product_controller.getDataByModel()
-        self.supplier_list = self.supplier_controller.getDataByModel()
+            # lấy dữ liệu
+            self.product_list = self.product_controller.getDataByModel()
+            self.supplier_list = self.supplier_controller.getDataByModel()
 
-        # gắn dữ liệu
-        self.search_box_product_order.addItems([item.product_code for index, item in enumerate(self.product_list)])
-        self.search_box_supplier.addItems([item.code for index, item in enumerate(self.supplier_list)])
+            # gắn dữ liệu
+            self.search_box_product_order.addItems([item.product_code for index, item in enumerate(self.product_list)])
+            self.search_box_supplier.addItems([item.code for index, item in enumerate(self.supplier_list)])
+        except Exception as E:
+            print(f'{E}- file ImportDetail.py function showEvent')
 
     # hiển thị ngày tháng được chọn lên label
     def on_selected_date(self, key, selected_date):
@@ -319,151 +326,115 @@ class ImportDetailWindow(QWidget):
         return widget, self.label
 
     @pyqtSlot()
-    def save_product(self, form_mode, product_id=None):
-        product_name = self.ui.product_name_le.text().strip()
-        product_code = self.ui.product_code_le.text().strip()
-        category = self.ui.category_le.currentText()
-        manufacture_date = self.ui.manufacture_date_le.text().strip()
-        price = self.ui.price_le.value()
-        quantity = self.ui.quantity_le.value()
-        product_image = self.ui.product_image_le.text().strip()
-        description = self.ui.description_le.toPlainText().strip()
-        border_error = Validate.BORDER_ERROR.value
-        border_valid = Validate.BORDER_VALID.value
-        color_text_error = Validate.COLOR_TEXT_ERROR.value
-        self.clear_error()
-        messages = {
-            'product_nameEmpty': "Vui lòng nhập tên sản phẩm.",
-            'product_codeEmpty': "Vui lòng nhập mã sản phẩm.",
-            'categoryEmpty': "Vui lòng chọn loại sản phẩm.",
-            'product_imageEmpty': "Vui lòng chọn ảnh cho sản phẩm.",
-            'manufacture_dateEmpty': "Vui lòng chọn ngày sản xuất.",
-            'product_codeExit': "Mã sản phẩm đã tồn tại.",
-            'priceGreater': "Vui lòng nhập giá lớn hơn 0.",
-            'quantityGreater': "Vui lòng nhập số lượng lớn hơn 0.",
-        }
+    def save_import(self, form_mode, import_id=None):
+        try:
+            code = self.ui.code_le.text().strip()
+            # xử lý ngày tháng
+            import_date = datetime(self.selected_date['import_date'].year(), self.selected_date['import_date'].month(), self.selected_date['import_date'].day())
+            delivery_date = datetime(self.selected_date['delivery_date'].year(), self.selected_date['delivery_date'].month(), self.selected_date['delivery_date'].day())
+            self.clear_error()
+            messages = {
+                'codeEmpty': "Vui lòng nhập mã chứng từ",
+                'codeExit': "Mã chứng từ đã tồn tại.",
+                'categoryEmpty': "Vui lòng chọn loại sản phẩm.",
+                'product_imageEmpty': "Vui lòng chọn ảnh cho sản phẩm.",
+                'manufacture_dateEmpty': "Vui lòng chọn ngày sản xuất.",
+                'product_codeExit': "Mã sản phẩm đã tồn tại.",
+                'priceGreater': "Vui lòng nhập giá lớn hơn 0.",
+                'quantityGreater': "Vui lòng nhập số lượng lớn hơn 0.",
+            }
 
-        if category == SelectBox.DEFAULT.value:
-            category = ''
-        # validate dữ liệu các cột không được trống
-        is_invalid = validateEmpty(self,
-                                   {'product_name': product_name, 'product_code': product_code, 'category': category,
-                                    'manufacture_date': manufacture_date, 'product_image': product_image}, messages)
-        if price == 0:
-            self.ui.error_price.setStyleSheet(color_text_error)
-            self.ui.error_price.setText(messages["priceGreater"])
-            self.ui.price_le.setStyleSheet(border_error)
-            is_invalid = True
+            # validate dữ liệu các cột không được trống
+            is_invalid = validateEmpty(self,
+                                       {'code': code}, messages)
 
-        if quantity == 0:
-            self.ui.error_quantity.setStyleSheet(color_text_error)
-            self.ui.error_quantity.setText(messages["quantityGreater"])
-            self.ui.quantity_le.setStyleSheet(border_error)
-            is_invalid = True
-        if is_invalid:
-            return
-
-        # xử lý ngày tháng
-        manufacture_date = datetime(self.selected_date.year(), self.selected_date.month(), self.selected_date.day())
-
-        # xử lý ảnh
-        destination_folder = "resources/images/product"
-        # Tạo thư mục lưu trữ ảnh sản phẩm nếu chưa có
-        os.makedirs(destination_folder, exist_ok=True)
-        # Đường dẫn đến thư mục đích
-        new_file_name = generate_unique_filename(product_image)
-        destination_path = os.path.join(destination_folder, new_file_name)
-        product = Product(product_code=product_code, product_name=product_name, price=price, quantity=quantity,
-                          description=description, manufacture_date=manufacture_date,
-                          category_id=self.category_selected.id)
-        image = Image(image_url=destination_path)
-        product.product_image = [image]
-        if form_mode == FormMode.ADD.value:
-            if self.product_controller.checkExitsDataWithModel(Product.product_code, data=product_code):
-                self.ui.error_product_code.setStyleSheet(color_text_error)
-                self.ui.error_product_code.setText(messages["product_codeExit"])
-                self.ui.product_code_le.setStyleSheet(border_error)
+            if is_invalid:
                 return
-            if self.product_image:
-                # di chuyển ảnh vào thư mục dự án
-                shutil.copy(self.product_image, destination_path)
-            self.product_controller.insertData(product)
-        elif form_mode == FormMode.EDIT.value:
-            if self.product_controller.checkExitsDataUpdateWithModel(Product.product_code, data=product_code,
-                                                                     model_id=product_id):
-                self.ui.error_product_code.setStyleSheet(color_text_error)
-                self.ui.error_product_code.setText(messages["product_codeExit"])
-                self.ui.product_code_le.setStyleSheet(border_error)
-                return
-            if self.product_image:
-                # di chuyển ảnh vào thư mục dự án
-                shutil.copy(self.product_image, destination_path)
-            self.product_controller.updateDataWithModel(
-                data={'product_name': product_name, 'product_code': product_code, 'price': price, 'quantity': quantity,
-                      'description': description, 'manufacture_date': manufacture_date,
-                      'category_id': self.category_selected.id}, model_id=product_id)
-        else:
-            return
 
-        return True
+            data = Import(code=code, import_date=import_date, delivery_date=delivery_date, original_price=self.original_price, final_price=self.final_price, status=1, description='')
+            product_relation = []
+            for index, item in self.product_selected.items():
+                data.products.append(item)
+                product_relation.append(item)
+
+            for index, item in self.supplier_selected.items():
+                data.suppliers.append(item)
+
+            if form_mode == FormMode.ADD.value:
+                if self.import_controller.checkExitsDataWithModel(Import.code, data=code):
+                    self.ui.error_code.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
+                    self.ui.error_code.setText(messages["codeExit"])
+                    self.ui.code_le.setStyleSheet(Validate.BORDER_ERROR.value)
+                    return
+                self.import_controller.insertData(data)
+            elif form_mode == FormMode.EDIT.value:
+                del data.products
+                del data.suppliers
+                data.id = import_id
+                if self.import_controller.checkExitsDataUpdateWithModel(Import.code, data=code,
+                                                                         model_id=import_id):
+                    self.ui.error_code.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
+                    self.ui.error_code.setText(messages["codeExit"])
+                    self.ui.code_le.setStyleSheet(Validate.BORDER_ERROR.value)
+                    return
+                self.import_controller.updateDataTest(
+                    data,
+                    {
+                        'products': product_relation,
+                    }
+                )
+            else:
+                return
+
+            return True
+        except Exception as E:
+            print(f'{E} - file ImportDetail.py function save_import')
 
     # gán các giá trị lên form
-    def handle_edit_event(self, category_id):
-        product = self.product_controller.getDataByIdWithModel(category_id)
-        if product:
-            self.ui.product_code_le.setText(product.product_code)
-            self.ui.product_name_le.setText(product.product_name)
-            self.ui.price_le.setValue(int(product.price))
-            self.ui.quantity_le.setValue(int(product.quantity))
-            self.selected_date = product.manufacture_date
-            # loại sản phẩm
-            self.category_selected = product.category
-            index = self.category.index(product.category)
-            self.combobox_category.setCurrentIndex(index)
-            if product.product_image:
-                self.ui.product_image_le.setText(product.product_image[0].image_url)
-            self.selected_date = QDate(product.manufacture_date.year, product.manufacture_date.month,
-                                       product.manufacture_date.day)
+    def handle_edit_event(self, import_id):
+        self.ui.dialog_import_title.setText("Cập nhật chứng từ")
+        data = self.import_controller.getDataByIdWithModel(import_id)
+        if data:
+            self.ui.code_le.setText(data.code)
+            self.selected_date['import_date'] = QDate(data.import_date.year, data.import_date.month,
+                                       data.import_date.day)
+            self.selected_date['delivery_date'] = QDate(data.delivery_date.year, data.delivery_date.month,
+                                                      data.delivery_date.day)
+
             # xử lý ngày tháng
-            self.manufacture_date_le.setText(f"{self.selected_date.toString('dd/MM/yyyy')}")
-            self.ui.description_le.setPlainText(product.description)
+            self.ui.import_date_le.setText(f"{self.selected_date['import_date'].toString('dd/MM/yyyy')}")
+            self.ui.delivery_date_le.setText(f"{self.selected_date['delivery_date'].toString('dd/MM/yyyy')}")
+            self.ui.discount_le.setValue(data.discount)
+            self.ui.vat_le.setValue(data.vat)
+            if data.products:
+                self.product_selected = {product.id: product for product in data.products}
+                self.show_table_product()
+                self.handle_total_quantity_product_order()
+            if data.suppliers:
+                self.supplier_selected = {supplier.id: supplier for supplier in data.suppliers}
+                self.show_table_supplier()
+
+
+
 
     # clear dữ liệu trên form
     def clear_form(self):
-        self.ui.product_name_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.product_code_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.product_image_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.category_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.price_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.quantity_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.manufacture_date_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.error_product_name.setText("")
-        self.ui.error_product_code.setText("")
-        self.ui.error_category.setText("")
-        self.ui.error_product_image.setText("")
-        self.ui.error_price.setText("")
-        self.ui.error_quantity.setText("")
-        self.ui.error_manufacture_date.setText("")
-        self.ui.product_name_le.setText("")
-        self.ui.product_code_le.setText("")
-        self.ui.product_image_le.setText("")
-        # self.ui.combobox_category_i
-        self.ui.price_le.setValue(0)
-        self.ui.quantity_le.setValue(0)
-        self.ui.manufacture_date_le.setText("")
-        self.ui.description_le.setPlainText("")
+        try:
+            self.clear_error()
+            self.ui.code_le.setStyleSheet("border: 1px solid #e0e5e9;")
+            # self.ui.supplier_le.currentIndex(1)
+            # self.ui.search_box_product_order.currentIndex(1)
+            self.ui.error_code.setText("")
+            self.ui.code_le.setText("")
+            self.ui.discount_le.setValue(0)
+            self.ui.vat_le.setValue(0)
+            self.ui.table_product_import.setRowCount(0)
+            self.ui.table_supplier.setRowCount(0)
+        except Exception as E:
+            print(f'{E} - file ImportDetail.py function clear_form')
+
 
     def clear_error(self):
-        self.ui.product_name_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.product_code_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.product_image_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.category_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.price_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.quantity_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.manufacture_date_le.setStyleSheet("border: 1px solid #e0e5e9;")
-        self.ui.error_product_name.setText("")
-        self.ui.error_product_code.setText("")
-        self.ui.error_category.setText("")
-        self.ui.error_product_image.setText("")
-        self.ui.error_price.setText("")
-        self.ui.error_quantity.setText("")
+        self.ui.code_le.setStyleSheet("border: 1px solid #e0e5e9;")
+        self.ui.error_code.setText("")
+

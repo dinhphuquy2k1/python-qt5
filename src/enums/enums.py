@@ -33,4 +33,7 @@ class ProductSelected(Enum):
     WARNING_SELECTED = 10
 
 
-
+class UserRole(Enum):
+    EMPLOYEE = 0  # nhân viên
+    WAREHOUSE_EMPLOYEE = 1  # nhân viên kho
+    ADMIN = 2  # admin

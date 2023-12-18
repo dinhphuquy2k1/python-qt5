@@ -3,6 +3,7 @@ from PyQt5.QtCore import pyqtSlot
 from src.views.ui_generated.admin.home import Ui_MainWindow
 from src.views.common.Common import *
 from src.enums.enums import *
+from src.models.users import User
 from src.controllers.admin.UserController import UserController
 from src.controllers.admin.CategoryController import CategoryController
 from src.controllers.admin.ProductController import ProductController
@@ -55,6 +56,8 @@ class HomeWindow(QMainWindow):
         self.member_rank_controller = MemberRankController()
         self.supplier_controller = SupplierController()
         self.import_controller = ImportController()
+        # lấy thông tin user
+        self.USER = self.user_controller.getDataByIdWithModel(user_id)
 
         # khởi tạo table
         self.user_table = self.ui.tableUser
@@ -167,6 +170,7 @@ class HomeWindow(QMainWindow):
         # hiển thị page mặc định khi mở form
         self.pages.setCurrentIndex(self.page_index['CATEGORY_PAGE'])
         self.show_category_table()
+        self.check_permission()
 
         self.initializeSignal()
 
@@ -175,6 +179,47 @@ class HomeWindow(QMainWindow):
 
     def showEvent(self, event):
         self.show_member_rank_table()
+
+    # kiểm tra quyền để ẩn/hiện menu tương ứng
+    def check_permission(self):
+        if self.USER.level == UserRole.EMPLOYEE.value:
+            self.hideAllMenu()
+            self.ui.products_btn_2.setVisible(True)
+            self.ui.orders_btn_2.setVisible(True)
+            self.ui.rank_btn_2.setVisible(True)
+            self.ui.customers_btn_2.setVisible(True)
+            self.ui.category_btn_2.setVisible(True)
+        elif self.USER.level == UserRole.WAREHOUSE_EMPLOYEE.value:
+            self.hideAllMenu()
+            self.ui.products_btn_2.setVisible(True)
+            self.ui.orders_btn_2.setVisible(True)
+            self.ui.rank_btn_2.setVisible(True)
+            self.ui.customers_btn_2.setVisible(True)
+            self.ui.category_btn_2.setVisible(True)
+            self.ui.supplier_btn_2.setVisible(True)
+            self.ui.purcharse_order_btn_2.setVisible(True)
+        else:
+            self.openAllMenu()
+
+    # ẩn toàn bộ menu
+    def hideAllMenu(self):
+        buttons = self.ui.icon_only_widget.findChildren(QPushButton) \
+        + self.ui.full_menu_widget.findChildren(QPushButton)
+        # Ẩn toàn bộ các QPushButton trong danh sách
+        for button in buttons:
+            button.setVisible(False)
+
+        # mở button thoát
+        self.ui.exit_btn_2.setVisible(True)
+        self.ui.exit_btn_1.setVisible(True)
+
+    # mở toàn bộ menu
+    def openAllMenu(self):
+        buttons = self.ui.icon_only_widget.findChildren(QPushButton) \
+                  + self.ui.full_menu_widget.findChildren(QPushButton)
+        # Ẩn toàn bộ các QPushButton trong danh sách
+        for button in buttons:
+            button.setVisible(True)
 
     # Khởi tạo kết nối các button liên kết
     def initializeSignal(self):

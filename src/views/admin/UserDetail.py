@@ -25,6 +25,7 @@ class UserDetailWindow(QWidget):
         username = self.ui.username_le.text().strip()
         password = self.ui.password_le.text().strip()
         confirm = self.ui.confirm_le.text().strip()
+        level_text = self.ui.level.currentText()
         self.clear_error()
 
         messages = {
@@ -53,14 +54,19 @@ class UserDetailWindow(QWidget):
             self.ui.error_username.setText(message)
             self.ui.username_le.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
             return
-
+        if level_text == 'Nhân viên':
+            level = UserRole.EMPLOYEE.value
+        elif level_text == 'Nhân viên kho':
+            level = UserRole.WAREHOUSE_EMPLOYEE.value
+        else:
+            level = UserRole.ADMIN.value
         if form_mode == FormMode.ADD.value:
             if user_controller.checkExitsUser(username=username):
                 self.ui.error_username.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
                 self.ui.error_username.setText(messages["usernameExit"])
                 self.ui.username_le.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
                 return
-            user = User(name=name, username=username, password=password)
+            user = User(name=name, username=username, password=password, level=level)
             user_controller.saveUser(user=user)
         elif form_mode == FormMode.EDIT.value:
             if user_controller.checkExitsUserUpdate(username=username, user_id=user_id):
@@ -68,7 +74,7 @@ class UserDetailWindow(QWidget):
                 self.ui.error_username.setText(messages["usernameExit"])
                 self.ui.username_le.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
                 return
-            user = {'username': username, 'name': name, 'password': password}
+            user = {'username': username, 'name': name, 'password': password, 'level': level}
             user_controller.updateUserWithModel(data=user, user_id=user_id)
         return True
 

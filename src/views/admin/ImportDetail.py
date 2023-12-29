@@ -7,10 +7,10 @@ from src.enums.enums import *
 from src.views.common.Common import *
 from src.controllers.admin.ProductController import ProductController
 from src.controllers.admin.SupplierController import SupplierController
-from src.controllers.admin.ImportController import ImportController
-from src.models.products import Product
-from src.models.imports import Import
-from src.models.suppliers import Supplier
+from src.controllers.admin.PurchaseOrderController import PurchaseOrderController
+from src.models.Products import Products
+from src.models.PurchaseOrders import PurchaseOrders
+from src.models.Suppliers import Suppliers
 from datetime import datetime
 from functools import partial
 
@@ -22,7 +22,7 @@ class ImportDetailWindow(QWidget):
         self.ui.setupUi(self)
         self.product_controller = ProductController()
         self.supplier_controller = SupplierController()
-        self.import_controller = ImportController()
+        self.import_controller = PurchaseOrderController()
         # khởi tạo biến
         self.selected_date = {
             'import_date': QDate.currentDate(),
@@ -351,7 +351,7 @@ class ImportDetailWindow(QWidget):
             if is_invalid:
                 return
 
-            data = Import(code=code, import_date=import_date, delivery_date=delivery_date, original_price=self.original_price, final_price=self.final_price, status=1, description='')
+            data = PurchaseOrders(code=code, import_date=import_date, delivery_date=delivery_date, original_price=self.original_price, final_price=self.final_price, status=1, description='')
             product_relation = []
             for index, item in self.product_selected.items():
                 data.products.append(item)
@@ -361,7 +361,7 @@ class ImportDetailWindow(QWidget):
                 data.suppliers.append(item)
 
             if form_mode == FormMode.ADD.value:
-                if self.import_controller.checkExitsDataWithModel(Import.code, data=code):
+                if self.import_controller.checkExitsDataWithModel(PurchaseOrders.code, data=code):
                     self.ui.error_code.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
                     self.ui.error_code.setText(messages["codeExit"])
                     self.ui.code_le.setStyleSheet(Validate.BORDER_ERROR.value)
@@ -371,7 +371,7 @@ class ImportDetailWindow(QWidget):
                 del data.products
                 del data.suppliers
                 data.id = import_id
-                if self.import_controller.checkExitsDataUpdateWithModel(Import.code, data=code,
+                if self.import_controller.checkExitsDataUpdateWithModel(PurchaseOrders.code, data=code,
                                                                          model_id=import_id):
                     self.ui.error_code.setStyleSheet(Validate.COLOR_TEXT_ERROR.value)
                     self.ui.error_code.setText(messages["codeExit"])

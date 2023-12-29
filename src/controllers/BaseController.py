@@ -125,7 +125,7 @@ class BaseController:
                 return True
 
         except SQLAlchemyError as e:
-            print(e)
+            print(f"{e} - file BaseController function updateDataWithModelRelation")
             self.connection.session.rollback()
             raise e
 

@@ -72,6 +72,7 @@ class OrderDetailWindow(QWidget):
     # Hàm luôn chạy khi form được show
     # Thực hiện lấy dữ liệu từ database
     def showEvent(self, event):
+        self.ui.dialog_product_title.setText("Thêm mới đơn hàng")
         self.product_selected = {}
         self.user_le.clear()
         self.search_box_product_order.clear()
@@ -447,6 +448,7 @@ class OrderDetailWindow(QWidget):
 
     @pyqtSlot()
     def save_order(self, form_mode, order_id=None):
+        self.order_details = []
         order_code = self.ui.order_code_le.text().strip()
         self.clear_error()
         messages = {
@@ -539,6 +541,7 @@ class OrderDetailWindow(QWidget):
 
     # gán các giá trị lên form
     def handle_edit_event(self, order_id):
+        self.ui.dialog_product_title.setText("Cập nhật đơn hàng")
         self.mode = FormMode.EDIT.value
         self.order_selected = self.order_controller.getDataByModelIdWithRelation(order_id)
         if self.order_selected:
@@ -561,8 +564,15 @@ class OrderDetailWindow(QWidget):
             self.show_table_product()
             self.show_table_user()
 
-    def handle_delete_event(self, order_detail_id):
-
+    def handle_delete_event(self, order_id):
+        try:
+            reply = message_box_delete()
+            if reply == QMessageBox.Yes:
+                self.order_controller.deleteDataWithModel(order_id)
+        except Exception as E:
+            print(E)
+            return False
+        return True
 
     # clear dữ liệu trên form
     def clear_form(self):
